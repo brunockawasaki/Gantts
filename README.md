@@ -39,8 +39,9 @@ Pensado para apresentar à diretoria: uma tela só, sem rolagem, com a mensagem 
 | `ferramentas/gerar.py` | Gera os cronogramas e os dois níveis de menu. Só usa a biblioteca padrão do Python. |
 | `ferramentas/modelo_gantt.html`, `modelo_menu.html`, `modelo_empresa.html` | Modelos das páginas. Mudar o visual é mexer aqui. |
 | `ferramentas/conferir_planilha.py` | Compara a planilha com os dados e aponta diferenças. Não altera nada. |
+| `ferramentas/preparar_logo.py` | Corta a margem e deixa transparente o fundo de uma logo nova. |
 | `cronogramas/`, `make-it/`, `index.html` | **Saída gerada.** Não editar à mão. |
-| `assets/` | Logo do Grupo Gadens e foto de fundo. |
+| `assets/` | Logo do Grupo Gadens, logos das marcas (Gadens e Make It) e foto de fundo. |
 | `fluxo-lancamentos-comercial/` | Gantt do Comercial (independente): página, gerador da planilha, planilha pronta, planilhas de origem e `LEIA-ME.txt`. |
 | `agents/gantt-cronogramas.md` | Agente do Claude Code que faz o passo a passo abaixo. Copie para `.claude/agents/` do projeto, ou para `~/.claude/agents/` para usar em todos. |
 

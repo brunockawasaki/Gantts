@@ -28,6 +28,10 @@ RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DADOS = os.path.join(RAIZ, "dados")
 FERR = os.path.join(RAIZ, "ferramentas")
 ORDEM_EMPRESAS = ["Gadens", "Make It"]   # ordem dos caminhos no menu principal
+LOGOS = {                                # logo de cada empresa (em assets/); sem logo, aparece só o nome
+    "Gadens": "assets/logo-gadens.png",
+    "Make It": "assets/logo-make-it.png",
+}
 
 
 def slug(texto):
@@ -172,6 +176,13 @@ def cartao_projeto(p, r):
     )
 
 
+def logo_html(empresa):
+    arq = LOGOS.get(empresa)
+    if not arq:
+        return ""
+    return f'      <div class="logo"><img src="{arq}" alt="Logo {empresa}"></div>\n'
+
+
 def frase_empresa(lista):
     nomes = [partes_nome(p["D"]["projeto"])[0] for p in lista]
     sufixos = {partes_nome(p["D"]["projeto"])[1] for p in lista}
@@ -224,12 +235,12 @@ def main():
     # menu principal
     empresas = list(ORDEM_EMPRESAS) + [e for e in por_empresa if e not in ORDEM_EMPRESAS]
     cartoes = []
-    for i, empresa in enumerate(empresas, 1):
+    for empresa in empresas:
         lista = por_empresa.get(empresa)
         if lista:
             cartoes.append(
                 f'    <a class="card" href="{slug(empresa)}/">\n'
-                f'      <div class="num">{i}</div>\n'
+                f'{logo_html(empresa)}'
                 f'      <h2>{empresa}</h2>\n'
                 f'      <p>{frase_empresa(lista)}</p>\n'
                 f'      <div class="go">Abrir &rarr;</div>\n'
@@ -237,7 +248,7 @@ def main():
         else:
             cartoes.append(
                 f'    <div class="card off" aria-disabled="true">\n'
-                f'      <div class="num">{i}</div>\n'
+                f'{logo_html(empresa)}'
                 f'      <h2>{empresa}</h2>\n'
                 f'      <p>Nenhum cronograma publicado ainda.</p>\n'
                 f'      <div class="go">Em breve</div>\n'

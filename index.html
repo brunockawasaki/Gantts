@@ -44,15 +44,13 @@ h1 em{font-style:normal;color:var(--accent)}
 }
 a.card:hover,a.card:focus-visible{transform:translateY(-3px);box-shadow:0 10px 26px rgba(0,0,0,.14);outline:none}
 a.card:focus-visible{box-shadow:0 0 0 3px var(--accent-soft),0 10px 26px rgba(0,0,0,.14)}
-.num{
-  width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;
-  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;
-}
-.card h2{margin:6px 0 0;font-size:30px;letter-spacing:-.02em}
+.logo{height:104px;display:flex;align-items:center;justify-content:center;margin-bottom:6px}
+.logo img{max-height:100%;max-width:100%;width:auto;height:auto;object-fit:contain;display:block}
+.card.off .logo img{filter:grayscale(1);opacity:.5}
+.card h2{margin:6px 0 0;font-size:26px;letter-spacing:-.02em}
 .card p{margin:0;color:var(--ink-soft);font-size:15px;line-height:1.45}
 .go{margin-top:auto;font-weight:600;color:var(--accent-strong);font-size:15px}
 .card.off{border-top-color:var(--border);background:rgba(255,255,255,.7);border-style:dashed;border-top-style:solid;cursor:default;box-shadow:none}
-.card.off .num{background:var(--muted)}
 .card.off h2,.card.off p{color:var(--muted)}
 .card.off .go{color:var(--muted);font-weight:500}
 .rodape{margin-top:40px;color:var(--muted);font-size:12.5px}
@@ -72,14 +70,14 @@ a.card:focus-visible{box-shadow:0 0 0 3px var(--accent-soft),0 10px 26px rgba(0,
 
   <div class="cards">
     <div class="card off" aria-disabled="true">
-      <div class="num">1</div>
+      <div class="logo"><img src="assets/logo-gadens.png" alt="Logo Gadens"></div>
       <h2>Gadens</h2>
       <p>Nenhum cronograma publicado ainda.</p>
       <div class="go">Em breve</div>
     </div>
 
     <a class="card" href="make-it/">
-      <div class="num">2</div>
+      <div class="logo"><img src="assets/logo-make-it.png" alt="Logo Make It"></div>
       <h2>Make It</h2>
       <p>2 cronogramas: Horizon e Now, financiamento CEF.</p>
       <div class="go">Abrir &rarr;</div>
