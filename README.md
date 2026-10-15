@@ -12,6 +12,12 @@ Cada Gantt é **um único arquivo HTML**. Abre direto no navegador, sem instalar
 | [Now · Financiamento CEF](cronogramas/Now%20%C2%B7%20Financiamento%20CEF.html) | Now | 15/10/2026 | 07/11/2026 | 19/09/2026 |
 | [Fluxo de lançamentos (Comercial)](fluxo-lancamentos-comercial/cronograma.html) | Projeto Next | 02/10/2026 | dia 190 (dia 0 = entrada do PL) | não se aplica |
 
+## Como usar os Gantts da CEF
+
+- **Passe o mouse** (ou use Tab) sobre uma tarefa: aparece o detalhe com datas, responsável, situação, folga, do que ela depende e o que ela libera. A tarefa fica em foco com as ligadas a ela; as demais ficam esmaecidas.
+- **Clique numa etapa** da tabela de comparativo: as tarefas dela, no previsto e no ideal, ficam destacadas no gráfico. Clique de novo para soltar.
+- **Botões:** Dia, Semana e Mês mudam a escala; Só caminho crítico filtra as tarefas sem folga; Ocultar prazo ideal esconde a referência.
+
 ## Como cada arquivo é feito
 
 - Os dados ficam em um bloco `<script type="application/json" id="dados">` dentro do próprio HTML: tarefas, durações, dependências, responsável, progresso e o texto da análise.
@@ -38,4 +44,5 @@ Gantt das cinco frentes do fluxo de lançamentos do Comercial (Documentação, I
 1. Salve o HTML em `cronogramas/` com o nome `<Projeto> · <Assunto>.html`.
 2. Inclua uma linha na tabela acima.
 3. Se já existir versão anterior, substitua o arquivo. O histórico fica no Git.
+
 

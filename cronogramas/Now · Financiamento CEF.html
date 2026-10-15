@@ -61,6 +61,18 @@ h2{font-size:16px;margin:28px 0 8px}
 .an ul{margin:0;padding-left:18px}
 .an li{margin:6px 0}
 @media print{.an>div,.cmp{break-inside:avoid}}
+#tip{position:fixed;z-index:50;left:0;top:0;pointer-events:none;opacity:0;transition:opacity .1s;background:var(--ink);color:var(--card);border-radius:6px;padding:8px 11px;font-size:12px;line-height:1.4;box-shadow:0 4px 14px rgba(0,0,0,.25);max-width:300px}
+#tip b{display:block;font-size:13px;margin-bottom:3px}
+#tip span{display:block;opacity:.85}
+.row[data-id]{transition:opacity .12s}
+.row.dim{opacity:.3}
+.row.link .left{box-shadow:inset 4px 0 var(--today)}
+.row:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+.cmp tbody tr{cursor:pointer}
+.cmp tbody tr:hover td,.cmp tbody tr.sel td{background:var(--grid)}
+.cmp tbody tr:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{#tip{display:none}.row.dim{opacity:1}}
 </style>
 
 <div class="page">
@@ -72,9 +84,11 @@ h2{font-size:16px;margin:28px 0 8px}
     <button data-z="dia">Dia</button><button data-z="semana">Semana</button><button data-z="mes">Mês</button>
     <span class="sep"></span>
     <button id="bCrit">Só caminho crítico</button>
+    <button id="bIdeal">Ocultar prazo ideal</button>
   </div>
   <div class="chart" id="chart"></div>
   <div class="legend" id="legend"></div>
+  <div class="nota">Passe o mouse (ou use a tecla Tab) sobre uma tarefa para ver os detalhes, do que ela depende e o que ela libera. Clique numa etapa do comparativo para destacá-la no gráfico.</div>
 
   <h2>Comparativo com o prazo ideal</h2>
   <div class="wrap"><table class="cmp" id="cmp"></table></div>
@@ -84,6 +98,8 @@ h2{font-size:16px;margin:28px 0 8px}
   <div class="an" id="analise"></div>
   <div class="nota" id="analiseNota"></div>
 </div>
+
+<div id="tip" role="status" aria-live="polite"></div>
 
 <!-- ===== DADOS DO PROJETO: o agente altera SOMENTE este bloco (e o <title>) ===== -->
 <script type="application/json" id="dados">
@@ -289,7 +305,7 @@ const dias=(a,b)=>Math.round((b-a)/DIA);
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const PX={dia:30,semana:14,mes:4};
 const CORES=['#4e79a7','#59a14f','#f28e2b','#b07aa1','#76b7b2','#edc948','#e15759','#9c755f','#ff9da7','#8cd17d'];
-let D,T,byId,cal,fimIdx,uteis,fases,zoom,soCrit=false,fimG={};
+let D,T,byId,cal,fimIdx,uteis,fases,zoom,soCrit=false,fimG={},semIdeal=false,etFixa=null;
 
 function agendar(){
   D=JSON.parse($('dados').textContent);
@@ -333,6 +349,7 @@ function agendar(){
   T.forEach(t=>{const g=t.ref?'r':'p';fimG[g]=Math.max(fimG[g]||0,t.ef);});
   fimIdx=Math.max(1,...T.map(t=>t.ef));
   const suc={};T.forEach(t=>t.dep.forEach(d=>{(suc[d]=suc[d]||[]).push(t);}));
+  T.forEach(t=>{t.libera=suc[t.id]||[];});
   ordem.slice().reverse().forEach(t=>{
     const s=suc[t.id]||[];
     t.lf=s.length?Math.min(...s.map(x=>x.ls)):fimG[t.ref?'r':'p'];
@@ -380,7 +397,7 @@ function comparar(){
     const pr=re.map(t=>Number(t.progresso)||0);
     const sit=pr.every(p=>p>=100)?'Concluída':pr.some(p=>p>0)?'Em andamento':'Previsão';
     const dif=ef-r.ef,ac=dif-ant;ant=dif;
-    h+=`<tr><td>${esc(r.etapa)}</td><td>${sit}</td><td>${r.dur} ${un}</td><td>${fmt(r.fim)}</td><td>${fmt(fim)}</td><td>${dif>0?'+':''}${dif} ${un}</td><td class="${ac>0?'mais':''}">${ac>0?'+':''}${ac} ${un}</td></tr>`;
+    h+=`<tr data-et="${esc(r.etapa)}" tabindex="0"><td>${esc(r.etapa)}</td><td>${sit}</td><td>${r.dur} ${un}</td><td>${fmt(r.fim)}</td><td>${fmt(fim)}</td><td>${dif>0?'+':''}${dif} ${un}</td><td class="${ac>0?'mais':''}">${ac>0?'+':''}${ac} ${un}</td></tr>`;
   });
   $('cmp').innerHTML=`<thead><tr><th>Etapa</th><th>Situação</th><th>Ideal: duração</th><th>Ideal: termina em</th><th>Real/previsto: termina em</th><th>Atraso acumulado</th><th>Acrescentado na etapa</th></tr></thead><tbody>${h}</tbody>`;
   $('cmpNota').textContent='Atraso acumulado = quantos dias o fim da etapa fica depois do fim da mesma etapa no prazo ideal. Acrescentado na etapa = quanto o atraso cresceu naquela etapa. '+(D.notaComparativo||'');
@@ -420,31 +437,99 @@ function desenhar(){
   fases.forEach(f=>{
     let ts=T.filter(t=>t.fase===f).sort((a,b)=>a.es-b.es||a.ef-b.ef);
     if(soCrit)ts=ts.filter(t=>t.critica);
+    if(semIdeal)ts=ts.filter(t=>!t.ref);
     if(!ts.length)return;
     const a=minD(ts,'ini'), b=maxD(ts,'fim');
     if(fases.length>1)out+=`<div class="row fase"><div class="left"><i class="sw" style="background:${cor(f)}"></i>${esc(f)}</div><div class="tl" style="${grade}">${lh}<div class="sum" style="left:${x(a)}px;width:${x(b)-x(a)+px}px"></div></div></div>`;
     ts.forEach(t=>{
       const pr0=Math.min(100,Math.max(0,Number(t.progresso)||0));
-      const sit=t.ref?'Referência (prazo ideal)':pr0>=100?'Concluída':(pr0?pr0+'% concluída · ':'')+'Folga: '+t.folga+' dia(s)'+(t.critica?' — caminho crítico':'');
-      const un=uteis?' dias úteis':' dias';
-      const tip=esc(`${t.nome}\n${fmt(t.ini)} → ${fmt(t.fim)}${t.dur?' · '+t.dur+un:' (marco)'}${t.responsavel?'\nResponsável: '+t.responsavel:''}${t.dep.length?'\nDepende de: '+t.dep.join(', '):''}\n${sit}${t.sob?'\nData da planilha começa '+t.sob+' dia(s) antes do fim da tarefa anterior':''}`);
       let g;
       if(t.dur){
         const l=x(t.ini),w=x(t.fim)-l+px;
-        g=`<div class="bar${t.critica?' crit':''}" style="left:${l}px;width:${w}px;background:${cor(f)}" title="${tip}"><i style="width:${pr0}%"></i></div><div class="lbl" style="left:${l+w+6}px">${esc(t.nome)}${pr0?' · '+pr0+'%':''}</div>`;
+        g=`<div class="bar${t.critica?' crit':''}" style="left:${l}px;width:${w}px;background:${cor(f)}"><i style="width:${pr0}%"></i></div><div class="lbl" style="left:${l+w+6}px">${esc(t.nome)}${pr0?' · '+pr0+'%':''}</div>`;
       }else{
         const l=x(t.ini)+px/2-7;
-        g=`<div class="ms${t.critica?' crit':''}" style="left:${l}px" title="${tip}"></div><div class="lbl" style="left:${l+20}px">${esc(t.nome)} · ${curto(t.ini)}</div>`;
+        g=`<div class="ms${t.critica?' crit':''}" style="left:${l}px"></div><div class="lbl" style="left:${l+20}px">${esc(t.nome)} · ${curto(t.ini)}</div>`;
       }
       const meta=[t.responsavel,t.dur?`${curto(t.ini)} → ${curto(t.fim)}`:curto(t.ini),t.dur?t.dur+'d':'marco'].filter(Boolean).map(esc).join(' · ');
-      out+=`<div class="row"><div class="left" title="${tip}"><div class="n">${esc(t.id)}. ${esc(t.nome)}</div><div class="m">${meta}</div></div><div class="tl" style="${grade}">${lh}${g}</div></div>`;
+      out+=`<div class="row" data-id="${esc(t.id)}" tabindex="0"><div class="left"><div class="n">${esc(t.id)}. ${esc(t.nome)}</div><div class="m">${meta}</div></div><div class="tl" style="${grade}">${lh}${g}</div></div>`;
     });
   });
   $('chart').innerHTML=out;
+  aplicaFixo();
+}
+
+const tip=$('tip');
+function mostra(html,x,y){
+  tip.innerHTML=html;tip.style.opacity=1;
+  const r=tip.getBoundingClientRect();
+  tip.style.left=Math.min(Math.max(8,x-r.width/2),innerWidth-r.width-8)+'px';
+  tip.style.top=(y-r.height-14<8?y+18:y-r.height-14)+'px';
+}
+function esconde(){tip.style.opacity=0;}
+function tipHTML(t){
+  const un=uteis?' dias úteis':' dias';
+  const pr=Math.min(100,Math.max(0,Number(t.progresso)||0));
+  const L=[`<b>${esc(t.nome)}</b>`,`<span>${fmt(t.ini)}${t.dur?' → '+fmt(t.fim)+' · '+t.dur+un:' · marco'}</span>`];
+  if(t.responsavel)L.push(`<span>Responsável: ${esc(t.responsavel)}</span>`);
+  if(t.ref)L.push('<span>Referência: prazo ideal</span>');
+  else if(t.dur){
+    L.push(`<span>Situação: ${pr>=100?'concluída':pr>0?pr+'% concluída':'a iniciar'}</span>`);
+    if(pr<100)L.push(`<span>Folga: ${t.folga} dia(s)${t.critica?' · caminho crítico':''}</span>`);
+  }
+  if(t.dep.length)L.push(`<span>Depende de: ${t.dep.map(d=>esc(d+'. '+byId[d].nome)).join('; ')}</span>`);
+  if(t.libera.length)L.push(`<span>Libera: ${t.libera.map(x=>esc(x.id+'. '+x.nome)).join('; ')}</span>`);
+  if(t.sob)L.push(`<span>A data da planilha começa ${t.sob} dia(s) antes do fim da tarefa anterior</span>`);
+  return L.join('');
+}
+function destaca(ids){
+  document.querySelectorAll('#chart .row[data-id]').forEach(r=>{
+    const on=ids.has(r.dataset.id);r.classList.toggle('dim',!on);r.classList.toggle('link',on);
+  });
+}
+function limpa(){document.querySelectorAll('#chart .row[data-id]').forEach(r=>r.classList.remove('dim','link'));}
+const idsEtapa=et=>new Set(T.filter(t=>t.etapa===et).map(t=>t.id));
+const idsTarefa=t=>new Set([t.id,...t.dep,...t.libera.map(x=>x.id)]);
+function aplicaFixo(){
+  document.querySelectorAll('#cmp tbody tr').forEach(tr=>tr.classList.toggle('sel',tr.dataset.et===etFixa));
+  if(etFixa)destaca(idsEtapa(etFixa));else limpa();
+}
+function ligar(){
+  const ch=$('chart'),cm=$('cmp');
+  ch.addEventListener('pointermove',e=>{
+    const r=e.target.closest('.row[data-id]');
+    if(!r){aplicaFixo();esconde();return;}
+    const t=byId[r.dataset.id];destaca(idsTarefa(t));
+    if(e.target.closest('.bar,.ms,.left'))mostra(tipHTML(t),e.clientX,e.clientY);else esconde();
+  });
+  ch.addEventListener('pointerleave',()=>{aplicaFixo();esconde();});
+  ch.addEventListener('focusin',e=>{
+    const r=e.target.closest('.row[data-id]');if(!r)return;
+    const t=byId[r.dataset.id];destaca(idsTarefa(t));
+    const b=r.querySelector('.left').getBoundingClientRect();
+    mostra(tipHTML(t),b.left+b.width/2,b.top);
+  });
+  ch.addEventListener('focusout',()=>{aplicaFixo();esconde();});
+  cm.addEventListener('pointerover',e=>{const tr=e.target.closest('tbody tr');if(tr)destaca(idsEtapa(tr.dataset.et));});
+  cm.addEventListener('pointerleave',aplicaFixo);
+  cm.addEventListener('click',e=>{
+    const tr=e.target.closest('tbody tr');if(!tr)return;
+    etFixa=etFixa===tr.dataset.et?null:tr.dataset.et;aplicaFixo();
+    if(etFixa)ch.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  cm.addEventListener('keydown',e=>{
+    if((e.key==='Enter'||e.key===' ')&&e.target.matches('tbody tr')){e.preventDefault();e.target.click();}
+  });
+  const bi=$('bIdeal');
+  if(!T.some(t=>t.ref))bi.hidden=true;
+  bi.onclick=e=>{
+    semIdeal=!semIdeal;e.currentTarget.classList.toggle('on',semIdeal);
+    e.currentTarget.textContent=semIdeal?'Mostrar prazo ideal':'Ocultar prazo ideal';desenhar();
+  };
 }
 
 try{
-  agendar();resumo();comparar();analise();desenhar();
+  agendar();resumo();comparar();analise();desenhar();ligar();
   document.querySelectorAll('[data-z]').forEach(b=>b.onclick=()=>{zoom=b.dataset.z;desenhar();});
   $('bCrit').onclick=e=>{soCrit=!soCrit;e.currentTarget.classList.toggle('on',soCrit);desenhar();};
 }catch(e){
