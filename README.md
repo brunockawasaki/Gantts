@@ -14,9 +14,11 @@ Cada Gantt é **um único arquivo HTML**. Abre direto no navegador, sem instalar
 
 ## Como usar os Gantts da CEF
 
-- **Passe o mouse** (ou use Tab) sobre uma tarefa: aparece o detalhe com datas, responsável, situação, folga, do que ela depende e o que ela libera. A tarefa fica em foco com as ligadas a ela; as demais ficam esmaecidas.
-- **Clique numa etapa** da tabela de comparativo: as tarefas dela, no previsto e no ideal, ficam destacadas no gráfico. Clique de novo para soltar.
-- **Botões:** Dia, Semana e Mês mudam a escala; Só caminho crítico filtra as tarefas sem folga; Ocultar prazo ideal esconde a referência.
+- **Passe o mouse** sobre uma tarefa: os detalhes aparecem no painel ao lado do gráfico (em telas pequenas, acima dele). Nada fica escondido nem sobreposto. **Clique** para fixar a tarefa.
+- **Setas** ligam cada tarefa à próxima. A tarefa escolhida fica marcada em preto, a que vem antes em azul e a que vem depois em laranja.
+- **Cores:** verde = concluída; azul com parte escura = em andamento (a parte escura é o % feito); listrada = a iniciar (previsão); cinza = prazo ideal; contorno vermelho = caminho crítico.
+- **Comparativo:** clique numa etapa da tabela para destacá-la no gráfico. A barra vermelha mostra quanto cada etapa acrescentou de atraso.
+- **Botões:** Ajustar à tela (padrão), Dia, Semana e Mês mudam a escala; Só caminho crítico filtra as tarefas sem folga; Ocultar prazo ideal esconde a referência.
 
 ## Como cada arquivo é feito
 
@@ -44,5 +46,6 @@ Gantt das cinco frentes do fluxo de lançamentos do Comercial (Documentação, I
 1. Salve o HTML em `cronogramas/` com o nome `<Projeto> · <Assunto>.html`.
 2. Inclua uma linha na tabela acima.
 3. Se já existir versão anterior, substitua o arquivo. O histórico fica no Git.
+
 
 

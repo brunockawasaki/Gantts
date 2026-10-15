@@ -44,15 +44,83 @@ h1{font-size:22px;margin:0 0 2px}
 @media (max-width:640px){.left{width:150px}.kpi{min-width:0;flex:1 1 40%}}
 @media print{.tools{display:none}.chart{overflow:visible;max-height:none}body{background:#fff}}
 
+:root{--left:360px;--done:#2f7d5b;--doing:#2f6fb0;--todoA:#eef3f9;--todoB:#d9e4f1;--todoBd:#7f9cc0;--refc:#a3a29a;--ant:#2f6fb0}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--done:#4cae85;--doing:#5b9be0;--todoA:#2a3340;--todoB:#222a35;--todoBd:#6f8fb5;--refc:#7d7c75;--ant:#5b9be0}}
+:root[data-theme="dark"]{--done:#4cae85;--doing:#5b9be0;--todoA:#2a3340;--todoB:#222a35;--todoBd:#6f8fb5;--refc:#7d7c75;--ant:#5b9be0}
+@media (max-width:640px){:root{--left:150px}}
 h2{font-size:16px;margin:28px 0 8px}
+.nota{color:var(--muted);font-size:12px;margin-top:8px}
+.kpi.alerta b{color:var(--crit)}
+
+/* layout: gráfico + painel de detalhes (nada flutua sobre o gráfico) */
+.main{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px;align-items:start}
+.det{position:sticky;top:12px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:13px;max-height:calc(100vh - 24px);overflow:auto}
+.det h3{margin:6px 0 8px;font-size:16px;line-height:1.25}
+.det .l{margin:8px 0}
+.det .l span{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+.det .chip{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;color:#fff;background:var(--muted)}
+.det .chip.s-done{background:var(--done)}.det .chip.s-doing{background:var(--doing)}
+.det .chip.s-todo{background:var(--todoBd)}.det .chip.s-ref{background:var(--refc)}
+.det .chip.crit{background:var(--crit);margin-left:4px}
+.det .pb{height:8px;border-radius:4px;background:var(--grid);overflow:hidden;margin-top:4px}
+.det .pb i{display:block;height:100%;background:var(--doing)}
+.det .lk{display:block;width:100%;text-align:left;font:inherit;font-size:12.5px;padding:5px 8px;margin-top:4px;border:1px solid var(--line);border-left:4px solid var(--ant);border-radius:6px;background:var(--card);color:var(--ink);cursor:pointer}
+.det .lk.px{border-left-color:var(--today)}
+.det .lk:hover{background:var(--grid)}
+.det .ajuda{color:var(--muted)}
+.det .ajuda b{color:var(--ink)}
+.det .et{border-top:1px solid var(--line);margin-top:10px;padding-top:8px}
+.det .et .dif{color:var(--crit);font-weight:600}
+.main>div{min-width:0}
+@media (max-width:1000px){.main{grid-template-columns:minmax(0,1fr)}.det{order:-1;position:static;max-height:none}}
+
+/* gráfico */
+.chart{max-height:none}
+.plot{position:relative;width:max-content;min-width:100%}
+#lig{position:absolute;left:0;top:0;pointer-events:none;z-index:1;overflow:visible}
+#lig .lk{fill:none;stroke:var(--muted);stroke-width:1.3;opacity:.55}
+#lig .lk.crit{stroke:var(--crit);opacity:.8}
+#lig .lk.on{stroke:var(--ink);stroke-width:2.4;opacity:1}
+#lig .ar{fill:var(--muted);opacity:.7}
+#lig .ar.crit{fill:var(--crit)}
+#lig .ar.on{fill:var(--ink);opacity:1}
+.left{width:var(--left)}
+.row{height:46px;cursor:pointer}
+.row.fase{height:34px;cursor:default}
+.row.head{cursor:default}
+.row:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+.row.foco .left{box-shadow:inset 5px 0 var(--ink);background:color-mix(in srgb,var(--today) 16%,var(--card))}
+.row.foco .tl{background-color:color-mix(in srgb,var(--today) 10%,transparent)}
+.row.ant .left{box-shadow:inset 5px 0 var(--ant)}
+.row.prox .left{box-shadow:inset 5px 0 var(--today)}
+.row.ant .tl,.row.prox .tl{background-color:color-mix(in srgb,var(--muted) 8%,transparent)}
+.row.et .left,.row.et .tl{background-color:color-mix(in srgb,var(--doing) 14%,var(--card))}
+.row.sel .left .n{text-decoration:underline}
+.bar{border-radius:4px}
+.bar i{background:var(--doing)}
+.bar.s-done{background:var(--done)}
+.bar.s-doing{background:color-mix(in srgb,var(--doing) 30%,var(--card))}
+.bar.s-todo{background:repeating-linear-gradient(135deg,var(--todoA) 0 6px,var(--todoB) 6px 12px);box-shadow:inset 0 0 0 1.5px var(--todoBd)}
+.bar.s-ref{background:var(--refc);opacity:.85}
+.lbl.dir{text-align:right}
+.ideal{position:absolute;top:0;bottom:0;width:0;border-left:2px dashed var(--muted);z-index:1}
+.sw.s-done{background:var(--done)}.sw.s-doing{background:color-mix(in srgb,var(--doing) 30%,var(--card));box-shadow:inset 7px 0 var(--doing)}
+.sw.s-todo{background:repeating-linear-gradient(135deg,var(--todoA) 0 4px,var(--todoB) 4px 8px);box-shadow:inset 0 0 0 1.5px var(--todoBd)}
+.sw.s-ref{background:var(--refc)}
+
+/* comparativo */
 .wrap{overflow:auto}
 .cmp{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);font-size:13px}
 .cmp th,.cmp td{padding:7px 10px;border-bottom:1px solid var(--grid);text-align:right;white-space:nowrap}
 .cmp th:first-child,.cmp td:first-child{text-align:left}
 .cmp th{color:var(--muted);font-weight:600}
 .cmp td.mais{color:var(--crit);font-weight:600}
-.ideal{position:absolute;top:0;bottom:0;width:0;border-left:2px dashed var(--muted);z-index:1}
-.nota{color:var(--muted);font-size:12px;margin-top:8px}
+.cmp .ib{display:inline-block;height:10px;border-radius:3px;background:var(--crit);vertical-align:middle;margin-right:8px;opacity:.75}
+.cmp tbody tr{cursor:pointer}
+.cmp tbody tr:hover td,.cmp tbody tr.sel td{background:var(--grid)}
+.cmp tbody tr:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+
+/* análise */
 .an{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
 .an>div{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--muted);border-radius:8px;padding:10px 14px}
 .an .c{border-left-color:var(--crit)}
@@ -60,19 +128,8 @@ h2{font-size:16px;margin:28px 0 8px}
 .an h3{margin:0 0 6px;font-size:14px}
 .an ul{margin:0;padding-left:18px}
 .an li{margin:6px 0}
-@media print{.an>div,.cmp{break-inside:avoid}}
-#tip{position:fixed;z-index:50;left:0;top:0;pointer-events:none;opacity:0;transition:opacity .1s;background:var(--ink);color:var(--card);border-radius:6px;padding:8px 11px;font-size:12px;line-height:1.4;box-shadow:0 4px 14px rgba(0,0,0,.25);max-width:300px}
-#tip b{display:block;font-size:13px;margin-bottom:3px}
-#tip span{display:block;opacity:.85}
-.row[data-id]{transition:opacity .12s}
-.row.dim{opacity:.3}
-.row.link .left{box-shadow:inset 4px 0 var(--today)}
-.row:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
-.cmp tbody tr{cursor:pointer}
-.cmp tbody tr:hover td,.cmp tbody tr.sel td{background:var(--grid)}
-.cmp tbody tr:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+@media print{.det{display:none}.main{display:block}.an>div,.cmp{break-inside:avoid}.chart{max-height:none;overflow:visible}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
-@media print{#tip{display:none}.row.dim{opacity:1}}
 </style>
 
 <div class="page">
@@ -81,14 +138,18 @@ h2{font-size:16px;margin:28px 0 8px}
   <div id="erro"></div>
   <div class="kpis" id="kpis"></div>
   <div class="tools">
-    <button data-z="dia">Dia</button><button data-z="semana">Semana</button><button data-z="mes">Mês</button>
+    <button data-z="ajustar">Ajustar à tela</button><button data-z="dia">Dia</button><button data-z="semana">Semana</button><button data-z="mes">Mês</button>
     <span class="sep"></span>
     <button id="bCrit">Só caminho crítico</button>
     <button id="bIdeal">Ocultar prazo ideal</button>
   </div>
-  <div class="chart" id="chart"></div>
-  <div class="legend" id="legend"></div>
-  <div class="nota">Passe o mouse (ou use a tecla Tab) sobre uma tarefa para ver os detalhes, do que ela depende e o que ela libera. Clique numa etapa do comparativo para destacá-la no gráfico.</div>
+  <div class="main">
+    <div>
+      <div class="chart" id="chart"></div>
+      <div class="legend" id="legend"></div>
+    </div>
+    <aside class="det" id="det" aria-live="polite"></aside>
+  </div>
 
   <h2>Comparativo com o prazo ideal</h2>
   <div class="wrap"><table class="cmp" id="cmp"></table></div>
@@ -98,8 +159,6 @@ h2{font-size:16px;margin:28px 0 8px}
   <div class="an" id="analise"></div>
   <div class="nota" id="analiseNota"></div>
 </div>
-
-<div id="tip" role="status" aria-live="polite"></div>
 
 <!-- ===== DADOS DO PROJETO: o agente altera SOMENTE este bloco (e o <title>) ===== -->
 <script type="application/json" id="dados">
@@ -358,8 +417,8 @@ const add=(d,n)=>new Date(d.getFullYear(),d.getMonth(),d.getDate()+n);
 const dias=(a,b)=>Math.round((b-a)/DIA);
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const PX={dia:30,semana:14,mes:4};
-const CORES=['#4e79a7','#59a14f','#f28e2b','#b07aa1','#76b7b2','#edc948','#e15759','#9c755f','#ff9da7','#8cd17d'];
-let D,T,byId,cal,fimIdx,uteis,fases,zoom,soCrit=false,fimG={},semIdeal=false,etFixa=null;
+let D,T,byId,cal,fimIdx,uteis,fases,zoom='ajustar',soCrit=false,semIdeal=false,fimG={};
+let sel=null,hov=null,etFixa=null,etHov=null,ETAPAS={};
 
 function agendar(){
   D=JSON.parse($('dados').textContent);
@@ -390,7 +449,7 @@ function agendar(){
     st[t.id]=2;ordem.push(t);
   };
   T.forEach(visita);
-  // Tarefa já iniciada com data informada: a data informada vale (é o realizado).
+  // Tarefa já iniciada com data informada: vale a data informada (é o realizado).
   // Tarefa ainda não iniciada: a data informada é "não antes de" e a dependência pode empurrá-la.
   ordem.forEach(t=>{
     let dep=0;t.dep.forEach(d=>{dep=Math.max(dep,byId[d].ef);});
@@ -412,49 +471,57 @@ function agendar(){
   T.forEach(t=>{
     if(t.dur){t.ini=cal[t.es];t.fim=cal[t.ef-1];}
     else{t.ini=t.fim=(t.es>0&&t.dep.length&&!t.inicio)?cal[t.es-1]:cal[t.es];}
+    const p=Math.min(100,Math.max(0,Number(t.progresso)||0));
+    t.pr=p;
+    t.st=t.ref?'ref':t.marco?'marco':p>=100?'done':p>0?'doing':'todo';
   });
   fases=[];T.forEach(t=>{if(!fases.includes(t.fase))fases.push(t.fase);});
-  zoom=fimIdx<=30?'dia':fimIdx<=200?'semana':'mes';
 }
 
-function cor(f){return CORES[fases.indexOf(f)%CORES.length];}
 const maxD=(l,k)=>l.reduce((m,t)=>t[k]>m?t[k]:m,l[0][k]);
 const minD=(l,k)=>l.reduce((m,t)=>t[k]<m?t[k]:m,l[0][k]);
+const un=()=>uteis?'dias úteis':'dias';
 
 function resumo(){
   const P=T.filter(t=>!t.ref),R=T.filter(t=>t.ref);
   const a=minD(P,'ini'),b=maxD(P,'fim');
   const dur=fimG.p-Math.min(...P.map(t=>t.es));
-  const un=uteis?' dias úteis':' dias';
   document.title=D.projeto||'Cronograma';
   $('titulo').textContent=D.projeto||'Cronograma';
   $('sub').textContent=(D.descricao?D.descricao+' · ':'')+(uteis?'Durações em dias úteis (seg–sex, sem feriados)':'Durações em dias corridos');
-  const k=[['Início',fmt(a)],['Término previsto',fmt(b)],['Duração prevista',dur+un],['Tarefas',P.filter(t=>!t.marco).length],['No caminho crítico',P.filter(t=>t.critica&&t.dur).length]];
-  if(R.length){k.push(['Término no prazo ideal',fmt(maxD(R,'fim'))]);k.push(['Diferença para o ideal','+'+(fimG.p-fimG.r)+un]);}
-  $('kpis').innerHTML=k.map(([l,v])=>`<div class="kpi"><span>${l}</span><b>${v}</b></div>`).join('');
-  $('legend').innerHTML=fases.map(f=>`<span><i class="sw" style="background:${cor(f)}"></i>${esc(f)}</span>`).join('')+
+  const k=[['Início',fmt(a)],['Término previsto',fmt(b)],['Duração prevista',dur+' '+un()],['Tarefas',P.filter(t=>!t.marco).length],['No caminho crítico',P.filter(t=>t.critica&&t.dur).length]];
+  if(R.length){k.push(['Término no prazo ideal',fmt(maxD(R,'fim'))]);k.push(['Diferença para o ideal','+'+(fimG.p-fimG.r)+' '+un(),1]);}
+  $('kpis').innerHTML=k.map(([l,v,al])=>`<div class="kpi${al?' alerta':''}"><span>${l}</span><b>${v}</b></div>`).join('');
+  $('legend').innerHTML=
+    `<span><i class="sw s-done"></i>Concluída</span>`+
+    `<span><i class="sw s-doing"></i>Em andamento (parte escura = % feito)</span>`+
+    `<span><i class="sw s-todo"></i>A iniciar (previsão)</span>`+
+    (R.length?`<span><i class="sw s-ref"></i>Prazo ideal</span>`:'')+
     `<span><i class="sw" style="outline:2px solid var(--crit);background:transparent"></i>Caminho crítico (folga zero)</span>`+
     `<span><i class="sw" style="background:var(--ink);width:10px;height:10px;transform:rotate(45deg)"></i>Marco</span>`+
+    `<span><b style="color:var(--muted)">→</b>Dependência</span>`+
     (R.length?`<span><i class="sw" style="width:0;height:14px;border-radius:0;border-left:2px dashed var(--muted)"></i>Término no prazo ideal</span>`:'')+
-    `<span><i class="sw" style="background:var(--today);width:2px;height:14px"></i>Hoje</span>`+
-    `<span><i class="sw" style="background:#4e79a7;box-shadow:inset 7px 0 rgba(0,0,0,.28)"></i>Parte escura = % concluído</span>`;
+    `<span><i class="sw" style="background:var(--today);width:2px;height:14px"></i>Hoje</span>`;
 }
 
 function comparar(){
-  const un=uteis?'dias úteis':'dias';
   const R=T.filter(t=>t.ref&&t.dur).sort((a,b)=>a.ef-b.ef);
-  let ant=0,h='';
+  let ant=0;const L=[];
+  ETAPAS={};
   R.forEach(r=>{
     const re=T.filter(t=>!t.ref&&t.dur&&t.etapa===r.etapa);
     if(!re.length)return;
     const ef=Math.max(...re.map(t=>t.ef)),fim=maxD(re,'fim');
-    const pr=re.map(t=>Number(t.progresso)||0);
+    const pr=re.map(t=>t.pr);
     const sit=pr.every(p=>p>=100)?'Concluída':pr.some(p=>p>0)?'Em andamento':'Previsão';
     const dif=ef-r.ef,ac=dif-ant;ant=dif;
-    h+=`<tr data-et="${esc(r.etapa)}" tabindex="0"><td>${esc(r.etapa)}</td><td>${sit}</td><td>${r.dur} ${un}</td><td>${fmt(r.fim)}</td><td>${fmt(fim)}</td><td>${dif>0?'+':''}${dif} ${un}</td><td class="${ac>0?'mais':''}">${ac>0?'+':''}${ac} ${un}</td></tr>`;
+    ETAPAS[r.etapa]={ideal:r,fim,dif,ac};
+    L.push({et:r.etapa,sit,dur:r.dur,idFim:r.fim,fim,dif,ac});
   });
+  const mx=Math.max(1,...L.map(l=>l.ac));
+  const h=L.map(l=>`<tr data-et="${esc(l.et)}" tabindex="0"><td>${esc(l.et)}</td><td>${l.sit}</td><td>${l.dur} ${un()}</td><td>${fmt(l.idFim)}</td><td>${fmt(l.fim)}</td><td>${l.dif>0?'+':''}${l.dif} ${un()}</td><td class="${l.ac>0?'mais':''}">${l.ac>0?`<span class="ib" style="width:${Math.round(l.ac/mx*90)}px"></span>`:''}${l.ac>0?'+':''}${l.ac} ${un()}</td></tr>`).join('');
   $('cmp').innerHTML=`<thead><tr><th>Etapa</th><th>Situação</th><th>Ideal: duração</th><th>Ideal: termina em</th><th>Real/previsto: termina em</th><th>Atraso acumulado</th><th>Acrescentado na etapa</th></tr></thead><tbody>${h}</tbody>`;
-  $('cmpNota').textContent='Atraso acumulado = quantos dias o fim da etapa fica depois do fim da mesma etapa no prazo ideal. Acrescentado na etapa = quanto o atraso cresceu naquela etapa. '+(D.notaComparativo||'');
+  $('cmpNota').textContent='Atraso acumulado = quantos dias o fim da etapa fica depois do fim da mesma etapa no prazo ideal. Acrescentado na etapa = quanto o atraso cresceu naquela etapa. Clique numa linha para destacá-la no gráfico. '+(D.notaComparativo||'');
 }
 
 function analise(){
@@ -465,18 +532,22 @@ function analise(){
 }
 
 function desenhar(){
-  const px=PX[zoom];
+  const LEFT=innerWidth<=640?150:360;
   document.querySelectorAll('[data-z]').forEach(o=>o.classList.toggle('on',o.dataset.z===zoom));
   const p0=minD(T,'ini');
   const ini=add(p0,-((p0.getDay()+6)%7));
-  const fim=add(maxD(T,'fim'),21);
-  const W=(dias(ini,fim)+1)*px;
+  const fim=add(maxD(T,'fim'),12);
+  const total=dias(ini,fim)+1;
+  let px=PX[zoom];
+  if(zoom==='ajustar')px=Math.max(4,Math.min(30,($('chart').clientWidth-LEFT-16)/total));
+  const W=total*px;
   const x=d=>dias(ini,d)*px;
+  const passo=px>=20?1:(px*7>=44?7:14);
   const grade=`width:${W}px;background-image:repeating-linear-gradient(to right,var(--grid) 0 1px,transparent 1px ${7*px}px)`;
   const hoje=new Date();hoje.setHours(0,0,0,0);
-  let lh=(hoje>=ini&&hoje<=fim)?`<div class="today" style="left:${x(hoje)+px/2}px" title="Hoje"></div>`:'';
+  let lh=(hoje>=ini&&hoje<=fim)?`<div class="today" style="left:${x(hoje)+px/2}px"></div>`:'';
   const R=T.filter(t=>t.ref);
-  if(R.length){const fi=maxD(R,'fim');lh+=`<div class="ideal" style="left:${x(fi)+px}px" title="Término no prazo ideal: ${fmt(fi)}"></div>`;}
+  if(R.length)lh+=`<div class="ideal" style="left:${x(maxD(R,'fim'))+px}px"></div>`;
   let h='';
   for(let d=new Date(ini.getFullYear(),ini.getMonth(),1);d<=fim;d=new Date(d.getFullYear(),d.getMonth()+1,1)){
     const a=d<ini?ini:d, b=new Date(d.getFullYear(),d.getMonth()+1,1);
@@ -484,108 +555,152 @@ function desenhar(){
     h+=`<div class="tick" style="left:${x(a)}px;width:${w}px;top:0;height:22px">${d.toLocaleDateString('pt-BR',{month:'short',year:'2-digit'})}</div>`;
   }
   if(zoom!=='mes'){
-    const passo=zoom==='dia'?1:7;
-    for(let d=ini;d<=fim;d=add(d,passo))h+=`<div class="tick" style="left:${x(d)}px;width:${passo*px}px;top:22px;bottom:0">${zoom==='dia'?d.getDate():curto(d)}</div>`;
+    for(let d=ini;d<=fim;d=add(d,passo))h+=`<div class="tick" style="left:${x(d)}px;width:${passo*px}px;top:22px;bottom:0">${passo===1?d.getDate():curto(d)}</div>`;
   }
-  let out=`<div class="row head"><div class="left">Tarefa</div><div class="tl" style="width:${W}px">${h}</div></div>`;
+  let out=`<div class="plot" id="plot"><svg id="lig"></svg><div class="row head"><div class="left">Tarefa</div><div class="tl" style="width:${W}px">${h}</div></div>`;
   fases.forEach(f=>{
     let ts=T.filter(t=>t.fase===f).sort((a,b)=>a.es-b.es||a.ef-b.ef);
     if(soCrit)ts=ts.filter(t=>t.critica);
     if(semIdeal)ts=ts.filter(t=>!t.ref);
     if(!ts.length)return;
     const a=minD(ts,'ini'), b=maxD(ts,'fim');
-    if(fases.length>1)out+=`<div class="row fase"><div class="left"><i class="sw" style="background:${cor(f)}"></i>${esc(f)}</div><div class="tl" style="${grade}">${lh}<div class="sum" style="left:${x(a)}px;width:${x(b)-x(a)+px}px"></div></div></div>`;
+    if(fases.length>1)out+=`<div class="row fase"><div class="left"><i class="sw ${ts[0].ref?'s-ref':'s-doing'}"></i>${esc(f)}</div><div class="tl" style="${grade}">${lh}<div class="sum" style="left:${x(a)}px;width:${x(b)-x(a)+px}px"></div></div></div>`;
     ts.forEach(t=>{
-      const pr0=Math.min(100,Math.max(0,Number(t.progresso)||0));
+      const est=Math.ceil((t.nome.length+(t.pr&&t.dur?6:0))*6.4)+12;
       let g;
       if(t.dur){
         const l=x(t.ini),w=x(t.fim)-l+px;
-        g=`<div class="bar${t.critica?' crit':''}" style="left:${l}px;width:${w}px;background:${cor(f)}"><i style="width:${pr0}%"></i></div><div class="lbl" style="left:${l+w+6}px">${esc(t.nome)}${pr0?' · '+pr0+'%':''}</div>`;
+        const lbl=esc(t.nome)+(t.pr&&!t.ref?' · '+t.pr+'%':'');
+        const pos=(l+w+6+est>W&&l-6-est>=0)?`right:${W-l+6}px`:`left:${l+w+6}px`;
+        g=`<div class="bar s-${t.st}${t.critica?' crit':''}" style="left:${l}px;width:${w}px">${t.st==='doing'?`<i style="width:${t.pr}%"></i>`:''}</div><div class="lbl ${pos.startsWith('right')?'dir':''}" style="${pos}">${lbl}</div>`;
       }else{
         const l=x(t.ini)+px/2-7;
-        g=`<div class="ms${t.critica?' crit':''}" style="left:${l}px"></div><div class="lbl" style="left:${l+20}px">${esc(t.nome)} · ${curto(t.ini)}</div>`;
+        const pos=(l+20+est>W&&l-6-est>=0)?`right:${W-l+6}px`:`left:${l+20}px`;
+        g=`<div class="ms${t.critica?' crit':''}" style="left:${l}px"></div><div class="lbl ${pos.startsWith('right')?'dir':''}" style="${pos}">${esc(t.nome)} · ${curto(t.ini)}</div>`;
       }
       const meta=[t.responsavel,t.dur?`${curto(t.ini)} → ${curto(t.fim)}`:curto(t.ini),t.dur?t.dur+'d':'marco'].filter(Boolean).map(esc).join(' · ');
       out+=`<div class="row" data-id="${esc(t.id)}" tabindex="0"><div class="left"><div class="n">${esc(t.id)}. ${esc(t.nome)}</div><div class="m">${meta}</div></div><div class="tl" style="${grade}">${lh}${g}</div></div>`;
     });
   });
+  out+='</div>';
   $('chart').innerHTML=out;
-  aplicaFixo();
+  conectar();
+  atualiza();
 }
 
-const tip=$('tip');
-function mostra(html,x,y){
-  tip.innerHTML=html;tip.style.opacity=1;
-  const r=tip.getBoundingClientRect();
-  tip.style.left=Math.min(Math.max(8,x-r.width/2),innerWidth-r.width-8)+'px';
-  tip.style.top=(y-r.height-14<8?y+18:y-r.height-14)+'px';
-}
-function esconde(){tip.style.opacity=0;}
-function tipHTML(t){
-  const un=uteis?' dias úteis':' dias';
-  const pr=Math.min(100,Math.max(0,Number(t.progresso)||0));
-  const L=[`<b>${esc(t.nome)}</b>`,`<span>${fmt(t.ini)}${t.dur?' → '+fmt(t.fim)+' · '+t.dur+un:' · marco'}</span>`];
-  if(t.responsavel)L.push(`<span>Responsável: ${esc(t.responsavel)}</span>`);
-  if(t.ref)L.push('<span>Referência: prazo ideal</span>');
-  else if(t.dur){
-    L.push(`<span>Situação: ${pr>=100?'concluída':pr>0?pr+'% concluída':'a iniciar'}</span>`);
-    if(pr<100)L.push(`<span>Folga: ${t.folga} dia(s)${t.critica?' · caminho crítico':''}</span>`);
-  }
-  if(t.dep.length)L.push(`<span>Depende de: ${t.dep.map(d=>esc(d+'. '+byId[d].nome)).join('; ')}</span>`);
-  if(t.libera.length)L.push(`<span>Libera: ${t.libera.map(x=>esc(x.id+'. '+x.nome)).join('; ')}</span>`);
-  if(t.sob)L.push(`<span>A data da planilha começa ${t.sob} dia(s) antes do fim da tarefa anterior</span>`);
-  return L.join('');
-}
-function destaca(ids){
-  document.querySelectorAll('#chart .row[data-id]').forEach(r=>{
-    const on=ids.has(r.dataset.id);r.classList.toggle('dim',!on);r.classList.toggle('link',on);
+// setas de dependência (desenhadas depois que o gráfico está na página)
+function conectar(){
+  const plot=$('plot'),svg=$('lig');if(!plot||!svg)return;
+  const rows={};plot.querySelectorAll('.row[data-id]').forEach(r=>{rows[r.dataset.id]=r;});
+  const geo=id=>{
+    const r=rows[id];if(!r)return null;
+    const tl=r.querySelector('.tl');
+    const el=r.querySelector('.bar')||r.querySelector('.ms');
+    const xs=tl.offsetLeft+el.offsetLeft;
+    return {xs,xe:xs+el.offsetWidth,y:r.offsetTop+23};
+  };
+  let h='';
+  T.forEach(t=>{
+    const b=geo(t.id);if(!b)return;
+    t.dep.forEach(d=>{
+      const a=geo(d);if(!a)return;
+      const crit=byId[d].critica&&t.critica?' crit':'';
+      const xm=a.xe+5,x2=Math.max(b.xs,xm);
+      h+=`<path class="lk${crit}" data-a="${esc(d)}" data-b="${esc(t.id)}" d="M${a.xe} ${a.y} H${xm} V${b.y} H${x2}"/>`+
+         `<polygon class="ar${crit}" data-a="${esc(d)}" data-b="${esc(t.id)}" points="${x2},${b.y} ${x2-6},${b.y-3.5} ${x2-6},${b.y+3.5}"/>`;
+    });
   });
+  svg.setAttribute('width',plot.scrollWidth);svg.setAttribute('height',plot.scrollHeight);
+  svg.innerHTML=h;
 }
-function limpa(){document.querySelectorAll('#chart .row[data-id]').forEach(r=>r.classList.remove('dim','link'));}
-const idsEtapa=et=>new Set(T.filter(t=>t.etapa===et).map(t=>t.id));
-const idsTarefa=t=>new Set([t.id,...t.dep,...t.libera.map(x=>x.id)]);
-function aplicaFixo(){
+
+function painel(t){
+  const el=$('det');
+  if(!t){
+    el.innerHTML=`<h3>Detalhes da tarefa</h3><div class="ajuda">`+
+      `<p><b>Passe o mouse</b> sobre uma tarefa para ver os detalhes aqui. <b>Clique</b> para fixar.</p>`+
+      `<p>As setas ligam cada tarefa à próxima. A tarefa escolhida fica marcada em preto; a que vem antes, em azul; a que vem depois, em laranja.</p>`+
+      `<p>Clique numa linha do comparativo (abaixo do gráfico) para destacar uma etapa inteira.</p></div>`;
+    return;
+  }
+  const chip={ref:['s-ref','Prazo ideal (referência)'],marco:['s-todo','Marco previsto'],done:['s-done','Concluída'],doing:['s-doing','Em andamento'],todo:['s-todo','A iniciar (previsão)']}[t.st];
+  let h=`<span class="chip ${chip[0]}">${chip[1]}</span>${t.critica?'<span class="chip crit">Caminho crítico</span>':''}<h3>${esc(t.nome)}</h3>`;
+  h+=`<div class="l"><span>Período</span><b>${fmt(t.ini)}${t.dur?' → '+fmt(t.fim):''}</b>${t.dur?' · '+t.dur+' '+un():' · marco'}</div>`;
+  if(t.responsavel)h+=`<div class="l"><span>Responsável</span>${esc(t.responsavel)}</div>`;
+  if(!t.ref&&t.dur){
+    h+=`<div class="l"><span>Andamento</span>${t.pr}% concluído<div class="pb"><i style="width:${t.pr}%"></i></div></div>`;
+    if(t.pr<100)h+=`<div class="l"><span>Folga</span>${t.folga} dia(s)${t.critica?' — qualquer atraso empurra o fim':''}</div>`;
+  }
+  if(t.dep.length)h+=`<div class="l"><span>Depende de</span>${t.dep.map(d=>`<button class="lk" data-go="${esc(d)}">${esc(d)}. ${esc(byId[d].nome)}</button>`).join('')}</div>`;
+  if(t.libera.length)h+=`<div class="l"><span>Libera</span>${t.libera.map(x=>`<button class="lk px" data-go="${esc(x.id)}">${esc(x.id)}. ${esc(x.nome)}</button>`).join('')}</div>`;
+  const e=ETAPAS[t.etapa];
+  if(e&&t.etapa)h+=`<div class="et"><span style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em">Etapa: ${esc(t.etapa)}</span><div>Ideal termina em <b>${fmt(e.ideal.fim)}</b></div><div>Previsto termina em <b>${fmt(e.fim)}</b> <span class="dif">(${e.dif>0?'+':''}${e.dif} ${un()})</span></div></div>`;
+  if(t.sob)h+=`<div class="l"><span>Atenção</span>A data da planilha começa ${t.sob} dia(s) antes do fim da tarefa anterior.</div>`;
+  el.innerHTML=h;
+}
+
+function atualiza(){
+  const a=hov||sel,t=a?byId[a]:null;
+  const ant=new Set(t?t.dep:[]),prox=new Set(t?t.libera.map(x=>x.id):[]);
+  const et=etHov||etFixa;
+  document.querySelectorAll('#chart .row[data-id]').forEach(r=>{
+    const id=r.dataset.id;
+    r.classList.toggle('foco',!!t&&id===t.id);
+    r.classList.toggle('ant',ant.has(id));
+    r.classList.toggle('prox',prox.has(id));
+    r.classList.toggle('sel',id===sel);
+    r.classList.toggle('et',!!et&&byId[id].etapa===et);
+  });
+  document.querySelectorAll('#lig .lk,#lig .ar').forEach(p=>p.classList.toggle('on',!!t&&(p.dataset.a===t.id||p.dataset.b===t.id)));
   document.querySelectorAll('#cmp tbody tr').forEach(tr=>tr.classList.toggle('sel',tr.dataset.et===etFixa));
-  if(etFixa)destaca(idsEtapa(etFixa));else limpa();
+  painel(t);
 }
+
 function ligar(){
   const ch=$('chart'),cm=$('cmp');
-  ch.addEventListener('pointermove',e=>{
-    const r=e.target.closest('.row[data-id]');
-    if(!r){aplicaFixo();esconde();return;}
-    const t=byId[r.dataset.id];destaca(idsTarefa(t));
-    if(e.target.closest('.bar,.ms,.left'))mostra(tipHTML(t),e.clientX,e.clientY);else esconde();
+  ch.addEventListener('pointerover',e=>{
+    const r=e.target.closest('.row[data-id]');const id=r?r.dataset.id:null;
+    if(id!==hov){hov=id;atualiza();}
   });
-  ch.addEventListener('pointerleave',()=>{aplicaFixo();esconde();});
-  ch.addEventListener('focusin',e=>{
+  ch.addEventListener('pointerleave',()=>{hov=null;atualiza();});
+  ch.addEventListener('click',e=>{
     const r=e.target.closest('.row[data-id]');if(!r)return;
-    const t=byId[r.dataset.id];destaca(idsTarefa(t));
-    const b=r.querySelector('.left').getBoundingClientRect();
-    mostra(tipHTML(t),b.left+b.width/2,b.top);
+    sel=sel===r.dataset.id?null:r.dataset.id;atualiza();
   });
-  ch.addEventListener('focusout',()=>{aplicaFixo();esconde();});
-  cm.addEventListener('pointerover',e=>{const tr=e.target.closest('tbody tr');if(tr)destaca(idsEtapa(tr.dataset.et));});
-  cm.addEventListener('pointerleave',aplicaFixo);
+  ch.addEventListener('keydown',e=>{
+    if((e.key==='Enter'||e.key===' ')&&e.target.matches('.row[data-id]')){e.preventDefault();e.target.click();}
+  });
+  ch.addEventListener('focusin',e=>{const r=e.target.closest('.row[data-id]');if(r){hov=r.dataset.id;atualiza();}});
+  ch.addEventListener('focusout',()=>{hov=null;atualiza();});
+  $('det').addEventListener('click',e=>{
+    const b=e.target.closest('[data-go]');if(!b)return;
+    sel=b.dataset.go;hov=null;atualiza();
+    const r=document.querySelector('#chart .row[data-id="'+sel+'"]');
+    if(r)r.scrollIntoView({block:'nearest',behavior:'smooth'});
+  });
+  cm.addEventListener('pointerover',e=>{const tr=e.target.closest('tbody tr');const v=tr?tr.dataset.et:null;if(v!==etHov){etHov=v;atualiza();}});
+  cm.addEventListener('pointerleave',()=>{etHov=null;atualiza();});
   cm.addEventListener('click',e=>{
     const tr=e.target.closest('tbody tr');if(!tr)return;
-    etFixa=etFixa===tr.dataset.et?null:tr.dataset.et;aplicaFixo();
-    if(etFixa)ch.scrollIntoView({behavior:'smooth',block:'start'});
+    etFixa=etFixa===tr.dataset.et?null:tr.dataset.et;atualiza();
+    if(etFixa)ch.scrollIntoView({behavior:'smooth',block:'nearest'});
   });
   cm.addEventListener('keydown',e=>{
     if((e.key==='Enter'||e.key===' ')&&e.target.matches('tbody tr')){e.preventDefault();e.target.click();}
   });
+  document.querySelectorAll('[data-z]').forEach(b=>b.onclick=()=>{zoom=b.dataset.z;desenhar();});
+  $('bCrit').onclick=e=>{soCrit=!soCrit;e.currentTarget.classList.toggle('on',soCrit);desenhar();};
   const bi=$('bIdeal');
   if(!T.some(t=>t.ref))bi.hidden=true;
   bi.onclick=e=>{
     semIdeal=!semIdeal;e.currentTarget.classList.toggle('on',semIdeal);
     e.currentTarget.textContent=semIdeal?'Mostrar prazo ideal':'Ocultar prazo ideal';desenhar();
   };
+  let tm;addEventListener('resize',()=>{clearTimeout(tm);tm=setTimeout(desenhar,150);});
 }
 
 try{
   agendar();resumo();comparar();analise();desenhar();ligar();
-  document.querySelectorAll('[data-z]').forEach(b=>b.onclick=()=>{zoom=b.dataset.z;desenhar();});
-  $('bCrit').onclick=e=>{soCrit=!soCrit;e.currentTarget.classList.toggle('on',soCrit);desenhar();};
 }catch(e){
   $('erro').innerHTML='<div class="erro"><b>Não foi possível montar o cronograma:</b> '+esc(e.message)+'</div>';
 }
