@@ -492,10 +492,11 @@ function desenhar(){
       let g;
       if(t.dur){
         const l=x(t.ini),w=x(t.fim)-l+px;
-        const txt=curto(t.ini)+' → '+curto(t.fim)+' · '+t.dur+'d';
-        const est=Math.ceil(txt.length*6.6)+14;
+        const cabe=(!t.ref&&x(t.fim)-x(t.ini)+px>=40);
+        const txt=curto(t.ini)+' → '+curto(t.fim)+' · '+t.dur+'d'+((!t.ref&&!cabe)?' · <b>'+t.pr+'%</b>':'');
+        const est=Math.ceil(txt.replace(/<[^>]*>/g,'').length*6.6)+14;
         const pos=(l+w+8+est>W&&l-8-est>=0)?`right:${W-l+8}px`:`left:${l+w+8}px`;
-        const pct=(!t.ref&&w>=40)?`<em>${t.pr}%</em>`:'';
+        const pct=cabe?`<em>${t.pr}%</em>`:'';
         const cls=t.ref?'':' s-'+t.st;
         g=`<div class="bar${cls}${t.critica?' crit':''}" style="left:${l}px;width:${w}px;background:${cor};color:${cor}" title="${tip}">${(!t.ref&&t.st!=='todo')?`<i style="width:${t.pr}%"></i>`:''}${pct}</div><div class="lbl ${pos.startsWith('right')?'dir':''}" style="${pos}">${txt}</div>`;
       }else{
