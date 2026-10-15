@@ -1,0 +1,383 @@
+<title>Cronograma de Lançamentos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+/* Layout: régua de dias no topo, uma raia por frente, barras segmentadas entre marcos;
+   abaixo, os pontos de convergência e a tabela completa de marcos. */
+:root{
+  --surface:#fcfcfb; --plane:#f4f3ef; --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --rule:#c3c2b7;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4;
+  --font-display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --font-body:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --surface:#1a1a19; --plane:#0d0d0d; --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+    --grid:#2c2c2a; --rule:#383835;
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --surface:#1a1a19; --plane:#0d0d0d; --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --rule:#383835;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{background:var(--plane);color:var(--ink);font-family:var(--font-body);margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:32px 56px;
+      display:flex;flex-direction:column;gap:26px}
+
+/* ---- cabeçalho ---- */
+.eyebrow{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+         color:var(--muted);margin:0 0 8px}
+h1{font-family:var(--font-display);font-weight:800;font-size:clamp(28px,4.6vw,44px);
+   line-height:1.02;letter-spacing:-.022em;margin:0;text-wrap:balance}
+.sub{color:var(--ink-2);font-size:15px;line-height:1.55;margin:10px 0 0;max-width:62ch}
+.meta{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:18px;padding-top:16px;
+      border-top:1px solid var(--grid)}
+.meta div{display:flex;flex-direction:column;gap:2px}
+.meta dt{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.meta dd{margin:0;font-family:var(--font-display);font-weight:600;font-size:19px;
+         letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+
+/* ---- legenda ---- */
+.key{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center}
+.key span{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-2);
+          font-weight:500;white-space:nowrap}
+.key i{width:11px;height:11px;border-radius:3px;background:var(--c);flex:none}
+
+/* ---- gráfico ---- */
+.chart{background:var(--surface);border:1px solid var(--grid);border-radius:10px;
+       padding:20px 18px 14px;overflow-x:auto}
+.plot{min-width:760px;position:relative}
+.lane{display:grid;grid-template-columns:118px 1fr;gap:14px;align-items:center}
+.lane-name{font-family:var(--font-display);font-weight:600;font-size:12.5px;letter-spacing:-.005em;
+           text-align:right;color:var(--ink);min-width:0;
+           overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lane-name b{display:block;font-family:var(--font-mono);font-weight:400;font-size:10px;
+             color:var(--muted);letter-spacing:.04em}
+.track{position:relative;height:30px}
+.labels{position:relative;height:30px;pointer-events:none}
+.mlabel{position:absolute;transform:translateX(-50%);white-space:nowrap;
+        font-family:var(--font-mono);font-size:10px;font-weight:500;color:var(--ink-2);
+        background:var(--surface);padding:0 3px;border-radius:2px}
+.mlabel.lvl0{bottom:2px}
+.mlabel.borda-ini{transform:none}
+.mlabel.borda-fim{transform:translateX(-100%)}
+.tick.borda-ini{transform:none}
+.fase{position:absolute;left:0;top:-15px;font-family:var(--font-mono);font-size:9.5px;
+      font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);
+      padding:1px 7px 1px 0;border-left:2px solid var(--muted);padding-left:6px}
+.tick.borda-fim{transform:translateX(-100%)}
+.mlabel.lvl1{bottom:16px}
+.seg{position:absolute;top:9px;height:12px;border-radius:2px;background:var(--c);
+     box-shadow:0 0 0 2px var(--surface);cursor:default;transition:filter .12s}
+.seg.ini{border-radius:6px 2px 2px 6px}
+.seg.fim{border-radius:2px 6px 6px 2px}
+.dot{position:absolute;top:15px;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;
+     background:var(--c);border-radius:2px;transform:rotate(45deg);
+     box-shadow:0 0 0 2px var(--surface);cursor:default;z-index:2;transition:transform .12s}
+.dot:hover{transform:rotate(45deg) scale(1.35)}
+.lane:hover .seg{filter:saturate(1.15)}
+
+/* ---- régua ---- */
+.ruler{position:relative;height:22px;border-top:1px solid var(--rule);margin-top:4px}
+.tick{position:absolute;top:0;transform:translateX(-50%);font-family:var(--font-mono);
+      font-size:10px;color:var(--muted);padding-top:5px;font-variant-numeric:tabular-nums}
+.tick::before{content:"";position:absolute;top:0;left:50%;width:1px;height:4px;background:var(--rule)}
+.gridline{position:absolute;top:0;bottom:0;width:1px;background:var(--grid);pointer-events:none}
+.node-line{position:absolute;top:0;bottom:0;width:0;border-left:1.5px dashed var(--muted);
+           opacity:.55;pointer-events:none}
+.plot-body{position:relative;display:flex;flex-direction:column;gap:2px}
+.ruler-row{display:grid;grid-template-columns:118px 1fr;gap:14px}
+.overlay{position:absolute;inset:0;margin-left:132px;pointer-events:none}
+
+/* ---- convergências ---- */
+.nodes{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:14px}
+.node{background:var(--surface);border:1px solid var(--grid);border-left:3px solid var(--s2);
+      border-radius:8px;padding:14px 16px}
+.node h3{font-family:var(--font-display);font-weight:700;font-size:14px;margin:0 0 4px;letter-spacing:-.01em}
+.node .day{font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:.06em;
+           text-transform:uppercase;display:block;margin-bottom:6px}
+.node p{margin:0;font-size:13px;line-height:1.5;color:var(--ink-2)}
+.node ul{margin:8px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:5px}
+.node li{font-family:var(--font-mono);font-size:10.5px;padding:2px 7px;border-radius:99px;
+         border:1px solid var(--grid);color:var(--ink-2);display:inline-flex;align-items:center;gap:5px}
+.node li::before{content:"";width:7px;height:7px;border-radius:2px;background:var(--c);flex:none}
+
+/* ---- tabela ---- */
+h2{font-family:var(--font-display);font-weight:700;font-size:17px;margin:0 0 3px;letter-spacing:-.012em}
+.hint{font-size:12.5px;color:var(--muted);margin:0 0 12px}
+.tablebox{background:var(--surface);border:1px solid var(--grid);border-radius:10px;overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:430px}
+th{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+   color:var(--muted);text-align:left;padding:11px 16px;border-bottom:1px solid var(--grid);font-weight:500}
+td{padding:9px 16px;font-size:13.5px;border-bottom:1px solid var(--grid);color:var(--ink-2)}
+tr:last-child td{border-bottom:0}
+td.marco{color:var(--ink);font-weight:500}
+td.num{font-family:var(--font-mono);text-align:right;font-variant-numeric:tabular-nums;width:1%;white-space:nowrap}
+td.frente{white-space:nowrap;width:1%}
+td.frente span{display:inline-flex;align-items:center;gap:7px;font-size:12px}
+td.frente i{width:9px;height:9px;border-radius:2px;background:var(--c);flex:none}
+tr.node-row td{background:color-mix(in srgb,var(--muted) 9%,transparent)}
+
+/* ---- tooltip ---- */
+#tip{position:fixed;z-index:50;pointer-events:none;opacity:0;transition:opacity .1s;
+     background:var(--ink);color:var(--surface);border-radius:6px;padding:7px 10px;
+     font-size:12px;line-height:1.35;box-shadow:0 4px 14px rgba(0,0,0,.22);max-width:230px}
+#tip b{font-family:var(--font-display);font-weight:600;display:block}
+#tip span{font-family:var(--font-mono);font-size:10.5px;opacity:.72}
+
+footer{font-size:12px;color:var(--muted);line-height:1.55;border-top:1px solid var(--grid);padding-top:14px}
+
+@media (max-width:560px){
+  .lane,.ruler-row{grid-template-columns:92px 1fr;gap:10px}
+  .overlay{margin-left:102px}
+  .lane-name{font-size:11.5px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">Projeto Next · Comercial</p>
+    <h1>Cronograma de Lançamentos</h1>
+    <p class="sub">As cinco frentes que correm entre a entrada do Projeto Legal e a entrega da
+      maquete, posicionadas em dias corridos. O dia 0 é a entrada do PL — a escala serve para
+      qualquer lançamento, sem depender de datas.</p>
+    <dl class="meta" id="meta"></dl>
+  </header>
+
+  <div class="key" id="key"></div>
+
+  <div class="chart">
+    <div class="plot">
+      <div class="plot-body" id="plot"></div>
+      <div class="overlay" id="overlay"></div>
+      <div class="ruler-row"><div></div><div class="ruler" id="ruler"></div></div>
+    </div>
+  </div>
+
+  <section>
+    <h2>Onde o cronograma aperta</h2>
+    <p class="hint">Dias em que mais de um marco cai na mesma data. São os pontos sem folga.</p>
+    <div class="nodes" id="nodes"></div>
+  </section>
+
+  <section>
+    <h2>Todos os marcos</h2>
+    <p class="hint">Em ordem de dia, com a distância desde o marco anterior. As linhas destacadas
+      são os dias de convergência.</p>
+    <div class="tablebox">
+      <table>
+        <thead><tr>
+          <th>Frente</th><th>Marco</th><th class="num">Dia</th><th class="num">Desde o anterior</th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    Fonte: <span style="font-family:var(--font-mono);font-size:11px">resumo fluxo Gadens Next
+    lançamentos.xlsx</span> — Projeto Next, Comercial. A linha 3 da planilha de origem — a primeira das
+    duas linhas de IMAGENS — foi desconsiderada, conforme combinado. Versão 2 da planilha,
+    de 02/10/2026: a ordem das faixas segue a ordem das linhas de lá. Dias corridos.
+  </footer>
+
+</div>
+
+<div id="tip" role="status" aria-live="polite"></div>
+
+<script>
+const MAX = 190;
+const FASE_INICIAL = "Anteprojeto";   // marcação do dia 0 na planilha de origem
+/* Ordem conforme a planilha de 02/10 (versão 2). As cores são os slots 1 a 5 da
+   paleta, atribuídos na ordem das faixas: com a ordem nova, manter a cor anterior
+   de cada frente deixaria Maquete e Orçamento a dE 12,9, abaixo do piso de 15. */
+const FRENTES = [
+  {nome:"Documentação", nota:"Prefeitura", cor:"var(--s1)", marcos:[
+    ["entrada PL",0],["retorno 1º PL",30],["retorno 2º PL",70],
+    ["retorno 3º PL",110],["alvará",140],["RI",180]]},
+  {nome:"Imagens", nota:"3 tiros + HR", cor:"var(--s2)", marcos:[
+    ["1º tiro",45],["2º tiro",125],["3º tiro",140],["HR",150]]},
+  {nome:"Orçamento", nota:"", cor:"var(--s3)", marcos:[
+    ["início orçamento",80],["1ª revisão",120],["orçamento final",140]]},
+  {nome:"Maquete", nota:"", cor:"var(--s4)", marcos:[
+    ["início maquete",125],["maquete final",185]]},
+  {nome:"Takes", nota:"", cor:"var(--s5)", marcos:[
+    ["início takes",150],["takes HR",190]]},
+];
+const pct = d => (d / MAX) * 100;
+
+/* ---- números do cabeçalho, calculados dos dados ---- */
+{
+  const fim = Math.max(...FRENTES.flatMap(f => f.marcos.map(m => m[1])));
+  const nmarcos = FRENTES.reduce((s, f) => s + f.marcos.length, 0);
+  const dur = f => Math.max(...f.marcos.map(m => m[1])) - Math.min(...f.marcos.map(m => m[1]));
+  const longa = FRENTES.reduce((a, b) => dur(b) > dur(a) ? b : a);
+  const conta = {};
+  FRENTES.forEach(f => f.marcos.forEach(([, d]) => conta[d] = (conta[d] || 0) + 1));
+  const nos = Object.keys(conta).filter(d => conta[d] > 1).map(Number).sort((a, b) => a - b);
+  document.getElementById("meta").innerHTML = [
+    ["Duração total", fim + " dias"],
+    ["Frentes", FRENTES.length],
+    ["Marcos", nmarcos],
+    ["Frente mais longa", `${longa.nome} · ${dur(longa)} d`],
+    ["Convergências", "Dias " + nos.join(", ")],
+  ].map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("");
+}
+
+/* ---- legenda ---- */
+document.getElementById("key").innerHTML = FRENTES.map(f =>
+  `<span style="--c:${f.cor}"><i></i>${f.nome}</span>`).join("");
+
+/* ---- tooltip ---- */
+const tip = document.getElementById("tip");
+function mostraTip(e, titulo, detalhe){
+  tip.innerHTML = `<b>${titulo}</b><span>${detalhe}</span>`;
+  tip.style.opacity = 1;
+  const r = tip.getBoundingClientRect();
+  const x = Math.min(Math.max(8, e.clientX - r.width / 2), innerWidth - r.width - 8);
+  tip.style.left = x + "px";
+  tip.style.top = Math.max(8, e.clientY - r.height - 12) + "px";
+}
+const escondeTip = () => { tip.style.opacity = 0; };
+
+/* ---- raias ---- */
+const plot = document.getElementById("plot");
+FRENTES.forEach(f => {
+  const lane = document.createElement("div");
+  lane.className = "lane";
+  lane.style.setProperty("--c", f.cor);
+
+  const nome = document.createElement("div");
+  nome.className = "lane-name";
+  nome.innerHTML = f.nome + (f.nota ? `<b>${f.nota}</b>` : "");
+
+  const col = document.createElement("div");
+  const rot = document.createElement("div");
+  rot.className = "labels";
+  const track = document.createElement("div");
+  track.className = "track";
+
+  /* rótulos: sobe um nível quando o marco fica perto do anterior */
+  let ultimo = -99, nivel = 0;
+  f.marcos.forEach(([texto, dia]) => {
+    nivel = (pct(dia) - ultimo < 9) ? 1 - nivel : 0;
+    ultimo = pct(dia);
+    const l = document.createElement("div");
+    const p = pct(dia);
+    l.className = "mlabel lvl" + nivel +
+                  (p < 5 ? " borda-ini" : p > 95 ? " borda-fim" : "");
+    l.style.left = pct(dia) + "%";
+    l.textContent = texto;
+    rot.appendChild(l);
+  });
+
+  /* segmentos entre marcos consecutivos */
+  for (let i = 0; i < f.marcos.length - 1; i++){
+    const [n1, d1] = f.marcos[i], [n2, d2] = f.marcos[i + 1];
+    const s = document.createElement("div");
+    s.className = "seg" + (i === 0 ? " ini" : "") +
+                  (i === f.marcos.length - 2 ? " fim" : "");
+    s.style.left = pct(d1) + "%";
+    s.style.width = (pct(d2) - pct(d1)) + "%";
+    s.addEventListener("pointerenter", e =>
+      mostraTip(e, `${d2 - d1} dias`, `${f.nome} · ${n1} → ${n2}`));
+    s.addEventListener("pointerleave", escondeTip);
+    track.appendChild(s);
+  }
+
+  /* losangos nos marcos */
+  f.marcos.forEach(([texto, dia]) => {
+    const d = document.createElement("div");
+    d.className = "dot";
+    d.style.left = pct(dia) + "%";
+    d.setAttribute("tabindex", "0");
+    d.setAttribute("aria-label", `${f.nome}, ${texto}, dia ${dia}`);
+    const abre = e => mostraTip(e, texto, `${f.nome} · dia ${dia}`);
+    d.addEventListener("pointerenter", abre);
+    d.addEventListener("focus", e => {
+      const r = d.getBoundingClientRect();
+      mostraTip({clientX:r.left + r.width/2, clientY:r.top}, texto, `${f.nome} · dia ${dia}`);
+    });
+    d.addEventListener("pointerleave", escondeTip);
+    d.addEventListener("blur", escondeTip);
+    track.appendChild(d);
+  });
+
+  col.appendChild(rot); col.appendChild(track);
+  lane.appendChild(nome); lane.appendChild(col);
+  plot.appendChild(lane);
+});
+
+/* ---- marcos ordenados e convergências ---- */
+const TODOS = FRENTES.flatMap(f => f.marcos.map(([m, d]) => ({dia:d, marco:m, frente:f.nome, cor:f.cor})))
+                     .sort((a, b) => a.dia - b.dia || a.frente.localeCompare(b.frente));
+const porDia = {};
+TODOS.forEach(m => (porDia[m.dia] ??= []).push(m));
+const NOS = Object.keys(porDia).map(Number).filter(d => porDia[d].length > 1).sort((a, b) => a - b);
+
+/* ---- régua e linhas de fundo ---- */
+const ruler = document.getElementById("ruler");
+const overlay = document.getElementById("overlay");
+const TICKS = [];
+for (let d = 0; d <= MAX; d += 25) TICKS.push(d);
+if (TICKS[TICKS.length - 1] !== MAX) TICKS.push(MAX);
+const fase = document.createElement("div");
+fase.className = "fase";
+fase.textContent = FASE_INICIAL;
+ruler.appendChild(fase);
+
+for (const d of TICKS){
+  const t = document.createElement("div");
+  t.className = "tick" + (d === 0 ? " borda-ini" : d === MAX ? " borda-fim" : "");
+  t.style.left = pct(d) + "%"; t.textContent = d;
+  ruler.appendChild(t);
+  const g = document.createElement("div");
+  g.className = "gridline"; g.style.left = pct(d) + "%";
+  overlay.appendChild(g);
+}
+NOS.forEach(d => {
+  const n = document.createElement("div");
+  n.className = "node-line"; n.style.left = pct(d) + "%";
+  overlay.appendChild(n);
+});
+
+/* ---- cartões de convergência ---- */
+const TEXTO_NO = {
+  125: "O 2º tiro de imagens e o início da maquete caem no mesmo dia, 15 dias antes do alvará. As duas frentes de material de venda arrancam juntas, antes da aprovação sair.",
+  140: "Três marcos caem no alvará: o 3º tiro de imagens e o fechamento do orçamento dependem dele sair na data. Se atrasar, os dois atrasam junto.",
+  150: "O HR de imagens termina e os takes começam no mesmo dia. Não há folga entre uma frente e a outra, e é daqui que sai o fim do cronograma.",
+};
+const TITULO_NO = {125:"As duas frentes de venda arrancam juntas", 140:"O nó do alvará",
+                   150:"O encaixe que define o fim"};
+document.getElementById("nodes").innerHTML = NOS.map(d => `
+  <article class="node">
+    <span class="day">Dia ${d} · ${porDia[d].length} marcos</span>
+    <h3>${TITULO_NO[d] || "Encaixe sem folga"}</h3>
+    <p>${TEXTO_NO[d] || ""}</p>
+    <ul>${porDia[d].map(m => `<li style="--c:${m.cor}">${m.marco}</li>`).join("")}</ul>
+  </article>`).join("");
+
+/* ---- tabela ---- */
+let anterior = null;
+document.getElementById("tbody").innerHTML = TODOS.map(m => {
+  const delta = anterior === null ? "—" : m.dia - anterior;
+  anterior = m.dia;
+  return `<tr class="${NOS.includes(m.dia) ? "node-row" : ""}">
+    <td class="frente"><span style="--c:${m.cor}"><i></i>${m.frente}</span></td>
+    <td class="marco">${m.marco}</td>
+    <td class="num">${m.dia}</td>
+    <td class="num">${delta}</td></tr>`;
+}).join("");
+</script>

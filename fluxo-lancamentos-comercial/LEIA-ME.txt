@@ -1,0 +1,64 @@
+GANTT DO FLUXO DE LANCAMENTOS - COMERCIAL
+Atualizado em 02/10/2026 (planilha de origem versao 2)
+=======================================================
+
+O QUE TEM AQUI
+
+  gera_gantt_excel.py   gera a planilha do Gantt. Os dados ficam na lista
+                        FRENTES, no topo do arquivo. Rodar:
+                            python gera_gantt_excel.py
+
+  cronograma.html       a pagina interativa. Os dados ficam na constante
+                        FRENTES dentro do <script>, e MAX e o ultimo dia da
+                        regua. Publicada como Artifact:
+                        https://claude.ai/artifact/8pEyf9vknRwmBHDYsLYZxX
+
+  resumo ... (02-10).xlsx     planilha de origem, 1a versao do dia
+  resumo ... v2 (02-10).xlsx  planilha de origem, versao em uso
+
+
+COMO ALTERAR
+
+  1. Mexer na lista FRENTES dos DOIS arquivos (sao independentes).
+  2. Ajustar DIA_MAX (no .py) e MAX (no .html) para o ultimo dia que existe.
+  3. Rodar o .py para regerar a planilha.
+  4. O .html e republicado como nova versao do mesmo Artifact (mesma URL).
+
+  Os numeros do cabecalho da pagina - duracao total, frente mais longa,
+  convergencias - sao CALCULADOS a partir dos dados. Nao mexer neles a mao.
+
+
+ESTADO ATUAL - 190 DIAS, NESTA ORDEM
+
+  DOCUMENTACAO  0 / 30 / 70 / 110 / 140 (alvara) / 180 (RI)
+  IMAGENS       45 / 125 / 140 / 150
+  ORCAMENTO     80 -> 120 (1a revisao) -> 140
+  MAQUETE       125 -> 185
+  TAKES         150 -> 190
+
+  Convergencias: dia 125, dia 140 e dia 150.
+  O fim do cronograma sai dos TAKES, nao da documentacao.
+
+
+TRES COISAS QUE VALEM LEMBRAR
+
+  - A planilha de origem tem DUAS linhas chamadas IMAGENS. A mais curta
+    (termina no dia 90) deve ser IGNORADA. Decisao do Bruno, 29/09/2026.
+
+  - A escala e em DIAS CORRIDOS RELATIVOS, dia 0 = entrada do PL. Nao
+    converter para datas de calendario sem o Bruno pedir.
+
+  - A ORDEM DAS FAIXAS segue a ordem das linhas da planilha. As CORES sao os
+    slots 1 a 5 da paleta, atribuidos nessa mesma ordem - nao sao fixas por
+    frente. Se a ordem mudar, reatribuir e REVALIDAR a paleta. Ja aconteceu de
+    duas frentes vizinhas ficarem indistinguiveis para daltonismo.
+
+
+POR CONFIRMAR COM O COMERCIAL
+
+  - "Anteprojeto" no dia 0: a celula existe na v2 sem fim marcado. Todo o
+    cronograma corre nessa fase, ou ha outras fases depois?
+
+  - 1o tiro de imagens: em 29/09 o Bruno pediu para mover do dia 45 para o
+    110. As planilhas de 02/10 trazem 45 nas duas. Confirmar se foi mudanca
+    de ideia ou celula nao atualizada.

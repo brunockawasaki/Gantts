@@ -1,4 +1,4 @@
-# Gantts — Grupo Gadens
+﻿# Gantts — Grupo Gadens
 
 Cronogramas (Gantt) do Grupo Gadens, com comparativo contra o prazo ideal e análise do projeto (pontos críticos, pontos de atenção e observações).
 
@@ -10,6 +10,7 @@ Cada Gantt é **um único arquivo HTML**. Abre direto no navegador, sem instalar
 |---|---|---|---|---|
 | [Horizon · Financiamento CEF](cronogramas/Horizon%20%C2%B7%20Financiamento%20CEF.html) | Horizon | 15/10/2026 | 15/11/2026 | 24/09/2026 |
 | [Now · Financiamento CEF](cronogramas/Now%20%C2%B7%20Financiamento%20CEF.html) | Now | 15/10/2026 | 07/11/2026 | 19/09/2026 |
+| [Fluxo de lançamentos (Comercial)](fluxo-lancamentos-comercial/cronograma.html) | Projeto Next | 02/10/2026 | dia 190 (dia 0 = entrada do PL) | não se aplica |
 
 ## Como cada arquivo é feito
 
@@ -24,6 +25,10 @@ Cada Gantt é **um único arquivo HTML**. Abre direto no navegador, sem instalar
 - Previsto e prazo ideal são duas cadeias separadas, cada uma com o seu fim.
 - A análise só usa o que está nos dados. O que depende de confirmação está escrito como tal.
 
+## Pasta `fluxo-lancamentos-comercial/`
+
+Gantt das cinco frentes do fluxo de lançamentos do Comercial (Documentação, Imagens, Orçamento, Maquete e Takes), em dias relativos, dia 0 = entrada do PL. Tem a página (`cronograma.html`), o gerador da planilha (`gera_gantt_excel.py`), a planilha pronta, as duas versões da planilha de origem e um `LEIA-ME.txt` com o passo a passo.
+
 ## Pasta `agents/`
 
 `gantt-cronogramas.md` é o agente do Claude Code que monta Gantts a partir de planilhas. Copie para `.claude/agents/` do projeto, ou para `~/.claude/agents/` para usar em todos.
@@ -33,3 +38,4 @@ Cada Gantt é **um único arquivo HTML**. Abre direto no navegador, sem instalar
 1. Salve o HTML em `cronogramas/` com o nome `<Projeto> · <Assunto>.html`.
 2. Inclua uma linha na tabela acima.
 3. Se já existir versão anterior, substitua o arquivo. O histórico fica no Git.
+
