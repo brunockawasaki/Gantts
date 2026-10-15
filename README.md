@@ -4,13 +4,19 @@ Cronogramas (Gantt) do Grupo Gadens, com comparativo contra o prazo ideal e aná
 
 Cada Gantt é **um único arquivo HTML**. Abre direto no navegador, sem instalar nada, e o botão "Imprimir" salva em PDF.
 
-## Gantts
+## Menu
 
-| Arquivo | Projeto | Posição | Término previsto | Prazo ideal |
-|---|---|---|---|---|
-| [Horizon · Financiamento CEF](cronogramas/Horizon%20%C2%B7%20Financiamento%20CEF.html) | Horizon | 15/10/2026 | 15/11/2026 | 24/09/2026 |
-| [Now · Financiamento CEF](cronogramas/Now%20%C2%B7%20Financiamento%20CEF.html) | Now | 15/10/2026 | 07/11/2026 | 19/09/2026 |
-| [Fluxo de lançamentos (Comercial)](fluxo-lancamentos-comercial/cronograma.html) | Projeto Next | 02/10/2026 | dia 190 (dia 0 = entrada do PL) | não se aplica |
+A página inicial (`index.html`) tem dois caminhos: **Gadens** (ainda sem cronogramas) e **Make It**, que abre Horizon e Now (financiamento CEF). O Gantt do Comercial não entra no menu e continua acessível pelo link direto.
+
+| Caminho | Arquivo |
+|---|---|
+| Menu principal | [index.html](index.html) |
+| Make It | [make-it/index.html](make-it/index.html) |
+| Horizon · Financiamento CEF | [cronogramas/Horizon...html](cronogramas/Horizon%20%C2%B7%20Financiamento%20CEF.html) |
+| Now · Financiamento CEF | [cronogramas/Now...html](cronogramas/Now%20%C2%B7%20Financiamento%20CEF.html) |
+| Fluxo de lançamentos (Comercial), fora do menu | [fluxo-lancamentos-comercial/cronograma.html](fluxo-lancamentos-comercial/cronograma.html) |
+
+A pasta `assets/` guarda o logo (`logo-gg.png`) e a foto de fundo (`fachada-gadens.jpg`).
 
 ## Como ler os Gantts da CEF
 
@@ -50,6 +56,7 @@ Gantt das cinco frentes do fluxo de lançamentos do Comercial (Documentação, I
 1. Salve o HTML em `cronogramas/` com o nome `<Projeto> · <Assunto>.html`.
 2. Inclua uma linha na tabela acima.
 3. Se já existir versão anterior, substitua o arquivo. O histórico fica no Git.
+
 
 
 
