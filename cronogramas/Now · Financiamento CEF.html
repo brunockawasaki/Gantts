@@ -140,7 +140,11 @@ h2{font-size:17px;margin:30px 0 8px}
    "duracao": 20,
    "inicio": "2026-07-24",
    "progresso": 100,
-   "etapa": "Solicitar documentação da DJE"
+   "etapa": "Solicitar documentação da DJE",
+   "solicitante": "Crédito Imobiliário",
+   "prazoIdealPlan": 10,
+   "prazoRealPlan": 20,
+   "motivo": "O sistema da CEF (Siopi) ficou uma semana com instabilidade"
   },
   {
    "id": "2",
@@ -152,7 +156,11 @@ h2{font-size:17px;margin:30px 0 8px}
     "1"
    ],
    "progresso": 100,
-   "etapa": "Análise da DJE"
+   "etapa": "Análise da DJE",
+   "solicitante": "Jurídico",
+   "prazoIdealPlan": 21,
+   "prazoRealPlan": 43,
+   "motivo": "Foram atualizada as certidõesdurante o prazo corrente e com isso a Caixa abriu novamente a demanda de mais 15 dias úteis"
   },
   {
    "id": "3",
@@ -164,7 +172,11 @@ h2{font-size:17px;margin:30px 0 8px}
     "2"
    ],
    "progresso": 80,
-   "etapa": "Risco do empreendimento"
+   "etapa": "Risco do empreendimento",
+   "solicitante": "Crédito Imobiliário",
+   "prazoIdealPlan": 8,
+   "prazoRealPlan": 25,
+   "motivo": "A Caixa informou que só analisaria o Risco do Empreendimento, após a emissão do Risco da Realty, que já estava em andamento"
   },
   {
    "id": "4",
@@ -175,7 +187,11 @@ h2{font-size:17px;margin:30px 0 8px}
    "depende": [
     "3"
    ],
-   "etapa": "Conformidade"
+   "etapa": "Conformidade",
+   "solicitante": "Crédito Imobiliário",
+   "prazoIdealPlan": 8,
+   "prazoRealPlan": null,
+   "motivo": "Não chegou nessa etapa, aguardando a conclusão do Risco"
   },
   {
    "id": "5",
@@ -186,7 +202,11 @@ h2{font-size:17px;margin:30px 0 8px}
    "depende": [
     "4"
    ],
-   "etapa": "Minuta PJ"
+   "etapa": "Minuta PJ",
+   "solicitante": "Crédito Imobiliário",
+   "prazoIdealPlan": 8,
+   "prazoRealPlan": null,
+   "motivo": "Não chegou nessa etapa, somente após a aprovação da conformidade"
   },
   {
    "id": "6",
@@ -197,7 +217,11 @@ h2{font-size:17px;margin:30px 0 8px}
    "depende": [
     "5"
    ],
-   "etapa": "Assinatura do contrato"
+   "etapa": "Assinatura do contrato",
+   "solicitante": "CEF",
+   "prazoIdealPlan": 3,
+   "prazoRealPlan": null,
+   "motivo": "Não chegou nessa etapa, após emitirem a minura"
   },
   {
    "id": "7",
@@ -475,7 +499,7 @@ function desenhar(){
   let out=`<div class="row head"><div class="left">Tarefa</div><div class="tl" style="width:${W}px">${h}</div></div>`;
   let primeira=true;
   fases.forEach(f=>{
-    let ts=T.filter(t=>t.fase===f).sort((a,b)=>a.es-b.es||a.ef-b.ef);
+    let ts=T.filter(t=>t.fase===f);   // mesma ordem da planilha
     if(soCrit)ts=ts.filter(t=>t.critica);
     if(semIdeal)ts=ts.filter(t=>!t.ref);
     if(!ts.length)return;
@@ -489,7 +513,7 @@ function desenhar(){
       const cor=t.ref?COR.r:COR.p;
       const un_=uteis?' dias úteis':' dias';
       const sit=t.ref?'Prazo ideal (referência)':t.st==='done'?'Concluída':t.st==='doing'?t.pr+'% concluída':'A iniciar (previsão)';
-      const tip=esc(`${t.nome}\n${fmt(t.ini)}${t.dur?' → '+fmt(t.fim)+' · '+t.dur+un_:' (marco)'}${t.responsavel?'\nResponsável: '+t.responsavel:''}\nSituação: ${sit}${(!t.ref&&t.dur&&t.pr<100)?'\nFolga: '+t.folga+' dia(s)'+(t.critica?' — caminho crítico':''):''}${t.dep.length?'\nDepende de: '+t.dep.map(d=>byId[d].nome).join('; '):''}`);
+      const tip=esc(`${t.nome}\n${fmt(t.ini)}${t.dur?' → '+fmt(t.fim)+' · '+t.dur+un_:' (marco)'}${t.responsavel?'\nResponsável: '+t.responsavel:''}\nSituação: ${sit}${(!t.ref&&t.dur&&t.pr<100)?'\nFolga: '+t.folga+' dia(s)'+(t.critica?' — caminho crítico':''):''}${t.dep.length?'\nDepende de: '+t.dep.map(d=>byId[d].nome).join('; '):''}${t.solicitante?'\nSolicitante: '+t.solicitante:''}${(t.prazoIdealPlan!=null||t.prazoRealPlan!=null)?'\nPlanilha: ideal '+(t.prazoIdealPlan!=null?t.prazoIdealPlan:'—')+' · real '+(t.prazoRealPlan!=null?t.prazoRealPlan:'—'):''}${t.motivo?'\nMotivo do desvio: '+t.motivo:''}`);
       let g;
       if(t.dur){
         const l=x(t.ini),w0=x(t.fim)-l+px;
