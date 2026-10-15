@@ -65,9 +65,10 @@ h1{font-size:22px;margin:0 0 2px}
 .ms{top:19px}
 .lbl{top:15px;font-size:12.5px;line-height:22px;color:var(--ink)}
 .lbl.dir{text-align:right}
+.lbl.m{top:1px;line-height:20px}
 .lbl small{color:var(--muted);font-size:12px}
 .lbl .atr{color:var(--crit);font-weight:700}
-.gap{position:absolute;top:26px;height:6px;border-radius:3px;background:repeating-linear-gradient(135deg,var(--crit) 0 3px,transparent 3px 6px)}
+.gap{position:absolute;top:23px;height:6px;border-radius:3px;background:repeating-linear-gradient(135deg,var(--crit) 0 3px,transparent 3px 6px)}
 .sum{top:15px}
 .ideal{position:absolute;top:0;bottom:0;width:0;border-left:2px dashed var(--muted);z-index:1}
 .tag{position:absolute;top:2px;font-size:10.5px;font-weight:700;letter-spacing:.03em;white-space:nowrap;z-index:2;background:var(--card);padding:0 4px;border-radius:3px}
@@ -560,7 +561,7 @@ function desenhar(){
         const txt=curto(t.ini)+(dg>0?` · <span class="atr">+${dg} ${un_.trim()} sobre o ideal</span>`:'');
         const est=Math.ceil((curto(t.ini).length+(dg>0?30:0))*6.6)+14;
         const pos=(l+22+est>W&&l-8-est>=0)?`right:${W-l+8}px`:`left:${l+22}px`;
-        g=`${gap}<div class="ms${t.critica?' crit':''}" style="left:${l}px" title="${tip}"></div><div class="lbl ${pos.startsWith('right')?'dir':''}" style="${pos}">${txt}</div>`;
+        g=`${gap}<div class="ms${t.critica?' crit':''}" style="left:${l}px" title="${tip}"></div><div class="lbl m ${pos.startsWith('right')?'dir':''}" style="${pos}">${txt}</div>`;
       }
       const meta=[t.responsavel,t.dur?`${curto(t.ini)} → ${curto(t.fim)}`:curto(t.ini),t.dur?t.dur+'d':'marco'].filter(Boolean).map(esc).join(' · ');
       const sb=(!t.ref&&t.dur)?`<span style="color:${t.st==='done'?'var(--done)':t.st==='doing'?'var(--today)':'var(--muted)'};font-weight:700"> · ${t.st==='done'?'concluída':t.st==='doing'?t.pr+'%':'a iniciar'}</span>`:'';
