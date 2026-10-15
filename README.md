@@ -12,13 +12,17 @@ Cada Gantt é **um único arquivo HTML**. Abre direto no navegador, sem instalar
 | [Now · Financiamento CEF](cronogramas/Now%20%C2%B7%20Financiamento%20CEF.html) | Now | 15/10/2026 | 07/11/2026 | 19/09/2026 |
 | [Fluxo de lançamentos (Comercial)](fluxo-lancamentos-comercial/cronograma.html) | Projeto Next | 02/10/2026 | dia 190 (dia 0 = entrada do PL) | não se aplica |
 
-## Como usar os Gantts da CEF
+## Como ler os Gantts da CEF
 
-- **Passe o mouse** sobre uma tarefa: os detalhes aparecem no painel ao lado do gráfico (em telas pequenas, acima dele). Nada fica escondido nem sobreposto. **Clique** para fixar a tarefa.
-- **Setas** ligam cada tarefa à próxima. A tarefa escolhida fica marcada em preto, a que vem antes em azul e a que vem depois em laranja.
-- **Cores:** verde = concluída; azul com parte escura = em andamento (a parte escura é o % feito); listrada = a iniciar (previsão); cinza = prazo ideal; contorno vermelho = caminho crítico.
-- **Comparativo:** clique numa etapa da tabela para destacá-la no gráfico. A barra vermelha mostra quanto cada etapa acrescentou de atraso.
-- **Botões:** Ajustar à tela (padrão), Dia, Semana e Mês mudam a escala; Só caminho crítico filtra as tarefas sem folga; Ocultar prazo ideal esconde a referência.
+Pensado para apresentar à diretoria: uma tela só, sem rolagem, com a mensagem principal no topo.
+
+- **Faixa de resumo:** diz quando o contrato está previsto e quantos dias depois do prazo ideal isso é.
+- **Uma linha por tarefa:** a barra mostra o andamento. A parte escura é o que já foi feito; barra toda escura é concluída; barra clara tracejada é a iniciar (previsão).
+- **Prazo ideal:** grupo em verde, logo abaixo, para comparar na mesma escala. Uma linha tracejada cinza marca o término ideal e uma laranja marca hoje.
+- **Contrato assinado:** a listra vermelha mostra o atraso sobre o ideal.
+- **Contorno vermelho:** caminho crítico (folga zero).
+- **Abaixo do gráfico:** comparativo com o prazo ideal (com barra do atraso acrescentado por etapa) e a análise do projeto.
+- **Botões:** Ajustar à tela (padrão), Dia, Semana, Mês, Só caminho crítico, Ocultar prazo ideal e Imprimir / salvar PDF.
 
 ## Como cada arquivo é feito
 
@@ -46,6 +50,7 @@ Gantt das cinco frentes do fluxo de lançamentos do Comercial (Documentação, I
 1. Salve o HTML em `cronogramas/` com o nome `<Projeto> · <Assunto>.html`.
 2. Inclua uma linha na tabela acima.
 3. Se já existir versão anterior, substitua o arquivo. O histórico fica no Git.
+
 
 
 
