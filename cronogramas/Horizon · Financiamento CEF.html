@@ -42,6 +42,9 @@ h1{font-size:22px;margin:0 0 2px}
 .sw{width:14px;height:10px;border-radius:3px;display:inline-block;flex:none}
 .erro{background:var(--card);color:var(--crit);border:1px solid var(--crit);border-radius:8px;padding:12px;margin:16px 0}
 @media (max-width:640px){.left{width:150px}.kpi{min-width:0;flex:1 1 40%}}
+.bar.s-aberta::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(0,0,0,.42) 0 6px,transparent 6px 12px)}
+.sw.s-aberta{background:#4e79a7;background-image:repeating-linear-gradient(135deg,rgba(0,0,0,.42) 0 3px,transparent 3px 6px)}
+.lbl.sem{color:var(--muted);font-style:italic}
 @media print{.tools{display:none}.chart{overflow:visible;max-height:none}body{background:#fff}}
 
 :root{--done:#2f5f8f}
@@ -400,14 +403,15 @@ h2{font-size:17px;margin:30px 0 8px}
    "Confirmar com o setor: no gráfico a Risco P02 depende só da P01, mas começou em 08/10, dois dias depois do fim da Análise DJE P02 (06/10). A planilha não diz se existe essa dependência."
   ],
   "observacoes": [
-   "Posição em 15/10/2026: 6 de 10 tarefas concluídas (ids 1 a 6), 1 em andamento (id 7) e 3 por iniciar (ids 8 a 10). Faltam 31 dias para o contrato previsto.",
-   "O avanço informado da P03 (30%) está em linha com o calendário: 5 de 17 dias já passaram (29%).",
+   "Posição em 16/10/2026: 6 de 10 tarefas concluídas (ids 1 a 6), 1 em andamento (id 7) e 3 por iniciar (ids 8 a 10). Faltam 30 dias para o contrato previsto.",
+   "O avanço informado da P03 é 30%. Pelo calendário, 6 de 17 dias já passaram (35%).",
    "Tempo das tarefas concluídas por responsável: Jurídico 56 dias (ids 1 e 3) e CEF 27 dias (ids 2, 4, 5 e 6).",
    "A 1ª rodada de risco (26/08 a 02/09) aconteceu junto com a 1ª análise da DJE (24/08 a 31/08). No prazo ideal as duas etapas estão em sequência.",
    "Datas da planilha: a tarefa 2 começa no mesmo dia em que a 1 termina (24/08) e a tarefa 4 no mesmo dia em que a 3 termina (29/09). Pode ser só a forma de contar os dias."
   ],
   "nota": ""
- }
+ },
+ "posicao": "2026-10-16"
 }
 </script>
 <!-- ===== FIM DOS DADOS ===== -->
@@ -425,10 +429,11 @@ const dias=(a,b)=>Math.round((b-a)/DIA);
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const PX={dia:30,semana:14,mes:4};
 const COR={p:'#4e79a7',r:'#59a14f'};
-let D,T,byId,cal,fimIdx,uteis,fases,zoom='ajustar',soCrit=false,semIdeal=false,fimG={};
+let D,T,byId,cal,fimIdx,uteis,fases,zoom='ajustar',soCrit=false,semIdeal=false,fimG={},POS=null;
 
 function agendar(){
   D=JSON.parse($('dados').textContent);
+  POS=D.posicao?parse(D.posicao):null;
   uteis=D.diasUteis!==false;
   const fer=new Set(D.feriados||[]);
   const ok=d=>!uteis||(d.getDay()!==0&&d.getDay()!==6&&!fer.has(iso(d)));
@@ -446,6 +451,7 @@ function agendar(){
     t.dep=(t.depende||[]).map(String);
     t.fase=t.fase||'Geral';
     t.ref=!!t.referencia;
+    t.aberta=!!t.aberta;   // em andamento, sem previsão de término
   });
   const ordem=[],st={};
   const visita=t=>{
@@ -459,26 +465,29 @@ function agendar(){
   // Tarefa já iniciada com data informada: vale a data informada (é o realizado).
   // Tarefa ainda não iniciada: a data informada é "não antes de" e a dependência pode empurrá-la.
   ordem.forEach(t=>{
+    if(t.dep.some(d=>byId[d].sem||byId[d].aberta)){t.sem=true;return;}   // sem data: depende de etapa sem previsão
     let dep=0;t.dep.forEach(d=>{dep=Math.max(dep,byId[d].ef);});
     const fixo=t.inicio?idx(t.inicio):null;
-    if(fixo!==null&&(Number(t.progresso)||0)>0){t.es=fixo;t.sob=Math.max(0,dep-fixo);}
+    if(fixo!==null&&((Number(t.progresso)||0)>0||t.aberta)){t.es=fixo;t.sob=Math.max(0,dep-fixo);}
     else{t.es=Math.max(fixo||0,dep);t.sob=0;}
     t.ef=t.es+t.dur;
   });
   // Previsto/real e prazo ideal são duas cadeias separadas: cada uma tem o seu próprio fim.
-  T.forEach(t=>{const g=t.ref?'r':'p';fimG[g]=Math.max(fimG[g]||0,t.ef);});
-  fimIdx=Math.max(1,...T.map(t=>t.ef));
+  T.forEach(t=>{if(t.sem)return;const g=t.ref?'r':'p';fimG[g]=Math.max(fimG[g]||0,t.ef);});
+  fimIdx=Math.max(1,...T.filter(t=>!t.sem).map(t=>t.ef));
   const suc={};T.forEach(t=>t.dep.forEach(d=>{(suc[d]=suc[d]||[]).push(t);}));
   ordem.slice().reverse().forEach(t=>{
-    const s=suc[t.id]||[];
+    if(t.sem){t.folga=null;t.critica=false;return;}
+    const s=(suc[t.id]||[]).filter(x=>!x.sem);
     t.lf=s.length?Math.min(...s.map(x=>x.ls)):fimG[t.ref?'r':'p'];
     t.ls=t.lf-t.dur;t.folga=t.ls-t.es;t.critica=!t.ref&&t.folga===0;
   });
   T.forEach(t=>{
+    t.pr=Math.min(100,Math.max(0,Number(t.progresso)||0));
+    if(t.sem){t.ini=t.fim=null;t.st='sem';return;}
     if(t.dur){t.ini=cal[t.es];t.fim=cal[t.ef-1];}
     else{t.ini=t.fim=(t.es>0&&t.dep.length&&!t.inicio)?cal[t.es-1]:cal[t.es];}
-    t.pr=Math.min(100,Math.max(0,Number(t.progresso)||0));
-    t.st=t.pr>=100?'done':t.pr>0?'doing':'todo';
+    t.st=t.aberta?'aberta':t.pr>=100?'done':t.pr>0?'doing':'todo';
   });
   fases=[];T.forEach(t=>{if(!fases.includes(t.fase))fases.push(t.fase);});
 }
@@ -490,23 +499,31 @@ const un=()=>uteis?'dias úteis':'dias';
 function resumo(){
   const P=T.filter(t=>!t.ref),R=T.filter(t=>t.ref);
   const reais=P.filter(t=>t.dur);
-  const a=minD(P,'ini'),b=maxD(P,'fim');
-  const dur=fimG.p-Math.min(...P.map(t=>t.es));
+  const Pv=P.filter(t=>!t.sem);
+  const semFim=P.some(t=>t.sem);   // há etapa sem data: o projeto ainda não tem previsão de término
+  const a=minD(Pv,'ini'),b=maxD(Pv,'fim');
+  const dur=fimG.p-Math.min(...Pv.map(t=>t.es));
   const conc=reais.filter(t=>t.st==='done').length;
   document.title=D.projeto||'Cronograma';
   $('titulo').textContent=D.projeto||'Cronograma';
   $('sub').textContent=(D.descricao?D.descricao+' · ':'')+(uteis?'Durações em dias úteis (seg–sex, sem feriados)':'Durações em dias corridos');
-  if(R.length){
+  const ab=P.find(t=>t.aberta);
+  if(R.length&&semFim&&ab){
+    const ib=maxD(R,'fim'),ref=POS||new Date(),atraso=dias(ib,new Date(ref.getFullYear(),ref.getMonth(),ref.getDate()));
+    $('banner').innerHTML=`O prazo ideal terminava em <b>${fmt(ib)}</b>. ${atraso>0?`<b class="r">${atraso} ${un()} depois</b>, a`:'A'} etapa <b>${esc(ab.nome.replace(/\s*\(.*\)\s*$/,''))}</b> segue em andamento há <b>${ab.dur} ${un()}</b>${ab.prazoIdealPlan!=null?` (o ideal são ${ab.prazoIdealPlan})`:''} e ainda não há previsão de término.`+
+      `<small>Hoje: ${conc} de ${reais.length} tarefas concluídas.</small>`;
+  }else if(R.length){
     const ib=maxD(R,'fim'),dif=fimG.p-fimG.r;
     $('banner').innerHTML=`Contrato assinado previsto para <b>${fmt(b)}</b>, <b class="r">${dif} ${un()} depois</b> do prazo ideal (${fmt(ib)}).`+
       `<small>Hoje: ${conc} de ${reais.length} tarefas concluídas.</small>`;
   }else $('banner').hidden=true;
-  const k=[['Início',fmt(a)],['Término previsto',fmt(b)],['Duração prevista',dur+' '+un()],['Tarefas concluídas',conc+' de '+reais.length],['No caminho crítico',reais.filter(t=>t.critica).length]];
-  if(R.length){k.push(['Término no prazo ideal',fmt(maxD(R,'fim'))]);k.push(['Diferença para o ideal','+'+(fimG.p-fimG.r)+' '+un(),1]);}
+  const k=[['Início',fmt(a)],['Término previsto',semFim?'sem previsão':fmt(b)],['Duração prevista',semFim?'—':dur+' '+un()],['Tarefas concluídas',conc+' de '+reais.length],['No caminho crítico',reais.filter(t=>t.critica).length]];
+  if(R.length){k.push(['Término no prazo ideal',fmt(maxD(R,'fim'))]);k.push(['Diferença para o ideal',semFim?'—':'+'+(fimG.p-fimG.r)+' '+un(),semFim?0:1]);}
   $('kpis').innerHTML=k.map(([l,v,al])=>`<div class="kpi${al?' alerta':''}"><span>${l}</span><b>${v}</b></div>`).join('');
   $('legend').innerHTML=
     `<span><i class="sw s-done"></i>Concluída (barra toda escura)</span>`+
     `<span><i class="sw s-doing"></i>Em andamento (parte escura = % feito)</span>`+
+    (P.some(t=>t.aberta)?`<span><i class="sw s-aberta"></i>Em andamento, sem previsão de término</span>`:'')+
     `<span><i class="sw s-todo"></i>A iniciar (previsão)</span>`+
     (R.length?`<span><i class="sw s-ref"></i>Prazo ideal</span>`:'')+
     `<span><i class="sw" style="outline:2px solid var(--crit);background:transparent"></i>Caminho crítico (folga zero)</span>`+
@@ -521,14 +538,15 @@ function comparar(){
   R.forEach(r=>{
     const re=T.filter(t=>!t.ref&&t.dur&&t.etapa===r.etapa);
     if(!re.length)return;
-    const ef=Math.max(...re.map(t=>t.ef)),fim=maxD(re,'fim');
-    const pr=re.map(t=>t.pr);
-    const sit=pr.every(p=>p>=100)?'Concluída':pr.some(p=>p>0)?'Em andamento':'Previsão';
-    const dif=ef-r.ef,ac=dif-ant;ant=dif;
+    const aberta=re.some(t=>t.sem||t.aberta);   // etapa sem previsão de término
+    const ef=aberta?null:Math.max(...re.map(t=>t.ef)),fim=aberta?null:maxD(re,'fim');
+    const sit=re.every(t=>t.sem)?'Sem previsão':re.every(t=>t.st==='done')?'Concluída':re.some(t=>t.st==='aberta'||t.pr>0)?'Em andamento':'Previsão';
+    let dif=null,ac=null;
+    if(!aberta){dif=ef-r.ef;ac=dif-ant;ant=dif;}
     L.push({et:r.etapa,sit,dur:r.dur,idFim:r.fim,fim,dif,ac});
   });
-  const mx=Math.max(1,...L.map(l=>l.ac));
-  const h=L.map(l=>`<tr><td>${esc(l.et)}</td><td>${l.sit}</td><td>${l.dur} ${un()}</td><td>${fmt(l.idFim)}</td><td>${fmt(l.fim)}</td><td>${l.dif>0?'+':''}${l.dif} ${un()}</td><td class="${l.ac>0?'mais':''}">${l.ac>0?`<span class="ib" style="width:${Math.round(l.ac/mx*90)}px"></span>`:''}${l.ac>0?'+':''}${l.ac} ${un()}</td></tr>`).join('');
+  const mx=Math.max(1,...L.map(l=>l.ac||0));
+  const h=L.map(l=>`<tr><td>${esc(l.et)}</td><td>${l.sit}</td><td>${l.dur} ${un()}</td><td>${fmt(l.idFim)}</td><td>${l.fim?fmt(l.fim):'sem previsão'}</td><td>${l.dif==null?'—':(l.dif>0?'+':'')+l.dif+' '+un()}</td><td class="${l.ac>0?'mais':''}">${l.ac>0?`<span class="ib" style="width:${Math.round(l.ac/mx*90)}px"></span>`:''}${l.ac==null?'—':(l.ac>0?'+':'')+l.ac+' '+un()}</td></tr>`).join('');
   $('cmp').innerHTML=`<thead><tr><th>Etapa</th><th>Situação</th><th>Ideal: duração</th><th>Ideal: termina em</th><th>Real/previsto: termina em</th><th>Atraso acumulado</th><th>Acrescentado na etapa</th></tr></thead><tbody>${h}</tbody>`;
   $('cmpNota').textContent='Atraso acumulado = quantos dias o fim da etapa fica depois do fim da mesma etapa no prazo ideal. Acrescentado na etapa = quanto o atraso cresceu naquela etapa. '+(D.notaComparativo||'');
 }
@@ -543,9 +561,10 @@ function analise(){
 function desenhar(){
   const LEFT=innerWidth<=640?150:290;
   document.querySelectorAll('[data-z]').forEach(o=>o.classList.toggle('on',o.dataset.z===zoom));
-  const p0=minD(T,'ini');
+  const Tv=T.filter(t=>!t.sem);
+  const p0=minD(Tv,'ini');
   const ini=add(p0,-((p0.getDay()+6)%7));
-  const fim=add(maxD(T,'fim'),8);
+  const fim=add(maxD(Tv,'fim'),8);
   const total=dias(ini,fim)+1;
   let px=PX[zoom];
   if(zoom==='ajustar')px=Math.max(4,Math.min(30,($('chart').clientWidth-LEFT-6)/total));
@@ -576,28 +595,33 @@ function desenhar(){
     if(soCrit)ts=ts.filter(t=>t.critica);
     if(semIdeal)ts=ts.filter(t=>!t.ref);
     if(!ts.length)return;
-    const a=minD(ts,'ini'), b=maxD(ts,'fim');
+    const tv=ts.filter(t=>!t.sem);
+    const a=tv.length?minD(tv,'ini'):null, b=tv.length?maxD(tv,'fim'):null;
     const cf=ts[0].ref?COR.r:COR.p;
     if(fases.length>1){
-      out+=`<div class="row fase"><div class="left"><i class="sw" style="background:${cf}"></i>${esc(f)}</div><div class="tl" style="${grade}">${lh}${primeira?tags:''}<div class="sum" style="left:${x(a)}px;width:${x(b)-x(a)+px}px"></div></div></div>`;
+      out+=`<div class="row fase"><div class="left"><i class="sw" style="background:${cf}"></i>${esc(f)}</div><div class="tl" style="${grade}">${lh}${primeira?tags:''}${a?`<div class="sum" style="left:${x(a)}px;width:${x(b)-x(a)+px}px"></div>`:''}</div></div>`;
       primeira=false;
     }
     ts.forEach(t=>{
       const cor=t.ref?COR.r:COR.p;
       const un_=uteis?' dias úteis':' dias';
-      const sit=t.ref?'Prazo ideal (referência)':t.st==='done'?'Concluída':t.st==='doing'?t.pr+'% concluída':'A iniciar (previsão)';
-      const tip=esc(`${t.nome}\n${fmt(t.ini)}${t.dur?' → '+fmt(t.fim)+' · '+t.dur+un_:' (marco)'}${t.responsavel?'\nResponsável: '+t.responsavel:''}\nSituação: ${sit}${(!t.ref&&t.dur&&t.pr<100)?'\nFolga: '+t.folga+' dia(s)'+(t.critica?' — caminho crítico':''):''}${t.dep.length?'\nDepende de: '+t.dep.map(d=>byId[d].nome).join('; '):''}${t.solicitante?'\nSolicitante: '+t.solicitante:''}${(t.prazoIdealPlan!=null||t.prazoRealPlan!=null)?'\nPlanilha: ideal '+(t.prazoIdealPlan!=null?t.prazoIdealPlan:'—')+' · real '+(t.prazoRealPlan!=null?t.prazoRealPlan:'—'):''}${t.motivo?'\nMotivo do desvio: '+t.motivo:''}`);
+      const sit=t.ref?'Prazo ideal (referência)':t.st==='sem'?'Sem data: aguarda a etapa anterior':t.st==='aberta'?'Em andamento, sem previsão de término':t.st==='done'?'Concluída':t.st==='doing'?t.pr+'% concluída':'A iniciar (previsão)';
+      const per=t.sem?(t.dur?'Sem data · prazo ideal da planilha: '+(t.prazoIdealPlan!=null?t.prazoIdealPlan:t.dur)+' dias':'Sem data'):`${fmt(t.ini)}${t.dur?' → '+fmt(t.fim)+' · '+t.dur+un_:' (marco)'}`;
+      const tip=esc(`${t.nome}\n${per}${t.responsavel?'\nResponsável: '+t.responsavel:''}\nSituação: ${sit}${(!t.ref&&t.dur&&t.pr<100&&!t.sem)?'\nFolga: '+t.folga+' dia(s)'+(t.critica?' — caminho crítico':''):''}${t.dep.length?'\nDepende de: '+t.dep.map(d=>byId[d].nome).join('; '):''}${t.solicitante?'\nSolicitante: '+t.solicitante:''}${(t.prazoIdealPlan!=null||t.prazoRealPlan!=null)?'\nPlanilha: ideal '+(t.prazoIdealPlan!=null?t.prazoIdealPlan:'—')+' · real '+(t.prazoRealPlan!=null?t.prazoRealPlan:'—'):''}${t.motivo?'\nMotivo do desvio: '+t.motivo:''}`);
       let g;
-      if(t.dur){
+      if(t.sem){
+        const ant=t.dep.filter(d=>byId[d].sem||byId[d].aberta).map(d=>byId[d].nome.replace(/\s*\(.*\)\s*$/,'')).join(', ');
+        g=`<div class="lbl sem" style="left:12px">sem data · aguardando ${esc(ant)}</div>`;
+      }else if(t.dur){
         const l=x(t.ini),w0=x(t.fim)-l+px;
         const w=(!t.ref&&w0<40)?40:w0;   // barra curta ganha largura mínima para caber o %
         const cabe=!t.ref;
-        const txt=curto(t.ini)+' → '+curto(t.fim)+' · '+t.dur+'d';
+        const txt=t.st==='aberta'?curto(t.ini)+' → hoje · '+t.dur+'d · em andamento':curto(t.ini)+' → '+curto(t.fim)+' · '+t.dur+'d';
         const est=Math.ceil(txt.replace(/<[^>]*>/g,'').length*6.6)+14;
         const pos=(l+w+8+est>W&&l-8-est>=0)?`right:${W-l+8}px`:`left:${l+w+8}px`;
-        const pct=cabe?`<em>${t.pr}%</em>`:'';
+        const pct=(cabe&&t.st!=='aberta')?`<em>${t.pr}%</em>`:'';
         const cls=t.ref?'':' s-'+t.st;
-        g=`<div class="bar${cls}${t.critica?' crit':''}" style="left:${l}px;width:${w}px;background:${cor};color:${cor}" title="${tip}">${(!t.ref&&t.st!=='todo')?`<i style="width:${t.pr}%"></i>`:''}${pct}</div><div class="lbl ${pos.startsWith('right')?'dir':''}" style="${pos}">${txt}</div>`;
+        g=`<div class="bar${cls}${t.critica?' crit':''}" style="left:${l}px;width:${w}px;background:${cor};color:${cor}" title="${tip}">${(!t.ref&&t.st!=='todo'&&t.st!=='aberta')?`<i style="width:${t.pr}%"></i>`:''}${pct}</div><div class="lbl ${pos.startsWith('right')?'dir':''}" style="${pos}">${txt}</div>`;
       }else{
         const l=x(t.ini)+px/2-7;
         const mi=R.find(r=>r.marco);
@@ -609,8 +633,9 @@ function desenhar(){
         const pos=(l+22+est>W&&l-8-est>=0)?`right:${W-l+8}px`:`left:${l+22}px`;
         g=`${gap}<div class="ms${t.critica?' crit':''}" style="left:${l}px" title="${tip}"></div><div class="lbl m ${pos.startsWith('right')?'dir':''}" style="${pos}">${txt}</div>`;
       }
-      const meta=[t.responsavel,t.dur?`${curto(t.ini)} → ${curto(t.fim)}`:curto(t.ini),t.dur?t.dur+'d':'marco'].filter(Boolean).map(esc).join(' · ');
-      const sb=(!t.ref&&t.dur)?`<span style="color:${t.st==='done'?'var(--done)':t.st==='doing'?'var(--today)':'var(--muted)'};font-weight:700"> · ${t.st==='done'?'concluída':t.st==='doing'?t.pr+'%':'a iniciar'}</span>`:'';
+      const meta=[t.responsavel,t.sem?'':t.st==='aberta'?`${curto(t.ini)} → hoje`:t.dur?`${curto(t.ini)} → ${curto(t.fim)}`:curto(t.ini),t.dur?(t.sem?'ideal '+t.dur+'d':t.dur+'d'):'marco'].filter(Boolean).map(esc).join(' · ');
+      const SB={done:['var(--done)','concluída'],doing:['var(--today)',t.pr+'%'],aberta:['var(--today)','em andamento'],sem:['var(--muted)','sem data'],todo:['var(--muted)','a iniciar']}[t.st]||['var(--muted)',''];
+      const sb=(!t.ref&&t.dur)?`<span style="color:${SB[0]};font-weight:700"> · ${SB[1]}</span>`:'';
       out+=`<div class="row" title="${tip}"><div class="left"><div class="n">${esc(t.id)}. ${esc(t.nome)}</div><div class="m">${meta}${sb}</div></div><div class="tl" style="${grade}">${lh}${g}</div></div>`;
     });
   });

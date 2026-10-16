@@ -94,9 +94,12 @@ def calcular(D):
 
     for t in ordem:
         t["_dur"] = 0 if t.get("marco") else max(1, round(t.get("duracao") or 1))
+        if any(T[str(x)].get("_sem") or T[str(x)].get("aberta") for x in t.get("depende", [])):
+            t["_sem"] = True     # depende de etapa em andamento sem previsão: fica sem data
+            continue
         dep = max([T[str(x)]["_ef"] for x in t.get("depende", [])], default=0)
         fixo = idx(t["inicio"]) if t.get("inicio") else None
-        iniciada = (t.get("progresso") or 0) > 0
+        iniciada = (t.get("progresso") or 0) > 0 or bool(t.get("aberta"))
         if fixo is not None and iniciada:
             es = fixo        # tarefa iniciada: vale a data informada
         else:
@@ -111,8 +114,10 @@ def calcular(D):
     previsto = [t for t in D["tarefas"] if not t.get("referencia")]
     ideal = [t for t in D["tarefas"] if t.get("referencia")]
     reais = [t for t in previsto if not t.get("marco")]
+    sem_fim = any(t.get("_sem") for t in previsto)   # sem previsão de término
+    agendadas = [t for t in previsto if not t.get("_sem")]
     res = {
-        "termino": max(t["_fim"] for t in previsto),
+        "termino": None if sem_fim else max(t["_fim"] for t in agendadas),
         "concluidas": sum(1 for t in reais if (t.get("progresso") or 0) >= 100),
         "total": len(reais),
         "uteis": uteis,
@@ -121,7 +126,7 @@ def calcular(D):
     }
     if ideal:
         res["ideal"] = max(t["_fim"] for t in ideal)
-        res["dif"] = max(t["_ef"] for t in previsto) - max(t["_ef"] for t in ideal)
+        res["dif"] = None if sem_fim else max(t["_ef"] for t in agendadas) - max(t["_ef"] for t in ideal)
     return res
 
 
@@ -141,7 +146,10 @@ def carregar_projetos():
 def pagina_gantt(modelo, p):
     D, meta = p["D"], p["meta"]
     empresa = meta.get("empresa", "Make It")
-    dados = json.dumps(D, ensure_ascii=False, indent=1)
+    limpo = dict(D)
+    if meta.get("posicao"):
+        limpo["posicao"] = meta["posicao"]   # a página usa a data da posição nos textos
+    dados = json.dumps(limpo, ensure_ascii=False, indent=1)
     return (modelo.replace("__TITULO__", D["projeto"])
                   .replace("__EMPRESA__", empresa)
                   .replace("__EMPRESA_SLUG__", slug(empresa))
@@ -166,7 +174,7 @@ def cartao_projeto(p, r):
         f'      <span class="tag">{resto}</span>\n'
         f'      <h2>{nome}</h2>\n'
         f'      <dl class="dados">\n'
-        f'        <div><dt>Término previsto</dt><dd>{br(r["termino"])}</dd></div>\n'
+        f'        <div><dt>Término previsto</dt><dd>{br(r["termino"]) if r["termino"] else "sem previsão"}</dd></div>\n'
         f'        <div><dt>Sobre o ideal</dt><dd class="alerta">{sobre}</dd></div>\n'
         f'        <div><dt>Tarefas concluídas</dt><dd>{r["concluidas"]} de {r["total"]}</dd></div>\n'
         f'        <div><dt>Término ideal</dt><dd>{ideal}</dd></div>\n'

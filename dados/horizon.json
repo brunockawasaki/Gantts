@@ -1,7 +1,7 @@
 {
  "_meta": {
   "empresa": "Make It",
-  "posicao": "2026-10-15",
+  "posicao": "2026-10-16",
   "aba": "HORIZON"
  },
  "projeto": "Horizon · Financiamento CEF",
@@ -274,8 +274,8 @@
    "Confirmar com o setor: no gráfico a Risco P02 depende só da P01, mas começou em 08/10, dois dias depois do fim da Análise DJE P02 (06/10). A planilha não diz se existe essa dependência."
   ],
   "observacoes": [
-   "Posição em 15/10/2026: 6 de 10 tarefas concluídas (ids 1 a 6), 1 em andamento (id 7) e 3 por iniciar (ids 8 a 10). Faltam 31 dias para o contrato previsto.",
-   "O avanço informado da P03 (30%) está em linha com o calendário: 5 de 17 dias já passaram (29%).",
+   "Posição em 16/10/2026: 6 de 10 tarefas concluídas (ids 1 a 6), 1 em andamento (id 7) e 3 por iniciar (ids 8 a 10). Faltam 30 dias para o contrato previsto.",
+   "O avanço informado da P03 é 30%. Pelo calendário, 6 de 17 dias já passaram (35%).",
    "Tempo das tarefas concluídas por responsável: Jurídico 56 dias (ids 1 e 3) e CEF 27 dias (ids 2, 4, 5 e 6).",
    "A 1ª rodada de risco (26/08 a 02/09) aconteceu junto com a 1ª análise da DJE (24/08 a 31/08). No prazo ideal as duas etapas estão em sequência.",
    "Datas da planilha: a tarefa 2 começa no mesmo dia em que a 1 termina (24/08) e a tarefa 4 no mesmo dia em que a 3 termina (29/09). Pode ser só a forma de contar os dias."

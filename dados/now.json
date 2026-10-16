@@ -1,7 +1,7 @@
 {
  "_meta": {
   "empresa": "Make It",
-  "posicao": "2026-10-15",
+  "posicao": "2026-10-16",
   "aba": "NOW"
  },
  "projeto": "Now · Financiamento CEF",
@@ -37,23 +37,23 @@
    "solicitante": "Jurídico",
    "prazoIdealPlan": 21,
    "prazoRealPlan": 43,
-   "motivo": "Foram atualizada as certidõesdurante o prazo corrente e com isso a Caixa abriu novamente a demanda de mais 15 dias úteis"
+   "motivo": "Foram atualizada as certidões durante o prazo corrente e com isso a Caixa abriu novamente a demanda de mais 15 dias úteis",
+   "inicio": "2026-08-12"
   },
   {
    "id": "3",
    "nome": "Risco do empreendimento (em andamento)",
    "fase": "Realizado + previsão",
    "responsavel": "CEF",
-   "duracao": 25,
-   "depende": [
-    "2"
-   ],
-   "progresso": 80,
+   "duracao": 52,
+   "depende": [],
    "etapa": "Risco do empreendimento",
    "solicitante": "Crédito Imobiliário",
    "prazoIdealPlan": 8,
-   "prazoRealPlan": 25,
-   "motivo": "A Caixa informou que só analisaria o Risco do Empreendimento, após a emissão do Risco da Realty, que já estava em andamento"
+   "prazoRealPlan": null,
+   "motivo": "Em andamento, a Caixa informou que só analisaria o Risco do Empreendimento, após a emissão do Risco da Realty",
+   "inicio": "2026-08-26",
+   "aberta": true
   },
   {
    "id": "4",
@@ -62,7 +62,8 @@
    "responsavel": "CEF",
    "duracao": 8,
    "depende": [
-    "3"
+    "3",
+    "2"
    ],
    "etapa": "Conformidade",
    "solicitante": "Crédito Imobiliário",
@@ -195,20 +196,21 @@
  "notaComparativo": "",
  "analise": {
   "criticos": [
-   "Término previsto em 07/11/2026, 49 dias depois do prazo ideal (19/09/2026). A duração prevista é de 107 dias contra 58 no ideal.",
-   "Todas as tarefas até o contrato estão em uma única sequência, sem folga: qualquer atraso em uma delas adia o contrato no mesmo número de dias.",
-   "Risco do empreendimento (id 3) está em andamento, 80% concluída, com término previsto em 19/10 (25 dias, de 25/09 a 19/10). A Conformidade só começa depois dela, em 20/10."
+   "Sem previsão de término. O Risco do empreendimento (id 3) está em andamento desde 26/08/2026, há 52 dias, contra 8 no ideal. Conformidade, Minuta PJ e Assinatura do contrato ficam sem data enquanto o Risco não tiver previsão.",
+   "O prazo ideal para o contrato terminava em 19/09/2026. Hoje, 16/10/2026, já se passaram 27 dias dessa data e o contrato ainda não tem previsão.",
+   "Segundo a planilha, a Conformidade aguarda a conclusão do Risco, a Minuta PJ só vem depois da aprovação da conformidade e a assinatura vem depois da minuta. Qualquer atraso no Risco adia a assinatura do contrato na mesma medida."
   ],
   "atencao": [
-   "Análise DJE P01 levou 43 dias contra 21 no ideal: foi a etapa que mais acrescentou atraso (+22 dias).",
-   "Risco do empreendimento: 25 dias previstos contra 8 no ideal (+17 dias). Solicitar documentação da DJE: 20 dias contra 10 (+10 dias).",
-   "Conformidade, Minuta PJ e Assinatura do contrato estão previstas com a mesma duração do prazo ideal (8, 8 e 3 dias), embora as três primeiras etapas tenham passado do ideal. A planilha não mostra se essas durações foram estimadas ou apenas repetidas do ideal.",
-   "Só a data de início da primeira tarefa (24/07) vem da planilha. As datas das demais, inclusive da já concluída, são calculadas somando as durações. Se a data real de término da Análise DJE P01 for outra, tudo o que vem depois muda.",
-   "O avanço informado da Risco (80%) está um pouco abaixo do calendário: 21 de 25 dias já passaram (84%), diferença de cerca de 1 dia."
+   "Análise DJE P01 levou 43 dias contra 21 no ideal. Motivo na planilha: as certidões foram atualizadas durante o prazo corrente e, com isso, a Caixa abriu novamente a demanda de mais 15 dias úteis.",
+   "Solicitar documentação da DJE levou 20 dias contra 10 no ideal (+10 dias). Motivo na planilha: o sistema da CEF (Siopi) ficou uma semana com instabilidade.",
+   "Risco do empreendimento: a planilha registra que a Caixa só analisaria o Risco depois da emissão do Risco da Realty, que já estava em andamento. A planilha não informa quando isso deve terminar.",
+   "O Risco começou em 26/08, antes do fim da Análise DJE P01 (23/09). As duas etapas correram juntas; no prazo ideal elas aparecem em sequência.",
+   "Conformidade (8 dias), Minuta PJ (8) e Assinatura do contrato (3) têm só o prazo ideal na planilha, sem prazo real. Por isso não foram colocadas no cronograma: dependem do fim do Risco."
   ],
   "observacoes": [
-   "Posição em 15/10/2026: 2 de 6 tarefas concluídas (ids 1 e 2), 1 em andamento (id 3) e 3 por iniciar (ids 4 a 6). Faltam 23 dias para o contrato previsto.",
-   "Tempo das tarefas concluídas por responsável: Jurídico 20 dias (id 1) e CEF 43 dias (id 2)."
+   "Posição em 16/10/2026: 2 de 6 tarefas concluídas (ids 1 e 2), 1 em andamento (id 3) e 3 por iniciar (ids 4 a 6).",
+   "Tempo das tarefas concluídas por responsável: Jurídico 20 dias (id 1) e CEF 43 dias (id 2).",
+   "Datas da planilha: a Análise DJE P01 começa em 12/08, no mesmo dia em que a solicitação da DJE termina. Pode ser só a forma de contar os dias."
   ],
   "nota": ""
  }

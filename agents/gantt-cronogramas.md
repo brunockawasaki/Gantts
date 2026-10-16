@@ -29,6 +29,7 @@ Você mantém o repositório **Gantts** do Grupo Gadens (https://github.com/brun
    - `id`, `nome`, `fase`, `etapa`, `responsavel`, `duracao` (dias), `inicio` (AAAA-MM-DD, data real do protocolo), `depende` (lista de ids), `progresso` (0 a 100), `marco` (true para marco).
    - `referencia: true` nas tarefas do prazo ideal.
    - Da planilha: `solicitante`, `motivo` (Motivo do Desvio), `prazoIdealPlan`, `prazoRealPlan`.
+   - `aberta: true`: etapa em andamento **sem previsão de término** (a planilha traz protocolo e nenhum prazo real). Informe `inicio` (protocolo) e `duracao` = dias do protocolo até a data de `_meta.posicao`. A página desenha a barra até hoje, e as etapas que dependem dela ficam **sem data** (menu e comparativo mostram "sem previsão").
    - O **andamento (`progresso`) não vem da planilha**. Pergunte ao usuário. Nunca estime.
    - Mantenha as tarefas **na ordem da planilha**: as linhas do gráfico seguem essa ordem.
 3. **Atualizar `_meta.posicao`** (data da posição, AAAA-MM-DD).

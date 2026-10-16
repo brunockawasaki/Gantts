@@ -75,6 +75,7 @@ Peça ao Claude Code, com o agente `gantt-cronogramas`, algo como: *"atualize o 
 - Tarefa ainda não iniciada: `inicio` é "não antes de"; a dependência pode empurrá-la.
 - Previsto e prazo ideal são duas cadeias separadas, cada uma com o seu fim.
 - O andamento (`progresso`) não vem da planilha; é informado à parte.
+- Etapa em andamento sem previsão (`aberta: true`): a barra vai até a data da posição, e as etapas que dependem dela ficam sem data. O término do projeto passa a aparecer como "sem previsão".
 - A análise só usa o que está nos dados. O que depende de confirmação está escrito como tal.
 
 ## Atenção
