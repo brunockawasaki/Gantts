@@ -247,7 +247,7 @@ def main():
         lista = por_empresa.get(empresa)
         if lista:
             cartoes.append(
-                f'    <a class="card" href="{slug(empresa)}/">\n'
+                f'    <a class="card" href="{slug(empresa)}/index.html">\n'
                 f'{logo_html(empresa)}'
                 f'      <h2>{empresa}</h2>\n'
                 f'      <p>{frase_empresa(lista)}</p>\n'

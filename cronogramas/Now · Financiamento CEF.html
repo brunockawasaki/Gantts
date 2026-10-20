@@ -45,6 +45,38 @@ h1{font-size:22px;margin:0 0 2px}
 .bar.s-aberta::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(0,0,0,.42) 0 6px,transparent 6px 12px)}
 .sw.s-aberta{background:#4e79a7;background-image:repeating-linear-gradient(135deg,rgba(0,0,0,.42) 0 3px,transparent 3px 6px)}
 .lbl.sem{color:var(--muted);font-style:italic}
+:root{--ideal:#2e8b57;--real:#4e79a7;--am:#ffd600;--at:#e8662a;--hoje2:#5b4bc4}
+.row{height:64px}
+.row.fase{height:36px}
+.row.head{height:44px}
+.today{background:var(--hoje2)}
+.tag.hoje{color:var(--hoje2)}
+.idl{position:absolute;top:10px;height:7px;border-radius:3px;background:var(--ideal)}
+.lbl.li{top:3px;line-height:16px;font-size:11.5px;color:var(--ideal);font-weight:600}
+.lbl.lr{top:27px;line-height:22px}
+.rb{position:absolute;top:27px;height:22px;border-radius:4px;overflow:hidden}
+.rb .sg{position:absolute;top:0;bottom:0}
+.rb .sg.ok{background:var(--real)}
+.rb .sg.am{background:var(--am)}
+.rb .sg.at{background:var(--at)}
+.rb i{position:absolute;left:0;top:0;bottom:0;background:rgba(0,0,0,.22);z-index:1}
+.rb em{position:relative;z-index:2;display:block;font-style:normal;font-size:12px;font-weight:700;color:#fff;padding:0 6px 0 13px;line-height:22px;text-shadow:0 0 2px #000,0 0 3px #000}
+.rb.s-todo{opacity:.62;outline:1.5px dashed #555;outline-offset:-1.5px}
+.rb.s-aberta::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(0,0,0,.38) 0 6px,transparent 6px 12px);z-index:1}
+.rb.crit{outline:2px solid var(--crit);outline-offset:1px}
+.rb.s-todo.crit{outline:2px solid var(--crit)}
+.mk{position:absolute;top:32px;width:12px;height:12px;margin-left:-6px;background:var(--ink);border:2px solid var(--card);transform:rotate(45deg);z-index:3;cursor:help}
+.ms{top:25px}
+.gap{top:30px;background:repeating-linear-gradient(135deg,var(--at) 0 3px,transparent 3px 6px)}
+.lbl.m{top:6px}
+.lbl .atr{color:var(--at)}
+.banner .r,.kpi.alerta b,.cmp td.mais{color:var(--at)}
+.cmp .ib{background:var(--at)}
+.sw.l-ideal{background:var(--ideal)}
+.sw.l-ok{background:var(--real)}
+.sw.l-am{background:var(--am)}
+.sw.l-at{background:var(--at)}
+.sw.l-mk{background:var(--ink);width:9px;height:9px;transform:rotate(45deg);border-radius:0}
 @media print{.tools{display:none}.chart{overflow:visible;max-height:none}body{background:#fff}}
 
 :root{--done:#2f5f8f}
@@ -104,7 +136,7 @@ h2{font-size:17px;margin:30px 0 8px}
 </style>
 
 <div class="page">
-  <div class="nav"><a href="../make-it/">&larr; Make It</a> &middot; <a href="../">Menu principal</a></div>
+  <div class="nav"><a href="../make-it/index.html">&larr; Make It</a> &middot; <a href="../index.html">Menu principal</a></div>
   <h1 id="titulo">Cronograma</h1>
   <div class="sub" id="sub"></div>
   <div id="erro"></div>
@@ -453,15 +485,17 @@ function resumo(){
   if(R.length){k.push(['Término no prazo ideal',fmt(maxD(R,'fim'))]);k.push(['Diferença para o ideal',semFim?'—':'+'+(fimG.p-fimG.r)+' '+un(),semFim?0:1]);}
   $('kpis').innerHTML=k.map(([l,v,al])=>`<div class="kpi${al?' alerta':''}"><span>${l}</span><b>${v}</b></div>`).join('');
   $('legend').innerHTML=
-    `<span><i class="sw s-done"></i>Concluída (barra toda escura)</span>`+
+    (R.length?`<span><i class="sw l-ideal"></i>Prazo ideal (início e fim)</span>`:'')+
+    `<span><i class="sw l-mk"></i>Início real (passe o mouse: motivo do desvio)</span>`+
+    `<span><i class="sw l-ok"></i>Real no prazo</span>`+
+    (R.length?`<span><i class="sw l-am"></i>Começou depois do início ideal, ainda dentro do prazo</span><span><i class="sw l-at"></i>Passou do prazo ideal</span>`:'')+
     `<span><i class="sw s-doing"></i>Em andamento (parte escura = % feito)</span>`+
     (P.some(t=>t.aberta)?`<span><i class="sw s-aberta"></i>Em andamento, sem previsão de término</span>`:'')+
     `<span><i class="sw s-todo"></i>A iniciar (previsão)</span>`+
-    (R.length?`<span><i class="sw s-ref"></i>Prazo ideal</span>`:'')+
-    `<span><i class="sw" style="outline:2px solid var(--crit);background:transparent"></i>Caminho crítico (folga zero)</span>`+
+    `<span><i class="sw" style="outline:2px solid var(--crit);background:transparent"></i>Caminho crítico</span>`+
     `<span><i class="sw" style="background:var(--ink);width:10px;height:10px;transform:rotate(45deg)"></i>Marco</span>`+
     (R.length?`<span><i class="sw" style="width:0;height:14px;border-radius:0;border-left:2px dashed var(--muted)"></i>Término no prazo ideal</span>`:'')+
-    `<span><i class="sw" style="background:var(--today);width:2px;height:14px"></i>Hoje</span>`;
+    `<span><i class="sw" style="background:var(--hoje2);width:2px;height:14px"></i>Hoje</span>`;
 }
 
 function comparar(){
@@ -507,6 +541,7 @@ function desenhar(){
   const hoje=new Date();hoje.setHours(0,0,0,0);
   let lh=(hoje>=ini&&hoje<=fim)?`<div class="today" style="left:${x(hoje)+px/2}px"></div>`:'';
   const R=T.filter(t=>t.ref);
+  const Rmap={};R.filter(r=>r.dur).forEach(r=>{Rmap[r.etapa]=r;});   // janela do prazo ideal de cada etapa
   const fIdeal=R.length?maxD(R,'fim'):null;
   if(fIdeal)lh+=`<div class="ideal" style="left:${x(fIdeal)+px}px"></div>`;
   const tags=(hoje>=ini&&hoje<=fim?`<span class="tag hoje" style="left:${x(hoje)+px/2}px">hoje ${curto(hoje)}</span>`:'')+
@@ -520,54 +555,67 @@ function desenhar(){
   if(zoom!=='mes'){
     for(let d=ini;d<=fim;d=add(d,passo))h+=`<div class="tick" style="left:${x(d)}px;width:${passo*px}px;top:22px;bottom:0">${passo===1?d.getDate():curto(d)}</div>`;
   }
+  const pos=(l,w,est)=>(l+w+8+est>W&&l-18-est>=0)?`right:${W-l+18}px`:`left:${l+w+8}px`;
+  const dirc=p=>p.startsWith('right')?' dir':'';
   let out=`<div class="row head"><div class="left">Tarefa</div><div class="tl" style="width:${W}px">${h}</div></div>`;
   let primeira=true;
   fases.forEach(f=>{
-    let ts=T.filter(t=>t.fase===f);   // mesma ordem da planilha
+    let ts=T.filter(t=>t.fase===f&&!t.ref);   // o prazo ideal fica na própria linha de cada tarefa
     if(soCrit)ts=ts.filter(t=>t.critica);
-    if(semIdeal)ts=ts.filter(t=>!t.ref);
     if(!ts.length)return;
     const tv=ts.filter(t=>!t.sem);
     const a=tv.length?minD(tv,'ini'):null, b=tv.length?maxD(tv,'fim'):null;
-    const cf=ts[0].ref?COR.r:COR.p;
-    if(fases.length>1){
-      out+=`<div class="row fase"><div class="left"><i class="sw" style="background:${cf}"></i>${esc(f)}</div><div class="tl" style="${grade}">${lh}${primeira?tags:''}${a?`<div class="sum" style="left:${x(a)}px;width:${x(b)-x(a)+px}px"></div>`:''}</div></div>`;
+    if(fases.length>1||R.length){
+      out+=`<div class="row fase"><div class="left"><i class="sw l-ideal"></i><i class="sw l-ok"></i>${esc(R.length?'Ideal x real':f)}</div><div class="tl" style="${grade}">${lh}${primeira?tags:''}${a?`<div class="sum" style="left:${x(a)}px;width:${x(b)-x(a)+px}px"></div>`:''}</div></div>`;
       primeira=false;
     }
     ts.forEach(t=>{
-      const cor=t.ref?COR.r:COR.p;
       const un_=uteis?' dias úteis':' dias';
-      const sit=t.ref?'Prazo ideal (referência)':t.st==='sem'?'Sem data: aguarda a etapa anterior':t.st==='aberta'?'Em andamento, sem previsão de término':t.st==='done'?'Concluída':t.st==='doing'?t.pr+'% concluída':'A iniciar (previsão)';
+      const id=Rmap[t.etapa];
+      const dIni=(id&&!t.sem&&t.dur)?dias(id.ini,t.ini):null;
+      const sit=t.st==='sem'?'Sem data: aguarda a etapa anterior':t.st==='aberta'?'Em andamento, sem previsão de término':t.st==='done'?'Concluída':t.st==='doing'?t.pr+'% concluída':'A iniciar (previsão)';
       const per=t.sem?(t.dur?'Sem data · prazo ideal da planilha: '+(t.prazoIdealPlan!=null?t.prazoIdealPlan:t.dur)+' dias':'Sem data'):`${fmt(t.ini)}${t.dur?' → '+fmt(t.fim)+' · '+t.dur+un_:' (marco)'}`;
-      const tip=esc(`${t.nome}\n${per}${t.responsavel?'\nResponsável: '+t.responsavel:''}\nSituação: ${sit}${(!t.ref&&t.dur&&t.pr<100&&!t.sem)?'\nFolga: '+t.folga+' dia(s)'+(t.critica?' — caminho crítico':''):''}${t.dep.length?'\nDepende de: '+t.dep.map(d=>byId[d].nome).join('; '):''}${t.solicitante?'\nSolicitante: '+t.solicitante:''}${(t.prazoIdealPlan!=null||t.prazoRealPlan!=null)?'\nPlanilha: ideal '+(t.prazoIdealPlan!=null?t.prazoIdealPlan:'—')+' · real '+(t.prazoRealPlan!=null?t.prazoRealPlan:'—'):''}${t.motivo?'\nMotivo do desvio: '+t.motivo:''}`);
-      let g;
+      const idTxt=(id&&t.dur)?`\nPrazo ideal: ${fmt(id.ini)} → ${fmt(id.fim)} · ${id.dur+un_}${dIni==null?'':dIni>0?'\nComeçou '+dIni+' dia(s) depois do início ideal':'\nComeçou no prazo ideal'}`:'';
+      const tip=esc(`${t.nome}\n${per}${idTxt}${t.responsavel?'\nResponsável: '+t.responsavel:''}\nSituação: ${sit}${(t.dur&&t.pr<100&&!t.sem)?'\nFolga: '+t.folga+' dia(s)'+(t.critica?' — caminho crítico':''):''}${t.dep.length?'\nDepende de: '+t.dep.map(d=>byId[d].nome).join('; '):''}${t.solicitante?'\nSolicitante: '+t.solicitante:''}${(t.prazoIdealPlan!=null||t.prazoRealPlan!=null)?'\nPlanilha: ideal '+(t.prazoIdealPlan!=null?t.prazoIdealPlan:'—')+' · real '+(t.prazoRealPlan!=null?t.prazoRealPlan:'—'):''}${t.motivo?'\nMotivo do desvio: '+t.motivo:''}`);
+      let g='';
+      // barra verde: o prazo ideal desta etapa (início e fim ideais), na mesma linha
+      if(id&&t.dur&&!semIdeal){
+        const il=x(id.ini),iw=x(id.fim)-il+px;
+        const txt=`ideal ${curto(id.ini)} → ${curto(id.fim)} · ${id.dur}d`;
+        const ps=pos(il,iw,Math.ceil(txt.length*6.2)+10);
+        g+=`<div class="idl" style="left:${il}px;width:${iw}px"></div><div class="lbl li${dirc(ps)}" style="${ps}">${txt}</div>`;
+      }
       if(t.sem){
         const ant=t.dep.filter(d=>byId[d].sem||byId[d].aberta).map(d=>byId[d].nome.replace(/\s*\(.*\)\s*$/,'')).join(', ');
-        g=`<div class="lbl sem" style="left:12px">sem data · aguardando ${esc(ant)}</div>`;
+        g+=`<div class="lbl lr sem" style="left:12px">sem data · aguardando ${esc(ant)}</div>`;
       }else if(t.dur){
-        const l=x(t.ini),w0=x(t.fim)-l+px;
-        const w=(!t.ref&&w0<40)?40:w0;   // barra curta ganha largura mínima para caber o %
-        const cabe=!t.ref;
-        const txt=t.st==='aberta'?curto(t.ini)+' → hoje · '+t.dur+'d · em andamento':curto(t.ini)+' → '+curto(t.fim)+' · '+t.dur+'d';
-        const est=Math.ceil(txt.replace(/<[^>]*>/g,'').length*6.6)+14;
-        const pos=(l+w+8+est>W&&l-8-est>=0)?`right:${W-l+8}px`:`left:${l+w+8}px`;
-        const pct=(cabe&&t.st!=='aberta')?`<em>${t.pr}%</em>`:'';
-        const cls=t.ref?'':' s-'+t.st;
-        g=`<div class="bar${cls}${t.critica?' crit':''}" style="left:${l}px;width:${w}px;background:${cor};color:${cor}" title="${tip}">${(!t.ref&&t.st!=='todo'&&t.st!=='aberta')?`<i style="width:${t.pr}%"></i>`:''}${pct}</div><div class="lbl ${pos.startsWith('right')?'dir':''}" style="${pos}">${txt}</div>`;
+        const l=x(t.ini),w0=x(t.fim)-l+px,w=Math.max(w0,40);   // barra curta ganha largura mínima para caber o %
+        const pc=(a,b)=>`left:${(x(a)-l)/w0*100}%;width:${(x(b)-x(a)+px)/w0*100}%`;
+        let segs='';
+        if(id){
+          if(t.ini<=id.fim){const e=t.fim<id.fim?t.fim:id.fim;segs+=`<b class="sg ${t.ini>id.ini?'am':'ok'}" style="${pc(t.ini,e)}"></b>`;}
+          if(t.fim>id.fim){const a=t.ini>id.fim?t.ini:add(id.fim,1);segs+=`<b class="sg at" style="${pc(a,t.fim)}"></b>`;}
+        }else segs=`<b class="sg ok" style="left:0;width:100%"></b>`;
+        const rot=t.st==='done'?'real':'previsto';
+        const txt=t.st==='aberta'?`real ${curto(t.ini)} → hoje · ${t.dur}d · em andamento`:`${rot} ${curto(t.ini)} → ${curto(t.fim)} · ${t.dur}d`;
+        const ps=pos(l,w,Math.ceil(txt.length*6.6)+14);
+        const ov=(t.st==='doing')?`<i style="width:${t.pr}%"></i>`:'';   // só quem está em andamento escurece a parte feita; concluída fica na cor pura
+        const pct=t.st!=='aberta'?`<em>${t.pr}%</em>`:'';
+        g+=`<div class="rb s-${t.st}${t.critica?' crit':''}" style="left:${l}px;width:${w}px">${segs}${ov}${pct}</div><div class="lbl lr${dirc(ps)}" style="${ps}">${txt}</div><div class="mk" style="left:${l}px" title="${tip}"></div>`;
       }else{
         const l=x(t.ini)+px/2-7;
         const mi=R.find(r=>r.marco);
-        const dg=(!t.ref&&mi)?dias(mi.ini,t.ini):0;
+        const dg=mi?dias(mi.ini,t.ini):0;
         let gap='';
         if(dg>0)gap=`<div class="gap" style="left:${x(mi.ini)+px/2}px;width:${x(t.ini)-x(mi.ini)}px"></div>`;
         const txt=curto(t.ini)+(dg>0?` · <span class="atr">+${dg} ${un_.trim()} sobre o ideal</span>`:'');
         const est=Math.ceil((curto(t.ini).length+(dg>0?30:0))*6.6)+14;
-        const pos=(l+22+est>W&&l-8-est>=0)?`right:${W-l+8}px`:`left:${l+22}px`;
-        g=`${gap}<div class="ms${t.critica?' crit':''}" style="left:${l}px" title="${tip}"></div><div class="lbl m ${pos.startsWith('right')?'dir':''}" style="${pos}">${txt}</div>`;
+        const ps=(l+22+est>W&&l-8-est>=0)?`right:${W-l+8}px`:`left:${l+22}px`;
+        g+=`${gap}<div class="ms${t.critica?' crit':''}" style="left:${l}px" title="${tip}"></div><div class="lbl m${dirc(ps)}" style="${ps}">${txt}</div>`;
       }
       const meta=[t.responsavel,t.sem?'':t.st==='aberta'?`${curto(t.ini)} → hoje`:t.dur?`${curto(t.ini)} → ${curto(t.fim)}`:curto(t.ini),t.dur?(t.sem?'ideal '+t.dur+'d':t.dur+'d'):'marco'].filter(Boolean).map(esc).join(' · ');
       const SB={done:['var(--done)','concluída'],doing:['var(--today)',t.pr+'%'],aberta:['var(--today)','em andamento'],sem:['var(--muted)','sem data'],todo:['var(--muted)','a iniciar']}[t.st]||['var(--muted)',''];
-      const sb=(!t.ref&&t.dur)?`<span style="color:${SB[0]};font-weight:700"> · ${SB[1]}</span>`:'';
+      const sb=t.dur?`<span style="color:${SB[0]};font-weight:700"> · ${SB[1]}</span>`:'';
       out+=`<div class="row" title="${tip}"><div class="left"><div class="n">${esc(t.id)}. ${esc(t.nome)}</div><div class="m">${meta}${sb}</div></div><div class="tl" style="${grade}">${lh}${g}</div></div>`;
     });
   });
