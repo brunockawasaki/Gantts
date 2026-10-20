@@ -46,6 +46,9 @@ h1{font-size:22px;margin:0 0 2px}
 .sw.s-aberta{background:#4e79a7;background-image:repeating-linear-gradient(135deg,rgba(0,0,0,.42) 0 3px,transparent 3px 6px)}
 .lbl.sem{color:var(--muted);font-style:italic}
 :root{--ideal:#2e8b57;--real:#4e79a7;--am:#ffd600;--at:#e8662a;--hoje2:#5b4bc4}
+.left{z-index:20}
+.head .left{z-index:21}
+.row.head{z-index:22}
 .row{height:64px}
 .row.fase{height:36px}
 .row.head{height:44px}
@@ -544,8 +547,10 @@ function desenhar(){
   const Rmap={};R.filter(r=>r.dur).forEach(r=>{Rmap[r.etapa]=r;});   // janela do prazo ideal de cada etapa
   const fIdeal=R.length?maxD(R,'fim'):null;
   if(fIdeal)lh+=`<div class="ideal" style="left:${x(fIdeal)+px}px"></div>`;
-  const tags=(hoje>=ini&&hoje<=fim?`<span class="tag hoje" style="left:${x(hoje)+px/2}px">hoje ${curto(hoje)}</span>`:'')+
-             (fIdeal?`<span class="tag ideal" style="left:${x(fIdeal)+px+4}px">término ideal ${curto(fIdeal)}</span>`:'');
+  const xH=(hoje>=ini&&hoje<=fim)?x(hoje)+px/2:null, xI=fIdeal?x(fIdeal)+px+4:null;
+  const baixo=(xH!=null&&xI!=null&&xH>xI-45&&xH<xI+170);   // etiquetas perto uma da outra: "hoje" desce uma linha
+  const tags=(xH!=null?`<span class="tag hoje" style="left:${xH}px${baixo?';top:19px':''}">hoje ${curto(hoje)}</span>`:'')+
+             (xI!=null?`<span class="tag ideal" style="left:${xI}px">término ideal ${curto(fIdeal)}</span>`:'');
   let h='';
   for(let d=new Date(ini.getFullYear(),ini.getMonth(),1);d<=fim;d=new Date(d.getFullYear(),d.getMonth()+1,1)){
     const a=d<ini?ini:d, b=new Date(d.getFullYear(),d.getMonth()+1,1);
