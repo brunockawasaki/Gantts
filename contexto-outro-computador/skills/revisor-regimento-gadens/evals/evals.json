@@ -1,0 +1,23 @@
+{
+  "skill_name": "revisor-regimento-gadens",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Revisa esse Regimento pra mim: [anexo RE.IG.PJC.001 - Regimento dos Comitês de Due Diligence.docx]",
+      "expected_output": "Resposta no chat com apontamentos agrupados por documento, classificados [E]/[C]/[D], seguindo o formato do SKILL.md. Deve também gerar um arquivo .docx checklist de trabalho cobrindo os itens [C]/[D], salvo na pasta de entregáveis do Bruno.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Dá uma olhada nesse Regimento, tá certo isso? [anexo RE.IG.PJC.002 - Regimento dos Comitês de Estudo Preliminar.docx, com capa mostrando Elaborador 'Bruno Kawasaki' e Aprovador 'Alessandro Braz, Carlos Vargas' — exatamente os placeholders de fábrica do template]",
+      "expected_output": "Não deve apontar 'capa desatualizada' ou 'revisão anterior diverge' como erro [E] sem antes confirmar que esses nomes não são os placeholders de fábrica do template RE.GG.PRO.001 — deve reconhecer o guarda-corpo do SKILL.md e, na dúvida, tratar como [C] em vez de [E].",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Compara os 5 Regimentos de comitê de fase (PJC.001 a PJC.005) e me diz se tá tudo consistente entre eles",
+      "expected_output": "Como o Bruno pediu explicitamente a comparação entre documentos irmãos e forneceu (ou pediu para revisar) todos juntos na mesma tarefa, a skill deve realizar a comparação cruzada normalmente (é a exceção declarada em 'O que esta skill não faz').",
+      "files": []
+    }
+  ]
+}

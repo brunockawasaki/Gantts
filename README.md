@@ -4,7 +4,7 @@ Cronogramas (Gantt) do Grupo Gadens, com comparativo contra o prazo ideal e aná
 
 Cada Gantt é **um único arquivo HTML**. Abre direto no navegador, sem instalar nada, e o botão "Imprimir / salvar PDF" gera a versão em paisagem.
 
-Publicado em: https://brunockawasaki.github.io/Gantts/
+**Repositório privado (privado desde 28/10/2026).** O site do GitHub Pages ficou desligado, então os links públicos deixaram de funcionar. As páginas abrem direto dos arquivos no computador (dê dois cliques em `index.html`).
 
 ## Menu
 
@@ -61,7 +61,7 @@ Peça ao Claude Code, com o agente `gantt-cronogramas`, algo como: *"atualize o 
    python ferramentas/gerar.py
    ```
 5. Abrir `cronogramas/<projeto>.html` e conferir.
-6. Publicar: `git add -A`, `git commit` e `git push`. O GitHub Pages atualiza em 1 a 2 minutos.
+6. Enviar: `git add -A`, `git commit` e `git push`, **só depois de perguntar e receber o "sim"**.
 
 ## Como criar um projeto novo
 
@@ -80,5 +80,11 @@ Peça ao Claude Code, com o agente `gantt-cronogramas`, algo como: *"atualize o 
 
 ## Atenção
 
-- **O repositório é público.** Qualquer pessoa com o link vê as páginas, os motivos de desvio e as planilhas de origem do Comercial. Não suba nada que não possa ser visto por qualquer pessoa.
+- **O repositório é privado desde 28/10/2026** e o site (Pages) está desligado. Ele guarda as memórias e as skills do Bruno em `contexto-outro-computador/`. **Não o torne público de novo sem antes tirar essa pasta e apagá-la do histórico**: tornar público mostra o histórico inteiro.
 - Os números dos menus e o texto da análise refletem a posição de `_meta.posicao`. Para atualizar, regere.
+
+## Contexto para usar em outro computador
+
+- `CLAUDE.md` (na raiz): regras e contexto do projeto. O Claude Code lê este arquivo sozinho ao abrir o repositório.
+- `contexto-outro-computador/CONTEXTO COMPLETO - Gantts.md`: passo a passo de instalação, o projeto, **todas as memórias** e **todas as skills do usuário**, na íntegra.
+- `contexto-outro-computador/memoria/` e `contexto-outro-computador/skills/`: cópias das pastas para colar no outro computador (a skill precisa dos scripts e modelos que estão junto do `SKILL.md`).

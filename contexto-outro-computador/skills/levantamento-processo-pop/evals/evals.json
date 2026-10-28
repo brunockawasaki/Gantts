@@ -1,0 +1,23 @@
+{
+  "skill_name": "levantamento-processo-pop",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Preciso levantar como o pessoal de Compras faz as cotações hoje, pra depois eu escrever o POP. Monta aquele formulário em Word no nosso padrão pra eu imprimir e distribuir?",
+      "expected_output": "Arquivo .docx (+ .pdf) na pasta do projeto com logo e cores do Grupo Gadens, 12 blocos de perguntas em linguagem leiga com etiquetas [POP · Seção X], bloco de identificação, linhas de exemplo nas tabelas e verificação visual das páginas antes da entrega.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Cria a versão desse formulário de levantamento de processo no Forms da Microsoft, na minha conta, pra eu mandar o link pro time responder.",
+      "expected_output": "Formulário criado na conta M365 via Chrome seguindo o roteiro de automação: 20 perguntas com subtítulos e etiquetas, obrigatórias corretas (identificação + objetivo + passo a passo), resposta longa nas de conteúdo, tema vermelho C0272D, SEM clicar em Coletar respostas (orientação final ao usuário).",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Recebi um modelo novo de procedimento (POP) da outra empresa do grupo, com seções diferentes do nosso. Consegue montar o formulário de levantamento baseado nesse modelo aqui? O arquivo é o 'Modelo_POP_novo.docx' na pasta.",
+      "expected_output": "Estrutura do novo modelo extraída do XML do .docx (sem depender de pandoc), banco de perguntas adaptado seção a seção mantendo a mecânica (pergunta leiga + exemplo + etiqueta + obrigatórias mínimas), e formulário gerado no formato pedido.",
+      "files": ["Modelo_POP_novo.docx"]
+    }
+  ]
+}

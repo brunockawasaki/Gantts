@@ -1,0 +1,35 @@
+{
+  "skill_name": "revisor-pop-gadens",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Revisa esse POP pra mim: [anexo PO.GG.SUP.007 - Controle de Estoque.docx]",
+      "expected_output": "Resposta no chat com apontamentos agrupados por documento, classificados [E]/[C]/[D], seguindo o formato do SKILL.md. Deve também gerar um arquivo .docx checklist de trabalho cobrindo os itens [C]/[D], salvo na pasta de entregáveis do Bruno.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Dá uma olhada nesse POP, tá certo isso? [anexo PO.GG.SUP.010 - Solicitação de Cadastro de Item.docx, com capa mostrando Elaborador 'Bruno Kawasaki' e Aprovador 'Alessandro Braz, Carlos Vargas' — exatamente os placeholders de fábrica do template]",
+      "expected_output": "Não deve apontar 'capa desatualizada' ou 'revisão anterior diverge' como erro [E] sem antes confirmar que esses nomes não são os placeholders de fábrica do template PO.GG.QLD.001 — deve reconhecer o guarda-corpo do SKILL.md e, na dúvida, tratar como [C] em vez de [E].",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Nesse POP [PO.GG.SUP.008], a tabela de Desvios tem uma coluna 'Escalonamento' fundida dentro de 'Ação Necessária'. Isso está errado?",
+      "expected_output": "Não deve apontar a fusão de colunas como erro [E] de completude por si só (é uma adaptação esperada da transposição, coberta pelo guarda-corpo de fusão do SKILL.md) — só apontar se o texto resultante estiver truncado/corrompido comparado à fonte original.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "Compara os 3 POPs de Orçamento (PO.GG.ORC.001 a 003) e me diz se tá tudo consistente entre eles",
+      "expected_output": "Como o Bruno pediu explicitamente a comparação entre documentos irmãos e forneceu todos juntos na mesma tarefa, a skill deve realizar a comparação cruzada normalmente (é a exceção declarada em 'O que esta skill não faz').",
+      "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "Esse POP [PO.GG.SUP.006] está com Status 'Aprovado' na capa mas a data de aprovação na tabela de Controle de Emissão está em branco.",
+      "expected_output": "Deve apontar como [E] (erro objetivo, corrige direto) — Status 'Aprovado' sem data de aprovação preenchida contradiz a regra do QLD.002 (seção 7 do qld-002.md desta skill); o status correto sem data seria 'Em aprovação'.",
+      "files": []
+    }
+  ]
+}

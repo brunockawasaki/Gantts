@@ -1,0 +1,38 @@
+- [IT template workflow](pop_it_template_workflow.md) — always use Grupo Gadens IT.GG.PRO.001 docx template to format raw text into ITs (filename says POP/IT but content is IT-only)
+- [POP template workflow](pop_template_workflow.md) — always use Grupo Gadens PO.GG.QLD.001 docx template to format raw text into POPs; 12-section structure
+- [Output folder](feedback_output_folder.md) — save generated ITs/deliverables to "...\1. Bruno Kawasaki\Projeto teste", not Downloads
+- [Grupo Gadens naming](feedback_grupo_gadens_naming.md) — "Grupo Gadens" already includes Gadens Incorporadora + Make It; never write "Grupo Gadens e Make It"
+- [No fabricated content](feedback_no_fabricated_content.md) — never invent specifics (indicators, metrics) absent from source POP text; keep generic/descriptive language or state absence explicitly
+- [Font Arial 10pt everywhere](feedback_font_arial10_registro.md) — every filled rPr must include explicit sz=20/szCs=20; never omit size (doc default is 11pt, not 10pt)
+- [Regimento template workflow](regimento_template_workflow.md) — always use Grupo Gadens RE.GG.PRO.001 docx template to format raw text into Regimentos
+- [Strict template transposition](feedback_transposicao_estrita_template.md) — never invent new titles/bold/bullets/structure; fit unmatched content inside an existing template title, never discard it
+- [Official Grupo Gadens doc rules PO.GG.QLD.002](reference_po_gg_qld_002.md) — authoritative naming (Tipo.Empresa.Setor.Seq) and formatting rulebook; no bullet symbols in lists
+- [Propose without insisting](feedback_propor_sem_insistir.md) — flag rule deviations once with the correct alternative, then defer to Bruno's call
+- [Explicação didática para leigo](feedback_explicacao_didatica_leigo.md) — Bruno não tem formação em arquitetura/engenharia; explicar apontamentos de forma prática, sem jargão não explicado
+- [Linguagem simples e direta](feedback_linguagem_simples_direta.md) — frases curtas, palavras comuns, sem metáfora nem termo abstrato, em toda conversa (não só em apontamentos técnicos)
+- [Entender antes de conferir](feedback_entender_antes_de_conferir.md) — ler o processo como processo, não como formulário; checklist é rede de segurança, não é o trabalho
+- [Projeto Next](project_next.md) — iniciativa de melhoria contínua do Grupo Gadens (mapeamento de processos/gargalos); Bruno é executor de entregas pontuais
+- [Checklist de trabalho](feedback_checklist_trabalho_format.md) — trigger "checklist de trabalho": Word com ☐ + item + linhas em branco para resposta, agrupado por tópico
+- [Toolkit OOXML reutilizável](reference_ooxml_toolkit.md) — biblioteca Perl (replace_exact/fill_bullets/fill_numbered/fill_table_row_multi) + âncoras conhecidas do template POP + validação sem Word COM
+- [Workflow de revisão POP/IT/Regimento](revisao_pop_it_regimento_workflow.md) — classificação [E]/[C]/[D], nunca afirmar erro de mérito, checklist de completude por tipo; implementado como skill única `revisor-pop-it-regimento` (cobre os 3 tipos; substitui as antigas revisor-pop-gadens/revisor-regimento-gadens)
+- [Confirmação não é autorização](feedback_confirmacao_nao_e_autorizacao.md) — Bruno confirmar/corrigir um fato não autoriza editar o arquivo; só executar com pedido explícito
+- ["Executar" = sobrescrever](feedback_executar_substitui_arquivo.md) — reexecutar um relatório/planilha já gerado deve sobrescrever o arquivo antigo, nunca criar versão nova
+- [Reconferir a versão atual](feedback_reconferir_versao_atual.md) — nunca repetir apontamento sem reler o arquivo; havendo cópias em várias pastas, achar a corrente antes de afirmar
+- [Organizador de documentos - 3 ambientes](organizador_documentos_3_ambientes.md) — regra de distribuição de "Organização Claude" para Central de Documentos/Repositório por Setor/Projeto Next no comando "execute"
+- [Projeto Aprovadores por Setor](projeto_aprovadores_por_setor.md) — desenho do fluxo de Aprovações (Power Automate) sobre o Organizador; mapeamento setor→gestor (e-mails pendentes, 3 setores sem definição)
+- [Gantt do fluxo de lançamentos](gantt_fluxo_lancamentos.md) — fontes em "Projeto teste/Gantt - fontes"; ordem e cores seguem a planilha e precisam revalidação; pendentes o "Anteprojeto" do dia 0 e o 1º tiro (45 ou 110)
+- [G-Docs: Elaborar POP incorporado](gdocs_elaborar_pop_merge.md) — formulario do repo Levantamento-de-Processos copiado p/ dentro do painel; script atualizar_elaborar_pop.py regera ao mudar o repo
+- [Formulário de IT](project_formulario_it.md) — formulário interativo de Levantamento de IT (com imagem por passo) em Projeto teste/Levantamento de IT; como refazer e o que foi testado
+- [Renderizar Word/PDF no Windows](reference_render_word_pdf_windows.md) — sem LibreOffice/pdftoppm: usar Word COM por reflection + leitor de PDF do Windows (WinRT) para ver as páginas
+- [Formulário de Regimento](project_formulario_regimento.md) — formulário interativo que gera Word no RE.GG.PRO.001, em Projeto teste/Levantamento de Regimento; testado no Word real, falta voz/GitHub/painel
+- [Gerador de Ata](project_gerador_ata.md) — formulário "Elaborar Ata" (padrão ATA.docx, sem código/revisão, outputs com data) em Projeto teste/Levantamento de Ata + painel G-Docs; falta subir ao GitHub
+- [Gantts Horizon/Now CEF](project_gantt_cef_horizon_now.md) — versões melhoradas em Projeto teste/cronogramas; regras do motor, números de 15/10/2026 e pendências a confirmar
+- [Concurso Curitiba (Monique)](project_concurso_curitiba_monique.md) — material de estudo do concurso Agente Administrativo Curitiba/FAFIPA (prova 13/12/2026): caderno, simulados, plano e sistema HTML em Projeto teste/Concurso Curitiba 2026
+- [launch.json: ler antes](feedback_launch_json_ler_antes.md) — Projeto teste/.claude/launch.json é compartilhado (painel-local, levantamento-local); só acrescentar entrada, nunca sobrescrever
+- [GitHub: perguntar antes de subir](feedback_github_perguntar_antes.md) — Gantts: trabalhar só no HTML local; nunca commit/push sem perguntar e receber o sim do Bruno
+- [ClickUp 5W2H](reference_clickup_5w2h.md) — IDs da lista/campos, regras de preenchimento (Área, Diretoria, Demandante, etiquetas) e armadilhas ao cadastrar tarefas
+- [Dashboard Projeto Next (Bumblebee)](project_dashboard_next_bumblebee.md) — como é gerado (Python+ClickUp+template), pasta de origem e pontos de cuidado; só ler, não executar
+- [Matriz de prioridades ClickUp](project_matriz_prioridades_clickup.md) — matriz 1-4 (Urgente/Alta/Normal/Baixa) das atividades do ClickUp: arquivos, lógica, resultado de 27/10/2026 (979 atividades), decisões do Bruno e pendências
+- [Computador padrão](reference_computador_padrao.md) — DESKTOP-IS1HAB3 é o padrão desde 26/10/2026; ferramentas (openpyxl, Excel/Word COM) diferem do outro computador
+- [Projeto Next: pasta e leitura dos fluxos](reference_projeto_next_pasta_leitura.md) — mapa da pasta 2. Processos, método do projeto, como ler .bpm (XPDL) e o que a leitura mostrou
+- [Material para o chefe](feedback_material_para_chefe.md) — contexto antes da proposta, lógica explicada, tabelas para conferir, tudo marcado como hipótese; "não execute" vale à risca
