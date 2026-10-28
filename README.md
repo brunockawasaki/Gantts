@@ -4,7 +4,7 @@ Cronogramas (Gantt) do Grupo Gadens, com comparativo contra o prazo ideal e aná
 
 Cada Gantt é **um único arquivo HTML**. Abre direto no navegador, sem instalar nada, e o botão "Imprimir / salvar PDF" gera a versão em paisagem.
 
-**Repositório privado (privado desde 28/10/2026).** O site do GitHub Pages ficou desligado, então os links públicos deixaram de funcionar. As páginas abrem direto dos arquivos no computador (dê dois cliques em `index.html`).
+**Repositório público, com site ligado (GitHub Pages) desde 28/10/2026:** https://brunockawasaki.github.io/Gantts/. As páginas também abrem direto dos arquivos no computador (dois cliques em `index.html`).
 
 ## Menu
 
@@ -80,7 +80,7 @@ Peça ao Claude Code, com o agente `gantt-cronogramas`, algo como: *"atualize o 
 
 ## Atenção
 
-- **O repositório é privado desde 28/10/2026** e o site (Pages) está desligado. Ele guarda as memórias e as skills do Bruno em `contexto-outro-computador/`. **Não o torne público de novo sem antes tirar essa pasta e apagá-la do histórico**: tornar público mostra o histórico inteiro.
+- **O repositório é público e o site (Pages) está ligado** desde 28/10/2026, por decisão do Bruno. Ele guarda as memórias e as skills em `contexto-outro-computador/`, que ficam visíveis junto com o histórico inteiro.
 - Os números dos menus e o texto da análise refletem a posição de `_meta.posicao`. Para atualizar, regere.
 
 ## Contexto para usar em outro computador

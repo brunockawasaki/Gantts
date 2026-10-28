@@ -11,13 +11,13 @@ Repositório de cronogramas (Gantt) em HTML, com prazo ideal x prazo real, anál
 
 ## Regra principal: GitHub só com sim
 - Trabalhe **só no HTML local**. **Nunca faça `git commit` nem `git push` sem perguntar "Posso subir para o GitHub?" e receber um "sim" claro.** Pedido de ajuste no HTML não é pedido para publicar. Um "sim" vale só para aquela publicação.
-- O repositório é **privado** (privado desde 28/10/2026) e o site (Pages) está **desligado**: os links públicos pararam. Ele guarda memórias e skills em `contexto-outro-computador\`. **Não torne público de novo sem avisar**: o histórico inteiro ficaria visível. Não suba planilhas de origem sem ele pedir.
-- Antes de subir, mostre `git status` (só os arquivos esperados). Depois do push, confira com `git status -sb` e `git log origin/main -1`. Não há site para conferir.
+- O repositório é **público** e o site (Pages) está **ligado** desde 28/10/2026 (o Bruno pediu, ciente de que `contexto-outro-computador\` e o histórico inteiro ficam visíveis). Não suba planilhas de origem sem ele pedir. Antes de acrescentar algo sensível, lembre que tudo o que for enviado fica público.
+- Antes de subir, mostre `git status` (só os arquivos esperados). Depois do push, confira com `git status -sb` e `git log origin/main -1` e, se quiser, o endereço do site.
 - Resposta final curta: o que mudou, o que foi testado, o que **não** foi testado e se algo foi publicado.
 
 ## Onde está cada coisa
 - **Pasta local (clone):** `...\1. Bruno Kawasaki\Gantts\` (fora da pasta `Projeto teste`, para não ficar um repositório dentro do outro).
-- **GitHub (privado):** https://github.com/brunockawasaki/Gantts. O site antigo (`brunockawasaki.github.io/Gantts`) está desligado. Para ver, abra os arquivos `index.html`, `make-it\index.html` e `cronogramas\<Projeto>.html` da pasta local.
+- **GitHub (público):** https://github.com/brunockawasaki/Gantts. **Site:** https://brunockawasaki.github.io/Gantts/ (Pages ligado, branch `main`, raiz). Depois do push o site leva alguns minutos para atualizar. Também dá para abrir `index.html`, `make-it\index.html`, `gadens\index.html` e `cronogramas\<Projeto>.html` da pasta local.
 - **Fonte da verdade:** `dados\*.json` (tarefas, durações, progresso, motivos e texto da análise; `_meta` com empresa, posição e aba).
 - **Gerador:** `ferramentas\gerar.py` (só biblioteca padrão). Escreve `cronogramas\`, `make-it\` e `index.html`. **Esses arquivos são gerados: nunca edite à mão.** Visual = `ferramentas\modelo_gantt.html`, `modelo_empresa.html`, `modelo_menu.html`.
 - **Conferir planilha:** `ferramentas\conferir_planilha.py "<planilha.xlsx>"` (só lê; precisa de `openpyxl`). Logo novo: `ferramentas\preparar_logo.py`.
