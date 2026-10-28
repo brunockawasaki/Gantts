@@ -1,7 +1,7 @@
 {
  "_meta": {
   "empresa": "Make It",
-  "posicao": "2026-10-27",
+  "posicao": "2026-10-28",
   "aba": "NOW"
  },
  "projeto": "Now · Financiamento CEF",
@@ -115,6 +115,7 @@
    "prazoIdealPlan": 8,
    "inicio": "2026-10-27",
    "aberta": true,
+   "progresso": 12.5,
    "duracao": 1,
    "prazoRealPlan": null,
    "motivo": "Aguardando retorno da CEF",
@@ -232,8 +233,8 @@
  "notaComparativo": "",
  "analise": {
   "criticos": [
-   "Sem previsão de término. A Minuta PJ (id 7) tem protocolo em 27/10/2026, o dia da posição, e aguarda retorno da CEF. A Assinatura do contrato só começa depois dela e fica sem data.",
-   "O prazo ideal para o contrato terminava em 19/09/2026. Em 27/10/2026 já passaram 38 dias dessa data. Desde o R.I (24/07) já são 95 dias, contra 58 no ideal."
+   "Sem previsão de término. A Minuta PJ (id 7) está em andamento desde 27/10/2026, com 12,5% de andamento, aguardando retorno da CEF. A Assinatura do contrato só começa depois dela e fica sem data.",
+   "O prazo ideal para o contrato terminava em 19/09/2026. Em 28/10/2026 já passaram 39 dias dessa data. Desde o R.I (24/07) já são 96 dias, contra 58 no ideal."
   ],
   "atencao": [
    "Análise DJE P01 levou 43 dias contra 21 no ideal (+22). Motivo informado: as certidões foram atualizadas durante o prazo e a Caixa reabriu a demanda por mais 15 dias úteis.",
@@ -243,9 +244,8 @@
    "Mudança em relação à planilha de 16/10: o Risco que estava em andamento sem previsão agora está dividido em P01 (8 dias), P02 (12 dias) e P03 (5 dias), todos concluídos."
   ],
   "observacoes": [
-   "Posição em 27/10/2026: 6 de 8 tarefas concluídas (ids 1 a 6), 1 em andamento (id 7) e 1 por iniciar (id 8).",
+   "Posição em 28/10/2026: 6 de 8 tarefas concluídas (ids 1 a 6), 1 em andamento (id 7, 12,5%) e 1 por iniciar (id 8).",
    "Tempo das tarefas concluídas por responsável: Jurídico 20 dias (id 1) e CEF 75 dias (ids 2 a 6).",
-   "O andamento (%) da Minuta PJ não consta na planilha; a barra mostra só o dia do protocolo.",
    "A última rodada de Risco (P03) levou 5 dias e a CEF analisou antes do prazo, segundo a planilha."
   ],
   "nota": ""

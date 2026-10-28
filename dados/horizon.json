@@ -1,7 +1,7 @@
 {
  "_meta": {
   "empresa": "Make It",
-  "posicao": "2026-10-27",
+  "posicao": "2026-10-28",
   "aba": "HORIZON"
  },
  "projeto": "Horizon · Financiamento CEF",
@@ -141,17 +141,17 @@
   },
   {
    "id": "9",
-   "nome": "Conformidade (em andamento)",
+   "nome": "Conformidade",
    "fase": "Realizado + previsão",
    "responsavel": "CEF",
    "etapa": "Conformidade",
    "solicitante": "Crédito Imobiliário",
    "prazoIdealPlan": 7,
    "inicio": "2026-10-22",
-   "aberta": true,
    "duracao": 5,
-   "prazoRealPlan": null,
-   "motivo": "Aguardando retorno da CEF",
+   "progresso": 100,
+   "prazoRealPlan": 5,
+   "motivo": "CEF analisou antes",
    "depende": [
     "8",
     "3"
@@ -159,15 +159,18 @@
   },
   {
    "id": "10",
-   "nome": "Solicitação Minuta PJ",
+   "nome": "Solicitação Minuta PJ (em andamento)",
    "fase": "Realizado + previsão",
    "responsavel": "CEF",
    "etapa": "Minuta PJ",
    "solicitante": "Crédito Imobiliário",
    "prazoIdealPlan": 8,
-   "duracao": 8,
+   "inicio": "2026-10-27",
+   "aberta": true,
+   "progresso": 12.5,
+   "duracao": 1,
    "prazoRealPlan": null,
-   "motivo": "Não chegou nessa etapa, após a conformidade",
+   "motivo": "Aguardando retorno CEF",
    "depende": [
     "9"
    ]
@@ -282,21 +285,20 @@
  "notaComparativo": "",
  "analise": {
   "criticos": [
-   "Sem previsão de término. A Conformidade (id 9) está em andamento desde 22/10/2026 (5 dias até 27/10), aguardando retorno da CEF. Minuta PJ e Assinatura do contrato só começam depois dela e ficam sem data.",
-   "O prazo ideal para o contrato terminava em 24/09/2026. Em 27/10/2026 já passaram 33 dias dessa data e o contrato ainda não tem previsão. Desde o R.I (29/07) já são 90 dias, contra 58 no ideal."
+   "Sem previsão de término. A Minuta PJ (id 10) está em andamento desde 27/10/2026, com 12,5% de andamento, aguardando retorno da CEF. A Assinatura do contrato só começa depois dela e fica sem data.",
+   "O prazo ideal para o contrato terminava em 24/09/2026. Em 28/10/2026 já passaram 34 dias dessa data e o contrato ainda não tem previsão. Desde o R.I (29/07) já são 91 dias, contra 58 no ideal."
   ],
   "atencao": [
    "Risco do empreendimento: as 5 rodadas somam 27 dias de análise contra 8 no ideal (+19). A P04 levou 13 dias. Entre o fim da P02 (02/09) e o início da P03 (05/10) passaram 33 dias sem rodada; o motivo registrado na P02 é que a Caixa só continuaria após a aprovação do Risco da REALTY.",
    "Solicitar documentação da DJE levou 27 dias contra 10 no ideal (+17). Motivo informado: Jurídico não atendeu o prazo.",
    "Análise da DJE: P01 (24/08 a 31/08) e P02 (29/09 a 06/10) somam 16 dias, abaixo dos 21 do ideal. Entre as duas passaram 29 dias sem tarefa de DJE; a planilha registra que a DJU da Gadens Empreendimentos estava vencida e o Jurídico só retornou o protocolo quando ela saiu.",
-   "Mudanças em relação à planilha de 16/10: a Risco P03 (que estava em andamento) agora está concluída em 4 dias, entraram a P04 (13 dias) e a P05 (2 dias) e a linha de retrabalho da DJE deixou de existir. Confirmar com a Danielle se a retirada foi intencional.",
+   "Mudanças em relação à planilha de 16/10: a Risco P03 (que estava em andamento) agora está concluída em 4 dias, entraram a P04 (13 dias) e a P05 (2 dias), a Conformidade foi concluída em 5 dias e a linha de retrabalho da DJE deixou de existir. Confirmar com a Danielle se a retirada foi intencional.",
    "A planilha traz prazo ideal de 7 dias para a Conformidade e 5 para a Assinatura; o gráfico segue com 8 e 3 (58 dias no total, decisão de 20/10/2026). Confirmar se o prazo ideal mudou."
   ],
   "observacoes": [
-   "Posição em 27/10/2026: 8 de 11 tarefas concluídas (ids 1 a 8), 1 em andamento (id 9) e 2 por iniciar (ids 10 e 11).",
-   "Tempo das tarefas concluídas por responsável: Jurídico 27 dias (id 1) e CEF 43 dias (ids 2 a 8).",
-   "O andamento (%) da Conformidade não consta na planilha; a barra mostra só os dias desde o protocolo.",
-   "A última rodada de Risco (P05) levou 2 dias e a CEF analisou antes do prazo, segundo a planilha."
+   "Posição em 28/10/2026: 9 de 11 tarefas concluídas (ids 1 a 9), 1 em andamento (id 10, 12,5%) e 1 por iniciar (id 11).",
+   "Tempo das tarefas concluídas por responsável: Jurídico 27 dias (id 1) e CEF 48 dias (ids 2 a 9).",
+   "A última rodada de Risco (P05) levou 2 dias e a Conformidade 5 dias; em ambas a CEF analisou antes do prazo, segundo a planilha."
   ],
   "nota": ""
  }

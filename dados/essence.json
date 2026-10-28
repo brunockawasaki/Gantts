@@ -1,7 +1,7 @@
 {
  "_meta": {
   "empresa": "Make It",
-  "posicao": "2026-10-27",
+  "posicao": "2026-10-28",
   "aba": "ESSENCE"
  },
  "projeto": "Essence · Financiamento CEF",
@@ -147,14 +147,14 @@
    "solicitante": "Crédito Imobiliário",
    "prazoIdealPlan": 7,
    "inicio": "2025-10-14",
-   "duracao": 55,
+   "progresso": 100,
+   "duracao": 1,
    "prazoRealPlan": null,
-   "motivo": "Planilha sem prazo real: \"Não temos um e-mail de retorno\". Duração calculada (55 dias) até o protocolo seguinte (Risco P05, 08/12/2025); confirmar.",
+   "motivo": "Sem prazo real na planilha (\"Não temos um e-mail de retorno\"). A etapa está concluída; a barra de 1 dia só marca o protocolo (14/10/2025), a duração real é desconhecida.",
    "depende": [
     "8",
     "3"
-   ],
-   "progresso": 100
+   ]
   },
   {
    "id": "10",
@@ -320,7 +320,7 @@
  "analise": {
   "criticos": [
    "Contrato assinado em 15/01/2026, 120 dias depois do prazo ideal (17/09/2025). A duração total foi de 177 dias contra 58 no ideal.",
-   "A Conformidade não tem prazo real na planilha (\"Não temos um e-mail de retorno\"). A barra de 55 dias, de 14/10 a 07/12/2025, é calculada até o protocolo seguinte (Risco P05, 08/12/2025), contra 7 dias no ideal. É o maior trecho do projeto e depende de confirmação."
+   "A Conformidade não tem prazo real na planilha (\"Não temos um e-mail de retorno\"). A etapa está concluída e não foi colocada data de término; a barra de 1 dia só marca o protocolo (14/10/2025), contra 7 dias no ideal. Entre o protocolo e a Risco P05 (08/12/2025) passaram 55 dias, mas a planilha não diz quando a Conformidade terminou."
   ],
   "atencao": [
    "Risco do empreendimento P03 levou 25 dias contra 8 no ideal (+17). Motivo informado: a CEF atrasou a análise.",
@@ -332,7 +332,7 @@
   "observacoes": [
    "Projeto concluído: 13 de 13 tarefas. R.I em 22/07/2025.",
    "A Análise DJE P01 e a Risco P01 levaram 1 dia cada; a P02 da DJE levou 14 dias (ideal 21).",
-   "Os anos da planilha estão agora consistentes (2025 e 2026), o que resolve a pendência anterior desta aba."
+   "Os anos da planilha estão agora consistentes (2025 e 2026). A falta de data de término da Conformidade foi mantida como está, sem data estimada, e não altera o término do projeto."
   ],
   "nota": ""
  }
