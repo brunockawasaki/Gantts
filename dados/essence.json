@@ -1,0 +1,339 @@
+{
+ "_meta": {
+  "empresa": "Make It",
+  "posicao": "2026-10-27",
+  "aba": "ESSENCE"
+ },
+ "projeto": "Essence · Financiamento CEF",
+ "descricao": "R.I 22/07/2025 · prazos em dias corridos, como na planilha",
+ "inicio": "2025-07-22",
+ "diasUteis": false,
+ "tarefas": [
+  {
+   "id": "1",
+   "nome": "Solicitar documentação da DJE",
+   "fase": "Realizado + previsão",
+   "responsavel": "Jurídico",
+   "etapa": "Solicitar documentação da DJE",
+   "solicitante": "Crédito Imobiliário",
+   "prazoIdealPlan": 10,
+   "inicio": "2025-07-22",
+   "duracao": 28,
+   "progresso": 100,
+   "prazoRealPlan": 28
+  },
+  {
+   "id": "2",
+   "nome": "Análise DJE P01",
+   "fase": "Realizado + previsão",
+   "responsavel": "CEF",
+   "etapa": "Análise da DJE",
+   "solicitante": "Jurídico",
+   "prazoIdealPlan": 21,
+   "inicio": "2025-08-19",
+   "duracao": 1,
+   "progresso": 100,
+   "prazoRealPlan": 1,
+   "motivo": "Retornou com pendência",
+   "depende": [
+    "1"
+   ]
+  },
+  {
+   "id": "3",
+   "nome": "Análise DJE P02",
+   "fase": "Realizado + previsão",
+   "responsavel": "CEF",
+   "etapa": "Análise da DJE",
+   "solicitante": "Jurídico",
+   "prazoIdealPlan": 21,
+   "inicio": "2025-08-27",
+   "duracao": 14,
+   "progresso": 100,
+   "prazoRealPlan": 14,
+   "motivo": "CEF analisou antes do prazo",
+   "depende": [
+    "2"
+   ]
+  },
+  {
+   "id": "4",
+   "nome": "Risco do empreendimento P01",
+   "fase": "Realizado + previsão",
+   "responsavel": "CEF",
+   "etapa": "Risco do empreendimento",
+   "solicitante": "Crédito Imobiliário",
+   "prazoIdealPlan": 8,
+   "inicio": "2025-08-28",
+   "duracao": 1,
+   "progresso": 100,
+   "prazoRealPlan": 1,
+   "motivo": "Retornou com pendência"
+  },
+  {
+   "id": "5",
+   "nome": "Risco do empreendimento P02",
+   "fase": "Realizado + previsão",
+   "responsavel": "CEF",
+   "etapa": "Risco do empreendimento",
+   "solicitante": "Crédito Imobiliário",
+   "prazoIdealPlan": 8,
+   "inicio": "2025-09-04",
+   "duracao": 7,
+   "progresso": 100,
+   "prazoRealPlan": 7,
+   "motivo": "CEF analisou antes do prazo",
+   "depende": [
+    "4"
+   ]
+  },
+  {
+   "id": "6",
+   "nome": "Risco do empreendimento P03",
+   "fase": "Realizado + previsão",
+   "responsavel": "CEF",
+   "etapa": "Risco do empreendimento",
+   "solicitante": "Crédito Imobiliário",
+   "prazoIdealPlan": 8,
+   "inicio": "2025-09-11",
+   "duracao": 25,
+   "progresso": 100,
+   "prazoRealPlan": 25,
+   "motivo": "CEF atrasou a analise",
+   "depende": [
+    "5"
+   ]
+  },
+  {
+   "id": "7",
+   "nome": "Risco do empreendimento P04",
+   "fase": "Realizado + previsão",
+   "responsavel": "CEF",
+   "etapa": "Risco do empreendimento",
+   "solicitante": "Crédito Imobiliário",
+   "prazoIdealPlan": 8,
+   "inicio": "2025-10-06",
+   "duracao": 7,
+   "progresso": 100,
+   "prazoRealPlan": 7,
+   "motivo": "CEF analisou antes do prazo",
+   "depende": [
+    "6"
+   ]
+  },
+  {
+   "id": "8",
+   "nome": "Risco do empreendimento P05",
+   "fase": "Realizado + previsão",
+   "responsavel": "CEF",
+   "etapa": "Risco do empreendimento",
+   "solicitante": "Crédito Imobiliário",
+   "prazoIdealPlan": 8,
+   "inicio": "2025-12-08",
+   "duracao": 1,
+   "progresso": 100,
+   "prazoRealPlan": 1,
+   "motivo": "Processo finalizado",
+   "depende": [
+    "7"
+   ]
+  },
+  {
+   "id": "9",
+   "nome": "Conformidade",
+   "fase": "Realizado + previsão",
+   "responsavel": "CEF",
+   "etapa": "Conformidade",
+   "solicitante": "Crédito Imobiliário",
+   "prazoIdealPlan": 7,
+   "inicio": "2025-10-14",
+   "duracao": 55,
+   "prazoRealPlan": null,
+   "motivo": "Planilha sem prazo real: \"Não temos um e-mail de retorno\". Duração calculada (55 dias) até o protocolo seguinte (Risco P05, 08/12/2025); confirmar.",
+   "depende": [
+    "8",
+    "3"
+   ],
+   "progresso": 100
+  },
+  {
+   "id": "10",
+   "nome": "Solicitação Minuta PJ P01",
+   "fase": "Realizado + previsão",
+   "responsavel": "CEF",
+   "etapa": "Minuta PJ",
+   "solicitante": "Crédito Imobiliário",
+   "prazoIdealPlan": 8,
+   "inicio": "2025-12-09",
+   "duracao": 8,
+   "progresso": 100,
+   "prazoRealPlan": 8,
+   "motivo": "Retornou com pendência",
+   "depende": [
+    "9"
+   ]
+  },
+  {
+   "id": "11",
+   "nome": "Solicitação Minuta PJ P02",
+   "fase": "Realizado + previsão",
+   "responsavel": "CEF",
+   "etapa": "Minuta PJ",
+   "solicitante": "Crédito Imobiliário",
+   "prazoIdealPlan": 8,
+   "inicio": "2025-12-16",
+   "duracao": 1,
+   "progresso": 100,
+   "prazoRealPlan": 1,
+   "motivo": "Emitiu o contrato, porém teve alguns erros, foi necessário uma nova emissão",
+   "depende": [
+    "10"
+   ]
+  },
+  {
+   "id": "12",
+   "nome": "Solicitação Minuta PJ P03",
+   "fase": "Realizado + previsão",
+   "responsavel": "CEF",
+   "etapa": "Minuta PJ",
+   "solicitante": "Crédito Imobiliário",
+   "prazoIdealPlan": 8,
+   "inicio": "2025-12-19",
+   "duracao": 11,
+   "progresso": 100,
+   "prazoRealPlan": 11,
+   "motivo": "O prazo se estendeu, devido ao ferido do Natal",
+   "depende": [
+    "11"
+   ]
+  },
+  {
+   "id": "13",
+   "nome": "Assinatura do contrato",
+   "fase": "Realizado + previsão",
+   "responsavel": "Crédito/Jurídico/Diretoria/CEF",
+   "etapa": "Assinatura do contrato",
+   "solicitante": "CEF",
+   "prazoIdealPlan": 5,
+   "inicio": "2026-01-05",
+   "duracao": 11,
+   "progresso": 100,
+   "prazoRealPlan": 11,
+   "motivo": "Demora no retorno de assinatura da CEF",
+   "depende": [
+    "12"
+   ]
+  },
+  {
+   "id": "14",
+   "nome": "Contrato assinado",
+   "fase": "Realizado + previsão",
+   "marco": true,
+   "depende": [
+    "13"
+   ],
+   "etapa": "Contrato assinado"
+  },
+  {
+   "id": "I1",
+   "nome": "Solicitar documentação da DJE",
+   "fase": "Prazo ideal (referência)",
+   "responsavel": "Jurídico",
+   "duracao": 10,
+   "etapa": "Solicitar documentação da DJE",
+   "referencia": true,
+   "inicio": "2025-07-22"
+  },
+  {
+   "id": "I2",
+   "nome": "Análise da DJE",
+   "fase": "Prazo ideal (referência)",
+   "responsavel": "CEF",
+   "duracao": 21,
+   "etapa": "Análise da DJE",
+   "referencia": true,
+   "depende": [
+    "I1"
+   ]
+  },
+  {
+   "id": "I3",
+   "nome": "Risco do empreendimento",
+   "fase": "Prazo ideal (referência)",
+   "responsavel": "CEF",
+   "duracao": 8,
+   "etapa": "Risco do empreendimento",
+   "referencia": true,
+   "depende": [
+    "I2"
+   ]
+  },
+  {
+   "id": "I4",
+   "nome": "Conformidade",
+   "fase": "Prazo ideal (referência)",
+   "responsavel": "CEF",
+   "duracao": 8,
+   "etapa": "Conformidade",
+   "referencia": true,
+   "depende": [
+    "I3"
+   ]
+  },
+  {
+   "id": "I5",
+   "nome": "Minuta PJ",
+   "fase": "Prazo ideal (referência)",
+   "responsavel": "CEF",
+   "duracao": 8,
+   "etapa": "Minuta PJ",
+   "referencia": true,
+   "depende": [
+    "I4"
+   ]
+  },
+  {
+   "id": "I6",
+   "nome": "Assinatura do contrato",
+   "fase": "Prazo ideal (referência)",
+   "responsavel": "Crédito/Jurídico/Diretoria/CEF",
+   "duracao": 3,
+   "etapa": "Assinatura do contrato",
+   "referencia": true,
+   "depende": [
+    "I5"
+   ]
+  },
+  {
+   "id": "I7",
+   "nome": "Contrato assinado (ideal)",
+   "fase": "Prazo ideal (referência)",
+   "marco": true,
+   "depende": [
+    "I6"
+   ],
+   "etapa": "Contrato assinado (ideal)",
+   "referencia": true
+  }
+ ],
+ "notaComparativo": "",
+ "analise": {
+  "criticos": [
+   "Contrato assinado em 15/01/2026, 120 dias depois do prazo ideal (17/09/2025). A duração total foi de 177 dias contra 58 no ideal.",
+   "A Conformidade não tem prazo real na planilha (\"Não temos um e-mail de retorno\"). A barra de 55 dias, de 14/10 a 07/12/2025, é calculada até o protocolo seguinte (Risco P05, 08/12/2025), contra 7 dias no ideal. É o maior trecho do projeto e depende de confirmação."
+  ],
+  "atencao": [
+   "Risco do empreendimento P03 levou 25 dias contra 8 no ideal (+17). Motivo informado: a CEF atrasou a análise.",
+   "Solicitar documentação da DJE levou 28 dias contra 10 no ideal (+18). Motivo não informado.",
+   "Minuta PJ: as 3 rodadas somam 20 dias contra 8 no ideal (+12). A P02 trouxe o contrato com erros e foi preciso nova emissão; a P03 se estendeu por causa do feriado de Natal.",
+   "Assinatura do contrato levou 11 dias contra 5 na planilha (+6). Motivo informado: demora no retorno de assinatura da CEF.",
+   "A Risco P05 (08/12/2025) aparece depois da Conformidade, embora esteja listada antes dela na planilha. Confirmar com a Danielle se a ordem está correta."
+  ],
+  "observacoes": [
+   "Projeto concluído: 13 de 13 tarefas. R.I em 22/07/2025.",
+   "A Análise DJE P01 e a Risco P01 levaram 1 dia cada; a P02 da DJE levou 14 dias (ideal 21).",
+   "Os anos da planilha estão agora consistentes (2025 e 2026), o que resolve a pendência anterior desta aba."
+  ],
+  "nota": ""
+ }
+}

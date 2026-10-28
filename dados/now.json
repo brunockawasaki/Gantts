@@ -1,7 +1,7 @@
 {
  "_meta": {
   "empresa": "Make It",
-  "posicao": "2026-10-16",
+  "posicao": "2026-10-27",
   "aba": "NOW"
  },
  "projeto": "Now · Financiamento CEF",
@@ -14,12 +14,12 @@
    "nome": "Solicitar documentação da DJE",
    "fase": "Realizado + previsão",
    "responsavel": "Jurídico",
-   "duracao": 20,
-   "inicio": "2026-07-24",
-   "progresso": 100,
    "etapa": "Solicitar documentação da DJE",
    "solicitante": "Crédito Imobiliário",
    "prazoIdealPlan": 10,
+   "inicio": "2026-07-24",
+   "duracao": 20,
+   "progresso": 100,
    "prazoRealPlan": 20,
    "motivo": "O sistema da CEF (Siopi) ficou uma semana com instabilidade"
   },
@@ -28,86 +28,122 @@
    "nome": "Análise DJE P01",
    "fase": "Realizado + previsão",
    "responsavel": "CEF",
-   "duracao": 43,
-   "depende": [
-    "1"
-   ],
-   "progresso": 100,
    "etapa": "Análise da DJE",
    "solicitante": "Jurídico",
    "prazoIdealPlan": 21,
+   "inicio": "2026-08-12",
+   "duracao": 43,
+   "progresso": 100,
    "prazoRealPlan": 43,
    "motivo": "Foram atualizada as certidões durante o prazo corrente e com isso a Caixa abriu novamente a demanda de mais 15 dias úteis",
-   "inicio": "2026-08-12"
+   "depende": [
+    "1"
+   ]
   },
   {
    "id": "3",
-   "nome": "Risco do empreendimento (em andamento)",
+   "nome": "Risco do empreendimento P01",
    "fase": "Realizado + previsão",
    "responsavel": "CEF",
-   "duracao": 52,
-   "depende": [],
    "etapa": "Risco do empreendimento",
    "solicitante": "Crédito Imobiliário",
    "prazoIdealPlan": 8,
-   "prazoRealPlan": null,
-   "motivo": "Em andamento, a Caixa informou que só analisaria o Risco do Empreendimento, após a emissão do Risco da Realty",
    "inicio": "2026-08-26",
-   "aberta": true
+   "duracao": 8,
+   "progresso": 100,
+   "prazoRealPlan": 8,
+   "motivo": "Em andamento, a Caixa informou que só analisaria o Risco do Empreendimento, após a emissão do Risco da Realty"
   },
   {
    "id": "4",
-   "nome": "Conformidade",
+   "nome": "Risco do empreendimento P02",
    "fase": "Realizado + previsão",
    "responsavel": "CEF",
-   "duracao": 8,
-   "depende": [
-    "3",
-    "2"
-   ],
-   "etapa": "Conformidade",
+   "etapa": "Risco do empreendimento",
    "solicitante": "Crédito Imobiliário",
    "prazoIdealPlan": 8,
-   "prazoRealPlan": null,
-   "motivo": "Não chegou nessa etapa, aguardando a conclusão do Risco"
+   "inicio": "2026-10-05",
+   "duracao": 12,
+   "progresso": 100,
+   "prazoRealPlan": 12,
+   "motivo": "CEF atrasou análise e solicitou correção, adequação da matriz com aporte e diferença nas unidades",
+   "depende": [
+    "3"
+   ]
   },
   {
    "id": "5",
-   "nome": "Minuta PJ",
+   "nome": "Risco do empreendimento P03",
    "fase": "Realizado + previsão",
    "responsavel": "CEF",
-   "duracao": 8,
-   "depende": [
-    "4"
-   ],
-   "etapa": "Minuta PJ",
+   "etapa": "Risco do empreendimento",
    "solicitante": "Crédito Imobiliário",
    "prazoIdealPlan": 8,
-   "prazoRealPlan": null,
-   "motivo": "Não chegou nessa etapa, somente após a aprovação da conformidade"
+   "inicio": "2026-10-16",
+   "duracao": 5,
+   "progresso": 100,
+   "prazoRealPlan": 5,
+   "motivo": "A CEF analisou antes do prazo",
+   "depende": [
+    "4"
+   ]
   },
   {
    "id": "6",
-   "nome": "Assinatura do contrato",
+   "nome": "Conformidade",
    "fase": "Realizado + previsão",
-   "responsavel": "Crédito/Jurídico/Diretoria/CEF",
-   "duracao": 3,
+   "responsavel": "CEF",
+   "etapa": "Conformidade",
+   "solicitante": "Crédito Imobiliário",
+   "prazoIdealPlan": 7,
+   "inicio": "2026-10-21",
+   "duracao": 7,
+   "progresso": 100,
+   "prazoRealPlan": 7,
    "depende": [
-    "5"
-   ],
-   "etapa": "Assinatura do contrato",
-   "solicitante": "CEF",
-   "prazoIdealPlan": 3,
-   "prazoRealPlan": null,
-   "motivo": "Não chegou nessa etapa, após emitirem a minura"
+    "5",
+    "2"
+   ]
   },
   {
    "id": "7",
+   "nome": "Solicitação Minuta PJ (em andamento)",
+   "fase": "Realizado + previsão",
+   "responsavel": "CEF",
+   "etapa": "Minuta PJ",
+   "solicitante": "Crédito Imobiliário",
+   "prazoIdealPlan": 8,
+   "inicio": "2026-10-27",
+   "aberta": true,
+   "duracao": 1,
+   "prazoRealPlan": null,
+   "motivo": "Aguardando retorno da CEF",
+   "depende": [
+    "6"
+   ]
+  },
+  {
+   "id": "8",
+   "nome": "Assinatura do contrato",
+   "fase": "Realizado + previsão",
+   "responsavel": "Crédito/Jurídico/Diretoria/CEF",
+   "etapa": "Assinatura do contrato",
+   "solicitante": "CEF",
+   "prazoIdealPlan": 5,
+   "duracao": 5,
+   "prazoRealPlan": null,
+   "motivo": "Não chegou nessa etapa, após emitirem a minura",
+   "depende": [
+    "7"
+   ]
+  },
+  {
+   "id": "9",
    "nome": "Contrato assinado (previsão)",
    "fase": "Realizado + previsão",
    "marco": true,
    "depende": [
-    "6"
+    "8"
    ],
    "etapa": "Contrato assinado (previsão)"
   },
@@ -117,9 +153,9 @@
    "fase": "Prazo ideal (referência)",
    "responsavel": "Jurídico",
    "duracao": 10,
-   "inicio": "2026-07-24",
    "etapa": "Solicitar documentação da DJE",
-   "referencia": true
+   "referencia": true,
+   "inicio": "2026-07-24"
   },
   {
    "id": "I2",
@@ -127,11 +163,11 @@
    "fase": "Prazo ideal (referência)",
    "responsavel": "CEF",
    "duracao": 21,
+   "etapa": "Análise da DJE",
+   "referencia": true,
    "depende": [
     "I1"
-   ],
-   "etapa": "Análise da DJE",
-   "referencia": true
+   ]
   },
   {
    "id": "I3",
@@ -139,11 +175,11 @@
    "fase": "Prazo ideal (referência)",
    "responsavel": "CEF",
    "duracao": 8,
+   "etapa": "Risco do empreendimento",
+   "referencia": true,
    "depende": [
     "I2"
-   ],
-   "etapa": "Risco do empreendimento",
-   "referencia": true
+   ]
   },
   {
    "id": "I4",
@@ -151,11 +187,11 @@
    "fase": "Prazo ideal (referência)",
    "responsavel": "CEF",
    "duracao": 8,
+   "etapa": "Conformidade",
+   "referencia": true,
    "depende": [
     "I3"
-   ],
-   "etapa": "Conformidade",
-   "referencia": true
+   ]
   },
   {
    "id": "I5",
@@ -163,11 +199,11 @@
    "fase": "Prazo ideal (referência)",
    "responsavel": "CEF",
    "duracao": 8,
+   "etapa": "Minuta PJ",
+   "referencia": true,
    "depende": [
     "I4"
-   ],
-   "etapa": "Minuta PJ",
-   "referencia": true
+   ]
   },
   {
    "id": "I6",
@@ -175,11 +211,11 @@
    "fase": "Prazo ideal (referência)",
    "responsavel": "Crédito/Jurídico/Diretoria/CEF",
    "duracao": 3,
+   "etapa": "Assinatura do contrato",
+   "referencia": true,
    "depende": [
     "I5"
-   ],
-   "etapa": "Assinatura do contrato",
-   "referencia": true
+   ]
   },
   {
    "id": "I7",
@@ -196,21 +232,21 @@
  "notaComparativo": "",
  "analise": {
   "criticos": [
-   "Sem previsão de término. O Risco do empreendimento (id 3) está em andamento desde 26/08/2026, há 52 dias, contra 8 no ideal. Conformidade, Minuta PJ e Assinatura do contrato ficam sem data enquanto o Risco não tiver previsão.",
-   "O prazo ideal para o contrato terminava em 19/09/2026. Hoje, 16/10/2026, já se passaram 27 dias dessa data e o contrato ainda não tem previsão.",
-   "Segundo a planilha, a Conformidade aguarda a conclusão do Risco, a Minuta PJ só vem depois da aprovação da conformidade e a assinatura vem depois da minuta. Qualquer atraso no Risco adia a assinatura do contrato na mesma medida."
+   "Sem previsão de término. A Minuta PJ (id 7) tem protocolo em 27/10/2026, o dia da posição, e aguarda retorno da CEF. A Assinatura do contrato só começa depois dela e fica sem data.",
+   "O prazo ideal para o contrato terminava em 19/09/2026. Em 27/10/2026 já passaram 38 dias dessa data. Desde o R.I (24/07) já são 95 dias, contra 58 no ideal."
   ],
   "atencao": [
-   "Análise DJE P01 levou 43 dias contra 21 no ideal. Motivo na planilha: as certidões foram atualizadas durante o prazo corrente e, com isso, a Caixa abriu novamente a demanda de mais 15 dias úteis.",
-   "Solicitar documentação da DJE levou 20 dias contra 10 no ideal (+10 dias). Motivo na planilha: o sistema da CEF (Siopi) ficou uma semana com instabilidade.",
-   "Risco do empreendimento: a planilha registra que a Caixa só analisaria o Risco depois da emissão do Risco da Realty, que já estava em andamento. A planilha não informa quando isso deve terminar.",
-   "O Risco começou em 26/08, antes do fim da Análise DJE P01 (23/09). As duas etapas correram juntas; no prazo ideal elas aparecem em sequência.",
-   "Conformidade (8 dias), Minuta PJ (8) e Assinatura do contrato (3) têm só o prazo ideal na planilha, sem prazo real. Por isso não foram colocadas no cronograma: dependem do fim do Risco."
+   "Análise DJE P01 levou 43 dias contra 21 no ideal (+22). Motivo informado: as certidões foram atualizadas durante o prazo e a Caixa reabriu a demanda por mais 15 dias úteis.",
+   "Solicitar documentação da DJE levou 20 dias contra 10 no ideal (+10). Motivo informado: instabilidade do sistema da CEF (Siopi) por uma semana.",
+   "Risco do empreendimento: as 3 rodadas somam 25 dias contra 8 no ideal (+17). A P02 levou 12 dias: a CEF atrasou e pediu correção da matriz com aporte e diferença nas unidades. Entre o fim da P01 (02/09) e o início da P02 (05/10) passaram 33 dias sem rodada; o motivo registrado na P01 é que a Caixa só analisaria depois do Risco da Realty.",
+   "A Conformidade levou 7 dias e não tem motivo informado.",
+   "Mudança em relação à planilha de 16/10: o Risco que estava em andamento sem previsão agora está dividido em P01 (8 dias), P02 (12 dias) e P03 (5 dias), todos concluídos."
   ],
   "observacoes": [
-   "Posição em 16/10/2026: 2 de 6 tarefas concluídas (ids 1 e 2), 1 em andamento (id 3) e 3 por iniciar (ids 4 a 6).",
-   "Tempo das tarefas concluídas por responsável: Jurídico 20 dias (id 1) e CEF 43 dias (id 2).",
-   "Datas da planilha: a Análise DJE P01 começa em 12/08, no mesmo dia em que a solicitação da DJE termina. Pode ser só a forma de contar os dias."
+   "Posição em 27/10/2026: 6 de 8 tarefas concluídas (ids 1 a 6), 1 em andamento (id 7) e 1 por iniciar (id 8).",
+   "Tempo das tarefas concluídas por responsável: Jurídico 20 dias (id 1) e CEF 75 dias (ids 2 a 6).",
+   "O andamento (%) da Minuta PJ não consta na planilha; a barra mostra só o dia do protocolo.",
+   "A última rodada de Risco (P03) levou 5 dias e a CEF analisou antes do prazo, segundo a planilha."
   ],
   "nota": ""
  }

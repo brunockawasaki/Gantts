@@ -1,0 +1,784 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Silva Jardim · Financiamento CEF</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+:root{--bg:#f6f5f1;--card:#fff;--ink:#1c1c1a;--muted:#6d6c66;--line:#e3e1da;--grid:#efede7;--crit:#c8372d;--today:#e08a00}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#151514;--card:#1e1e1c;--ink:#ecebe5;--muted:#a19f97;--line:#34332f;--grid:#292825;--crit:#ff6a5c;--today:#ffb23a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#151514;--card:#1e1e1c;--ink:#ecebe5;--muted:#a19f97;--line:#34332f;--grid:#292825;--crit:#ff6a5c;--today:#ffb23a;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.page{max-width:1400px;margin:0 auto;padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1{font-size:22px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px}
+.kpis{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 12px;min-width:110px}
+.kpi span{display:block;color:var(--muted);font-size:12px}
+.kpi b{font-size:17px}
+.tools{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;align-items:center}
+.tools button{font:inherit;font-size:13px;padding:5px 11px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.tools button.on{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.sep{width:1px;height:20px;background:var(--line);margin:0 4px}
+.chart{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:auto;max-height:75vh}
+.row{display:flex;min-width:max-content;height:46px;border-bottom:1px solid var(--grid)}
+.row.fase{height:34px}
+.row.head{height:44px;position:sticky;top:0;z-index:3;background:var(--card);border-bottom:1px solid var(--line)}
+.left{position:sticky;left:0;z-index:2;width:290px;flex:none;background:var(--card);border-right:1px solid var(--line);padding:6px 10px;overflow:hidden}
+.head .left{z-index:4;font-weight:600;display:flex;align-items:flex-end}
+.fase .left{font-weight:600;display:flex;align-items:center;gap:8px}
+.left .n{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.left .m{color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tl{position:relative;flex:none}
+.tick{position:absolute;border-left:1px solid var(--line);font-size:11px;color:var(--muted);padding:3px 4px;white-space:nowrap;overflow:hidden}
+.bar{position:absolute;top:14px;height:18px;border-radius:4px;overflow:hidden}
+.bar i{position:absolute;top:0;bottom:0;left:0;background:rgba(0,0,0,.28)}
+.bar.crit{outline:2px solid var(--crit);outline-offset:1px}
+.sum{position:absolute;top:14px;height:6px;border-radius:3px;background:var(--muted);opacity:.6}
+.ms{position:absolute;top:16px;width:14px;height:14px;transform:rotate(45deg);background:var(--ink)}
+.ms.crit{background:var(--crit)}
+.lbl{position:absolute;top:14px;font-size:12px;line-height:18px;white-space:nowrap;color:var(--muted);pointer-events:none}
+.today{position:absolute;top:0;bottom:0;width:2px;background:var(--today);z-index:1}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:10px;color:var(--muted);font-size:12px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:14px;height:10px;border-radius:3px;display:inline-block;flex:none}
+.erro{background:var(--card);color:var(--crit);border:1px solid var(--crit);border-radius:8px;padding:12px;margin:16px 0}
+@media (max-width:640px){.left{width:150px}.kpi{min-width:0;flex:1 1 40%}}
+.bar.s-aberta::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(0,0,0,.42) 0 6px,transparent 6px 12px)}
+.sw.s-aberta{background:#4e79a7;background-image:repeating-linear-gradient(135deg,rgba(0,0,0,.42) 0 3px,transparent 3px 6px)}
+.lbl.sem{color:var(--muted);font-style:italic}
+:root{--ideal:#2e8b57;--real:#4e79a7;--am:#ffd600;--at:#e8662a;--hoje2:#5b4bc4}
+.left{z-index:20}
+.head .left{z-index:21}
+.row.head{z-index:22}
+.row{height:64px}
+.row.fase{height:36px}
+.row.head{height:44px}
+.today{background:var(--hoje2)}
+.tag.hoje{color:var(--hoje2)}
+.idl{position:absolute;top:10px;height:7px;border-radius:3px;background:var(--ideal)}
+.lbl.li{top:3px;line-height:16px;font-size:11.5px;color:var(--ideal);font-weight:600}
+.lbl.lr{top:27px;line-height:22px}
+.rb{position:absolute;top:27px;height:22px;border-radius:4px;overflow:hidden}
+.rb .sg{position:absolute;top:0;bottom:0}
+.rb .sg.ok{background:var(--real)}
+.rb .sg.am{background:var(--am)}
+.rb .sg.at{background:var(--at)}
+.rb i{position:absolute;left:0;top:0;bottom:0;background:rgba(0,0,0,.22);z-index:1}
+.rb em{position:relative;z-index:2;display:block;font-style:normal;font-size:12px;font-weight:700;color:#fff;padding:0 6px 0 13px;line-height:22px;text-shadow:0 0 2px #000,0 0 3px #000}
+.rb.s-todo{opacity:.62;outline:1.5px dashed #555;outline-offset:-1.5px}
+.rb.s-aberta::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(0,0,0,.38) 0 6px,transparent 6px 12px);z-index:1}
+.rb.crit{outline:2px solid var(--crit);outline-offset:1px}
+.rb.s-todo.crit{outline:2px solid var(--crit)}
+.mk{position:absolute;top:32px;width:12px;height:12px;margin-left:-6px;background:var(--ink);border:2px solid var(--card);transform:rotate(45deg);z-index:3;cursor:help}
+.ms{top:25px}
+.gap{top:30px;background:repeating-linear-gradient(135deg,var(--at) 0 3px,transparent 3px 6px)}
+.lbl.m{top:6px}
+.lbl .atr{color:var(--at)}
+.banner .r,.kpi.alerta b,.cmp td.mais{color:var(--at)}
+.cmp .ib{background:var(--at)}
+.sw.l-ideal{background:var(--ideal)}
+.sw.l-ok{background:var(--real)}
+.sw.l-am{background:var(--am)}
+.sw.l-at{background:var(--at)}
+.sw.l-mk{background:var(--ink);width:9px;height:9px;transform:rotate(45deg);border-radius:0}
+@media print{.tools{display:none}.chart{overflow:visible;max-height:none}body{background:#fff}}
+
+:root{--done:#2f5f8f}
+.chart{max-height:none}
+.row .tl{overflow:hidden}
+.nav{font-size:13px;margin:0 0 10px}
+.nav a{color:var(--crit);font-weight:600;text-decoration:none}
+.nav a:hover{text-decoration:underline}
+.banner{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--crit);border-radius:10px;padding:14px 18px;margin:14px 0;font-size:17px;line-height:1.45}
+.banner b{font-weight:700}
+.banner .r{color:var(--crit)}
+.banner small{display:block;color:var(--muted);font-size:13px;margin-top:4px}
+.kpi.alerta b{color:var(--crit)}
+.tools .sp{flex:1}
+.row{height:52px}
+.row.fase{height:36px}
+.bar{top:14px;height:24px;border-radius:5px;display:flex;align-items:center}
+.bar i{background:rgba(0,0,0,.42)}
+.bar em{position:relative;font-style:normal;font-size:12px;font-weight:700;color:#fff;padding-left:7px;text-shadow:0 0 2px rgba(0,0,0,.35)}
+.bar.s-todo{opacity:.5;outline:1.5px dashed currentColor;outline-offset:-1.5px}
+.bar.s-todo em{color:var(--ink);text-shadow:none}
+.bar.crit{outline:2px solid var(--crit);outline-offset:1px}
+.bar.s-todo.crit{outline:2px solid var(--crit)}
+.ms{top:19px}
+.lbl{top:15px;font-size:12.5px;line-height:22px;color:var(--ink)}
+.lbl.dir{text-align:right}
+.lbl.m{top:1px;line-height:20px}
+.lbl small{color:var(--muted);font-size:12px}
+.lbl .atr{color:var(--crit);font-weight:700}
+.gap{position:absolute;top:23px;height:6px;border-radius:3px;background:repeating-linear-gradient(135deg,var(--crit) 0 3px,transparent 3px 6px)}
+.sum{top:15px}
+.ideal{position:absolute;top:0;bottom:0;width:0;border-left:2px dashed var(--muted);z-index:1}
+.tag{position:absolute;top:2px;font-size:10.5px;font-weight:700;letter-spacing:.03em;white-space:nowrap;z-index:2;background:var(--card);padding:0 4px;border-radius:3px}
+.tag.hoje{color:var(--today);transform:translateX(-50%)}
+.tag.ideal{color:var(--muted)}
+.sw.s-done{background:#4e79a7;box-shadow:inset 14px 0 rgba(0,0,0,.42)}
+.sw.s-doing{background:#4e79a7;box-shadow:inset 7px 0 rgba(0,0,0,.42)}
+.sw.s-todo{background:#4e79a7;opacity:.5;outline:1.5px dashed #4e79a7;outline-offset:-1.5px}
+.sw.s-ref{background:#59a14f}
+h2{font-size:17px;margin:30px 0 8px}
+.nota{color:var(--muted);font-size:12px;margin-top:8px}
+.wrap{overflow:auto}
+.cmp{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);font-size:14px}
+.cmp th,.cmp td{padding:9px 12px;border-bottom:1px solid var(--grid);text-align:right;white-space:nowrap}
+.cmp th:first-child,.cmp td:first-child{text-align:left}
+.cmp th{color:var(--muted);font-weight:600}
+.cmp td.mais{color:var(--crit);font-weight:700}
+.cmp .ib{display:inline-block;height:10px;border-radius:3px;background:var(--crit);vertical-align:middle;margin-right:8px;opacity:.75}
+.an{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.an>div{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--muted);border-radius:8px;padding:10px 14px}
+.an .c{border-left-color:var(--crit)}
+.an .a{border-left-color:var(--today)}
+.an h3{margin:0 0 6px;font-size:14px}
+.an ul{margin:0;padding-left:18px}
+.an li{margin:6px 0}
+@media print{.tools{display:none}.an>div,.cmp,.banner{break-inside:avoid}@page{size:landscape;margin:10mm}.chart{overflow:visible}}
+</style>
+
+<div class="page">
+  <div class="nav"><a href="../gadens/index.html">&larr; Gadens</a> &middot; <a href="../index.html">Menu principal</a></div>
+  <h1 id="titulo">Cronograma</h1>
+  <div class="sub" id="sub"></div>
+  <div id="erro"></div>
+  <div class="banner" id="banner"></div>
+  <div class="kpis" id="kpis"></div>
+  <div class="tools">
+    <button data-z="ajustar">Ajustar à tela</button><button data-z="dia">Dia</button><button data-z="semana">Semana</button><button data-z="mes">Mês</button>
+    <span class="sep"></span>
+    <button id="bCrit">Só caminho crítico</button>
+    <button id="bIdeal">Ocultar prazo ideal</button>
+    <span class="sp"></span>
+    <button id="bPrint">Imprimir / salvar PDF</button>
+  </div>
+  <div class="chart" id="chart"></div>
+  <div class="legend" id="legend"></div>
+
+  <h2>Comparativo com o prazo ideal</h2>
+  <div class="wrap"><table class="cmp" id="cmp"></table></div>
+  <div class="nota" id="cmpNota"></div>
+
+  <h2>Análise do projeto</h2>
+  <div class="an" id="analise"></div>
+  <div class="nota" id="analiseNota"></div>
+</div>
+
+<!-- ===== DADOS DO PROJETO: o agente altera SOMENTE este bloco (e o <title>) ===== -->
+<script type="application/json" id="dados">
+{
+ "projeto": "Silva Jardim · Financiamento CEF",
+ "descricao": "R.I 23/07/2025 · prazos em dias corridos, como na planilha",
+ "inicio": "2025-07-23",
+ "diasUteis": false,
+ "tarefas": [
+  {
+   "id": "1",
+   "nome": "Solicitar documentação da DJE",
+   "fase": "Realizado + previsão",
+   "responsavel": "Jurídico",
+   "etapa": "Solicitar documentação da DJE",
+   "solicitante": "Crédito Imobiliário",
+   "prazoIdealPlan": 10,
+   "inicio": "2025-08-01",
+   "duracao": 12,
+   "progresso": 100,
+   "prazoRealPlan": 12,
+   "motivo": "Jurídico demorou protocolar"
+  },
+  {
+   "id": "2",
+   "nome": "Análise DJE P01",
+   "fase": "Realizado + previsão",
+   "responsavel": "CEF",
+   "etapa": "Análise da DJE",
+   "solicitante": "Jurídico",
+   "prazoIdealPlan": 21,
+   "inicio": "2025-08-13",
+   "duracao": 7,
+   "progresso": 100,
+   "prazoRealPlan": 7,
+   "motivo": "Atualização da grade jurídica",
+   "depende": [
+    "1"
+   ]
+  },
+  {
+   "id": "3",
+   "nome": "Análise DJE P02",
+   "fase": "Realizado + previsão",
+   "responsavel": "CEF",
+   "etapa": "Análise da DJE",
+   "solicitante": "Jurídico",
+   "prazoIdealPlan": 21,
+   "inicio": "2025-11-06",
+   "duracao": 7,
+   "progresso": 100,
+   "prazoRealPlan": 7,
+   "motivo": "Atualização da grade jurídica",
+   "depende": [
+    "2"
+   ]
+  },
+  {
+   "id": "4",
+   "nome": "Análise DJE P03",
+   "fase": "Realizado + previsão",
+   "responsavel": "CEF",
+   "etapa": "Análise da DJE",
+   "solicitante": "Jurídico",
+   "prazoIdealPlan": 21,
+   "inicio": "2026-03-26",
+   "duracao": 6,
+   "progresso": 100,
+   "prazoRealPlan": 6,
+   "motivo": "Atualização da grade jurídica",
+   "depende": [
+    "3"
+   ]
+  },
+  {
+   "id": "5",
+   "nome": "Análise DJE P04",
+   "fase": "Realizado + previsão",
+   "responsavel": "CEF",
+   "etapa": "Análise da DJE",
+   "solicitante": "Crédito Imobiliário",
+   "prazoIdealPlan": 21,
+   "inicio": "2026-04-13",
+   "duracao": 4,
+   "progresso": 100,
+   "prazoRealPlan": 4,
+   "motivo": "Atualização da grade jurídica",
+   "depende": [
+    "4"
+   ]
+  },
+  {
+   "id": "6",
+   "nome": "Análise DJE P05",
+   "fase": "Realizado + previsão",
+   "responsavel": "CEF",
+   "etapa": "Análise da DJE",
+   "solicitante": "Crédito Imobiliário",
+   "prazoIdealPlan": 21,
+   "inicio": "2026-04-27",
+   "duracao": 1,
+   "progresso": 100,
+   "prazoRealPlan": 1,
+   "motivo": "Atualização da grade jurídica",
+   "depende": [
+    "5"
+   ]
+  },
+  {
+   "id": "7",
+   "nome": "Análise DJE P06",
+   "fase": "Realizado + previsão",
+   "responsavel": "CEF",
+   "etapa": "Análise da DJE",
+   "solicitante": "Crédito Imobiliário",
+   "prazoIdealPlan": 21,
+   "inicio": "2026-05-11",
+   "duracao": 3,
+   "progresso": 100,
+   "prazoRealPlan": 3,
+   "motivo": "Atualização da grade jurídica",
+   "depende": [
+    "6"
+   ]
+  },
+  {
+   "id": "8",
+   "nome": "Risco do empreendimento P01",
+   "fase": "Realizado + previsão",
+   "responsavel": "CEF",
+   "etapa": "Risco do empreendimento",
+   "solicitante": "Crédito Imobiliário",
+   "prazoIdealPlan": 8,
+   "inicio": "2025-11-04",
+   "duracao": 10,
+   "progresso": 100,
+   "prazoRealPlan": 10,
+   "motivo": "A CEF analisou antes o processo, mas com pendências"
+  },
+  {
+   "id": "9",
+   "nome": "Risco do empreendimento P02",
+   "fase": "Realizado + previsão",
+   "responsavel": "CEF",
+   "etapa": "Risco do empreendimento",
+   "solicitante": "Crédito Imobiliário",
+   "prazoIdealPlan": 8,
+   "inicio": "2025-11-14",
+   "duracao": 103,
+   "progresso": 100,
+   "prazoRealPlan": 103,
+   "motivo": "A CEF demorou retornar, pois tivemos que aprovar o comitê matriz do SILVA JARDIM",
+   "depende": [
+    "8"
+   ]
+  },
+  {
+   "id": "10",
+   "nome": "Conformidade P01",
+   "fase": "Realizado + previsão",
+   "responsavel": "CEF",
+   "etapa": "Conformidade",
+   "solicitante": "Crédito Imobiliário",
+   "prazoIdealPlan": 7,
+   "inicio": "2026-03-10",
+   "duracao": 2,
+   "progresso": 100,
+   "prazoRealPlan": 2,
+   "motivo": "A CEF analisou antes o processo, mas com pendências",
+   "depende": [
+    "9",
+    "7"
+   ]
+  },
+  {
+   "id": "11",
+   "nome": "Conformidade P02",
+   "fase": "Realizado + previsão",
+   "responsavel": "CEF",
+   "etapa": "Conformidade",
+   "solicitante": "Crédito Imobiliário",
+   "prazoIdealPlan": 7,
+   "inicio": "2026-03-23",
+   "duracao": 2,
+   "progresso": 100,
+   "prazoRealPlan": 2,
+   "motivo": "A CEF analisou antes o processo",
+   "depende": [
+    "10"
+   ]
+  },
+  {
+   "id": "12",
+   "nome": "Solicitação Minuta PJ P01",
+   "fase": "Realizado + previsão",
+   "responsavel": "CEF",
+   "etapa": "Minuta PJ",
+   "solicitante": "Crédito Imobiliário",
+   "prazoIdealPlan": 8,
+   "inicio": "2026-04-22",
+   "duracao": 30,
+   "progresso": 100,
+   "prazoRealPlan": 30,
+   "motivo": "A CEF demorou retornar",
+   "depende": [
+    "11"
+   ]
+  },
+  {
+   "id": "13",
+   "nome": "Solicitação Minuta PJ P02",
+   "fase": "Realizado + previsão",
+   "responsavel": "CEF",
+   "etapa": "Minuta PJ",
+   "solicitante": "Crédito Imobiliário",
+   "prazoIdealPlan": 8,
+   "inicio": "2026-05-25",
+   "duracao": 10,
+   "progresso": 100,
+   "prazoRealPlan": 10,
+   "motivo": "Apesar de passar 2 dias, como foi uma correção, eles haviam passado que poderia sair em até 10 dias",
+   "depende": [
+    "12"
+   ]
+  },
+  {
+   "id": "14",
+   "nome": "Assinatura do contrato P01",
+   "fase": "Realizado + previsão",
+   "responsavel": "Crédito/Jurídico/Diretoria/CEF",
+   "etapa": "Assinatura do contrato",
+   "solicitante": "CEF",
+   "prazoIdealPlan": 5,
+   "inicio": "2026-06-03",
+   "duracao": 10,
+   "progresso": 100,
+   "prazoRealPlan": 10,
+   "motivo": "Eram mais pessoas envolvidas para assinatura",
+   "depende": [
+    "13"
+   ]
+  },
+  {
+   "id": "15",
+   "nome": "Contrato assinado",
+   "fase": "Realizado + previsão",
+   "marco": true,
+   "depende": [
+    "14"
+   ],
+   "etapa": "Contrato assinado"
+  },
+  {
+   "id": "I1",
+   "nome": "Solicitar documentação da DJE",
+   "fase": "Prazo ideal (referência)",
+   "responsavel": "Jurídico",
+   "duracao": 10,
+   "etapa": "Solicitar documentação da DJE",
+   "referencia": true,
+   "inicio": "2025-07-23"
+  },
+  {
+   "id": "I2",
+   "nome": "Análise da DJE",
+   "fase": "Prazo ideal (referência)",
+   "responsavel": "CEF",
+   "duracao": 21,
+   "etapa": "Análise da DJE",
+   "referencia": true,
+   "depende": [
+    "I1"
+   ]
+  },
+  {
+   "id": "I3",
+   "nome": "Risco do empreendimento",
+   "fase": "Prazo ideal (referência)",
+   "responsavel": "CEF",
+   "duracao": 8,
+   "etapa": "Risco do empreendimento",
+   "referencia": true,
+   "depende": [
+    "I2"
+   ]
+  },
+  {
+   "id": "I4",
+   "nome": "Conformidade",
+   "fase": "Prazo ideal (referência)",
+   "responsavel": "CEF",
+   "duracao": 8,
+   "etapa": "Conformidade",
+   "referencia": true,
+   "depende": [
+    "I3"
+   ]
+  },
+  {
+   "id": "I5",
+   "nome": "Minuta PJ",
+   "fase": "Prazo ideal (referência)",
+   "responsavel": "CEF",
+   "duracao": 8,
+   "etapa": "Minuta PJ",
+   "referencia": true,
+   "depende": [
+    "I4"
+   ]
+  },
+  {
+   "id": "I6",
+   "nome": "Assinatura do contrato",
+   "fase": "Prazo ideal (referência)",
+   "responsavel": "Crédito/Jurídico/Diretoria/CEF",
+   "duracao": 3,
+   "etapa": "Assinatura do contrato",
+   "referencia": true,
+   "depende": [
+    "I5"
+   ]
+  },
+  {
+   "id": "I7",
+   "nome": "Contrato assinado (ideal)",
+   "fase": "Prazo ideal (referência)",
+   "marco": true,
+   "depende": [
+    "I6"
+   ],
+   "etapa": "Contrato assinado (ideal)",
+   "referencia": true
+  }
+ ],
+ "notaComparativo": "",
+ "analise": {
+  "criticos": [
+   "Contrato assinado em 12/06/2026, 267 dias depois do prazo ideal (18/09/2025). A duração total foi de 324 dias contra 58 no ideal.",
+   "Risco do empreendimento P02 levou 103 dias contra 8 no ideal (+95), de 14/11/2025 a 24/02/2026. Motivo informado: a CEF demorou porque foi preciso aprovar o comitê matriz do Silva Jardim.",
+   "Minuta PJ P01 levou 30 dias contra 8 no ideal (+22). Motivo informado: a CEF demorou para retornar."
+  ],
+  "atencao": [
+   "Análise da DJE teve 6 rodadas, todas com o motivo \"atualização da grade jurídica\". Somam 28 dias contra 21 no ideal, mas espalhadas de 13/08/2025 a 13/05/2026. Entre a P01 (fim em 19/08/2025) e a P02 (início em 06/11/2025) passaram 79 dias sem tarefa de DJE; a planilha não explica o intervalo.",
+   "Assinatura do contrato levou 10 dias contra 5 na planilha (+5). Motivo informado: mais pessoas envolvidas na assinatura.",
+   "Minuta PJ P02 levou 10 dias: a CEF havia dito que sairia em até 10 dias por ser uma correção."
+  ],
+  "observacoes": [
+   "Projeto concluído: 14 de 14 tarefas. R.I em 23/07/2025.",
+   "As Conformidades P01 e P02 levaram 2 dias cada, contra 7 no ideal.",
+   "A planilha traz as rodadas P04 a P06 da DJE com solicitante Crédito Imobiliário e as anteriores com Jurídico."
+  ],
+  "nota": ""
+ },
+ "posicao": "2026-10-27"
+}
+</script>
+<!-- ===== FIM DOS DADOS ===== -->
+
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const DIA=864e5;
+const parse=s=>{const p=String(s).split('-').map(Number);if(p.length!==3||p.some(isNaN))throw Error('Data inválida: "'+s+'" (use AAAA-MM-DD)');return new Date(p[0],p[1]-1,p[2]);};
+const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const fmt=d=>d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit'});
+const curto=d=>String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0');
+const add=(d,n)=>new Date(d.getFullYear(),d.getMonth(),d.getDate()+n);
+const dias=(a,b)=>Math.round((b-a)/DIA);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const PX={dia:30,semana:14,mes:4};
+const COR={p:'#4e79a7',r:'#59a14f'};
+let D,T,byId,cal,fimIdx,uteis,fases,zoom='ajustar',soCrit=false,semIdeal=false,fimG={},POS=null;
+
+function agendar(){
+  D=JSON.parse($('dados').textContent);
+  POS=D.posicao?parse(D.posicao):null;
+  uteis=D.diasUteis!==false;
+  const fer=new Set(D.feriados||[]);
+  const ok=d=>!uteis||(d.getDay()!==0&&d.getDay()!==6&&!fer.has(iso(d)));
+  cal=[];let c=parse(D.inicio);
+  while(cal.length<4000){if(ok(c))cal.push(c);c=add(c,1);}
+  const idx=s=>{const t=parse(s);const i=cal.findIndex(x=>x>=t);return i<0?cal.length-1:i;};
+  T=D.tarefas||[];
+  if(!T.length)throw Error('Nenhuma tarefa informada.');
+  byId={};
+  T.forEach(t=>{
+    t.id=String(t.id);
+    if(byId[t.id])throw Error('ID repetido: '+t.id);
+    byId[t.id]=t;
+    t.dur=t.marco?0:Math.max(1,Math.round(t.duracao||1));
+    t.dep=(t.depende||[]).map(String);
+    t.fase=t.fase||'Geral';
+    t.ref=!!t.referencia;
+    t.aberta=!!t.aberta;   // em andamento, sem previsão de término
+  });
+  const ordem=[],st={};
+  const visita=t=>{
+    if(st[t.id]===2)return;
+    if(st[t.id]===1)throw Error('Dependência circular envolvendo a tarefa '+t.id+'.');
+    st[t.id]=1;
+    t.dep.forEach(d=>{if(!byId[d])throw Error('A tarefa '+t.id+' depende de "'+d+'", que não existe.');visita(byId[d]);});
+    st[t.id]=2;ordem.push(t);
+  };
+  T.forEach(visita);
+  // Tarefa já iniciada com data informada: vale a data informada (é o realizado).
+  // Tarefa ainda não iniciada: a data informada é "não antes de" e a dependência pode empurrá-la.
+  ordem.forEach(t=>{
+    if(t.dep.some(d=>byId[d].sem||byId[d].aberta)){t.sem=true;return;}   // sem data: depende de etapa sem previsão
+    let dep=0;t.dep.forEach(d=>{dep=Math.max(dep,byId[d].ef);});
+    const fixo=t.inicio?idx(t.inicio):null;
+    if(fixo!==null&&((Number(t.progresso)||0)>0||t.aberta)){t.es=fixo;t.sob=Math.max(0,dep-fixo);}
+    else{t.es=Math.max(fixo||0,dep);t.sob=0;}
+    t.ef=t.es+t.dur;
+  });
+  // Previsto/real e prazo ideal são duas cadeias separadas: cada uma tem o seu próprio fim.
+  T.forEach(t=>{if(t.sem)return;const g=t.ref?'r':'p';fimG[g]=Math.max(fimG[g]||0,t.ef);});
+  fimIdx=Math.max(1,...T.filter(t=>!t.sem).map(t=>t.ef));
+  const suc={};T.forEach(t=>t.dep.forEach(d=>{(suc[d]=suc[d]||[]).push(t);}));
+  ordem.slice().reverse().forEach(t=>{
+    if(t.sem){t.folga=null;t.critica=false;return;}
+    const s=(suc[t.id]||[]).filter(x=>!x.sem);
+    t.lf=s.length?Math.min(...s.map(x=>x.ls)):fimG[t.ref?'r':'p'];
+    t.ls=t.lf-t.dur;t.folga=t.ls-t.es;t.critica=!t.ref&&t.folga===0;
+  });
+  T.forEach(t=>{
+    t.pr=Math.min(100,Math.max(0,Number(t.progresso)||0));
+    if(t.sem){t.ini=t.fim=null;t.st='sem';return;}
+    if(t.dur){t.ini=cal[t.es];t.fim=cal[t.ef-1];}
+    else{t.ini=t.fim=(t.es>0&&t.dep.length&&!t.inicio)?cal[t.es-1]:cal[t.es];}
+    t.st=t.aberta?'aberta':t.pr>=100?'done':t.pr>0?'doing':'todo';
+  });
+  fases=[];T.forEach(t=>{if(!fases.includes(t.fase))fases.push(t.fase);});
+}
+
+const maxD=(l,k)=>l.reduce((m,t)=>t[k]>m?t[k]:m,l[0][k]);
+const minD=(l,k)=>l.reduce((m,t)=>t[k]<m?t[k]:m,l[0][k]);
+const un=()=>uteis?'dias úteis':'dias';
+
+function resumo(){
+  const P=T.filter(t=>!t.ref),R=T.filter(t=>t.ref);
+  const reais=P.filter(t=>t.dur);
+  const Pv=P.filter(t=>!t.sem);
+  const semFim=P.some(t=>t.sem);   // há etapa sem data: o projeto ainda não tem previsão de término
+  const a=minD(Pv,'ini'),b=maxD(Pv,'fim');
+  const dur=fimG.p-Math.min(...Pv.map(t=>t.es));
+  const conc=reais.filter(t=>t.st==='done').length;
+  document.title=D.projeto||'Cronograma';
+  $('titulo').textContent=D.projeto||'Cronograma';
+  $('sub').textContent=(D.descricao?D.descricao+' · ':'')+(uteis?'Durações em dias úteis (seg–sex, sem feriados)':'Durações em dias corridos');
+  const ab=P.find(t=>t.aberta);
+  if(R.length&&semFim&&ab){
+    const ib=maxD(R,'fim'),ref=POS||new Date(),atraso=dias(ib,new Date(ref.getFullYear(),ref.getMonth(),ref.getDate()));
+    $('banner').innerHTML=`O prazo ideal terminava em <b>${fmt(ib)}</b>. ${atraso>0?`<b class="r">${atraso} ${un()} depois</b>, a`:'A'} etapa <b>${esc(ab.nome.replace(/\s*\(.*\)\s*$/,''))}</b> segue em andamento há <b>${ab.dur} ${un()}</b>${ab.prazoIdealPlan!=null?` (o ideal são ${ab.prazoIdealPlan})`:''} e ainda não há previsão de término.`+
+      `<small>Hoje: ${conc} de ${reais.length} tarefas concluídas.</small>`;
+  }else if(R.length){
+    const ib=maxD(R,'fim'),dif=fimG.p-fimG.r;
+    $('banner').innerHTML=`Contrato assinado previsto para <b>${fmt(b)}</b>, <b class="r">${dif} ${un()} depois</b> do prazo ideal (${fmt(ib)}).`+
+      `<small>Hoje: ${conc} de ${reais.length} tarefas concluídas.</small>`;
+  }else $('banner').hidden=true;
+  const k=[['Início',fmt(a)],['Término previsto',semFim?'sem previsão':fmt(b)],['Duração prevista',semFim?'—':dur+' '+un()],['Tarefas concluídas',conc+' de '+reais.length],['No caminho crítico',reais.filter(t=>t.critica).length]];
+  if(R.length){k.push(['Término no prazo ideal',fmt(maxD(R,'fim'))]);k.push(['Diferença para o ideal',semFim?'—':'+'+(fimG.p-fimG.r)+' '+un(),semFim?0:1]);}
+  $('kpis').innerHTML=k.map(([l,v,al])=>`<div class="kpi${al?' alerta':''}"><span>${l}</span><b>${v}</b></div>`).join('');
+  $('legend').innerHTML=
+    (R.length?`<span><i class="sw l-ideal"></i>Prazo ideal (início e fim)</span>`:'')+
+    `<span><i class="sw l-mk"></i>Início real (passe o mouse: motivo do desvio)</span>`+
+    `<span><i class="sw l-ok"></i>Real no prazo</span>`+
+    (R.length?`<span><i class="sw l-am"></i>Começou depois do início ideal, ainda dentro do prazo</span><span><i class="sw l-at"></i>Passou do prazo ideal</span>`:'')+
+    `<span><i class="sw s-doing"></i>Em andamento (parte escura = % feito)</span>`+
+    (P.some(t=>t.aberta)?`<span><i class="sw s-aberta"></i>Em andamento, sem previsão de término</span>`:'')+
+    `<span><i class="sw s-todo"></i>A iniciar (previsão)</span>`+
+    `<span><i class="sw" style="outline:2px solid var(--crit);background:transparent"></i>Caminho crítico</span>`+
+    `<span><i class="sw" style="background:var(--ink);width:10px;height:10px;transform:rotate(45deg)"></i>Marco</span>`+
+    (R.length?`<span><i class="sw" style="width:0;height:14px;border-radius:0;border-left:2px dashed var(--muted)"></i>Término no prazo ideal</span>`:'')+
+    `<span><i class="sw" style="background:var(--hoje2);width:2px;height:14px"></i>Hoje</span>`;
+}
+
+function comparar(){
+  const R=T.filter(t=>t.ref&&t.dur).sort((a,b)=>a.ef-b.ef);
+  let ant=0;const L=[];
+  R.forEach(r=>{
+    const re=T.filter(t=>!t.ref&&t.dur&&t.etapa===r.etapa);
+    if(!re.length)return;
+    const aberta=re.some(t=>t.sem||t.aberta);   // etapa sem previsão de término
+    const ef=aberta?null:Math.max(...re.map(t=>t.ef)),fim=aberta?null:maxD(re,'fim');
+    const sit=re.every(t=>t.sem)?'Sem previsão':re.every(t=>t.st==='done')?'Concluída':re.some(t=>t.st==='aberta'||t.pr>0)?'Em andamento':'Previsão';
+    let dif=null,ac=null;
+    if(!aberta){dif=ef-r.ef;ac=dif-ant;ant=dif;}
+    L.push({et:r.etapa,sit,dur:r.dur,idFim:r.fim,fim,dif,ac});
+  });
+  const mx=Math.max(1,...L.map(l=>l.ac||0));
+  const h=L.map(l=>`<tr><td>${esc(l.et)}</td><td>${l.sit}</td><td>${l.dur} ${un()}</td><td>${fmt(l.idFim)}</td><td>${l.fim?fmt(l.fim):'sem previsão'}</td><td>${l.dif==null?'—':(l.dif>0?'+':'')+l.dif+' '+un()}</td><td class="${l.ac>0?'mais':''}">${l.ac>0?`<span class="ib" style="width:${Math.round(l.ac/mx*90)}px"></span>`:''}${l.ac==null?'—':(l.ac>0?'+':'')+l.ac+' '+un()}</td></tr>`).join('');
+  $('cmp').innerHTML=`<thead><tr><th>Etapa</th><th>Situação</th><th>Ideal: duração</th><th>Ideal: termina em</th><th>Real/previsto: termina em</th><th>Atraso acumulado</th><th>Acrescentado na etapa</th></tr></thead><tbody>${h}</tbody>`;
+  $('cmpNota').textContent='Atraso acumulado = quantos dias o fim da etapa fica depois do fim da mesma etapa no prazo ideal. Acrescentado na etapa = quanto o atraso cresceu naquela etapa. '+(D.notaComparativo||'');
+}
+
+function analise(){
+  const A=D.analise||{};
+  const bx=(t,c,l)=>`<div class="${c}"><h3>${t}</h3><ul>${(l&&l.length?l:['Nada a apontar.']).map(i=>`<li>${esc(i)}</li>`).join('')}</ul></div>`;
+  $('analise').innerHTML=bx('Pontos críticos','c',A.criticos)+bx('Pontos de atenção','a',A.atencao)+bx('Observações','o',A.observacoes);
+  $('analiseNota').textContent=A.nota||'';
+}
+
+function desenhar(){
+  const LEFT=innerWidth<=640?150:290;
+  document.querySelectorAll('[data-z]').forEach(o=>o.classList.toggle('on',o.dataset.z===zoom));
+  const Tv=T.filter(t=>!t.sem);
+  const p0=minD(Tv,'ini');
+  const ini=add(p0,-((p0.getDay()+6)%7));
+  const fim=add(maxD(Tv,'fim'),8);
+  const total=dias(ini,fim)+1;
+  let px=PX[zoom];
+  if(zoom==='ajustar')px=Math.max(4,Math.min(30,($('chart').clientWidth-LEFT-6)/total));
+  const W=total*px;
+  const x=d=>dias(ini,d)*px;
+  const passo=px>=20?1:(px*7>=44?7:14);
+  const grade=`width:${W}px;background-image:repeating-linear-gradient(to right,var(--grid) 0 1px,transparent 1px ${7*px}px)`;
+  const hoje=new Date();hoje.setHours(0,0,0,0);
+  let lh=(hoje>=ini&&hoje<=fim)?`<div class="today" style="left:${x(hoje)+px/2}px"></div>`:'';
+  const R=T.filter(t=>t.ref);
+  const Rmap={};R.filter(r=>r.dur).forEach(r=>{Rmap[r.etapa]=r;});   // janela do prazo ideal de cada etapa
+  const fIdeal=R.length?maxD(R,'fim'):null;
+  if(fIdeal)lh+=`<div class="ideal" style="left:${x(fIdeal)+px}px"></div>`;
+  const xH=(hoje>=ini&&hoje<=fim)?x(hoje)+px/2:null, xI=fIdeal?x(fIdeal)+px+4:null;
+  const baixo=(xH!=null&&xI!=null&&xH>xI-45&&xH<xI+170);   // etiquetas perto uma da outra: "hoje" desce uma linha
+  const tags=(xH!=null?`<span class="tag hoje" style="left:${xH}px${baixo?';top:19px':''}">hoje ${curto(hoje)}</span>`:'')+
+             (xI!=null?`<span class="tag ideal" style="left:${xI}px">término ideal ${curto(fIdeal)}</span>`:'');
+  let h='';
+  for(let d=new Date(ini.getFullYear(),ini.getMonth(),1);d<=fim;d=new Date(d.getFullYear(),d.getMonth()+1,1)){
+    const a=d<ini?ini:d, b=new Date(d.getFullYear(),d.getMonth()+1,1);
+    const w=x(b>fim?add(fim,1):b)-x(a);
+    h+=`<div class="tick" style="left:${x(a)}px;width:${w}px;top:0;height:22px">${d.toLocaleDateString('pt-BR',{month:'short',year:'2-digit'})}</div>`;
+  }
+  if(zoom!=='mes'){
+    for(let d=ini;d<=fim;d=add(d,passo))h+=`<div class="tick" style="left:${x(d)}px;width:${passo*px}px;top:22px;bottom:0">${passo===1?d.getDate():curto(d)}</div>`;
+  }
+  const pos=(l,w,est)=>(l+w+8+est>W&&l-18-est>=0)?`right:${W-l+18}px`:`left:${l+w+8}px`;
+  const dirc=p=>p.startsWith('right')?' dir':'';
+  let out=`<div class="row head"><div class="left">Tarefa</div><div class="tl" style="width:${W}px">${h}</div></div>`;
+  let primeira=true;
+  fases.forEach(f=>{
+    let ts=T.filter(t=>t.fase===f&&!t.ref);   // o prazo ideal fica na própria linha de cada tarefa
+    if(soCrit)ts=ts.filter(t=>t.critica);
+    if(!ts.length)return;
+    const tv=ts.filter(t=>!t.sem);
+    const a=tv.length?minD(tv,'ini'):null, b=tv.length?maxD(tv,'fim'):null;
+    if(fases.length>1||R.length){
+      out+=`<div class="row fase"><div class="left"><i class="sw l-ideal"></i><i class="sw l-ok"></i>${esc(R.length?'Ideal x real':f)}</div><div class="tl" style="${grade}">${lh}${primeira?tags:''}${a?`<div class="sum" style="left:${x(a)}px;width:${x(b)-x(a)+px}px"></div>`:''}</div></div>`;
+      primeira=false;
+    }
+    ts.forEach(t=>{
+      const un_=uteis?' dias úteis':' dias';
+      const id=Rmap[t.etapa];
+      const dIni=(id&&!t.sem&&t.dur)?dias(id.ini,t.ini):null;
+      const sit=t.st==='sem'?'Sem data: aguarda a etapa anterior':t.st==='aberta'?'Em andamento, sem previsão de término':t.st==='done'?'Concluída':t.st==='doing'?t.pr+'% concluída':'A iniciar (previsão)';
+      const per=t.sem?(t.dur?'Sem data · prazo ideal da planilha: '+(t.prazoIdealPlan!=null?t.prazoIdealPlan:t.dur)+' dias':'Sem data'):`${fmt(t.ini)}${t.dur?' → '+fmt(t.fim)+' · '+t.dur+un_:' (marco)'}`;
+      const idTxt=(id&&t.dur)?`\nPrazo ideal: ${fmt(id.ini)} → ${fmt(id.fim)} · ${id.dur+un_}${dIni==null?'':dIni>0?'\nComeçou '+dIni+' dia(s) depois do início ideal':'\nComeçou no prazo ideal'}`:'';
+      const tip=esc(`${t.nome}\n${per}${idTxt}${t.responsavel?'\nResponsável: '+t.responsavel:''}\nSituação: ${sit}${(t.dur&&t.pr<100&&!t.sem)?'\nFolga: '+t.folga+' dia(s)'+(t.critica?' — caminho crítico':''):''}${t.dep.length?'\nDepende de: '+t.dep.map(d=>byId[d].nome).join('; '):''}${t.solicitante?'\nSolicitante: '+t.solicitante:''}${(t.prazoIdealPlan!=null||t.prazoRealPlan!=null)?'\nPlanilha: ideal '+(t.prazoIdealPlan!=null?t.prazoIdealPlan:'—')+' · real '+(t.prazoRealPlan!=null?t.prazoRealPlan:'—'):''}${t.motivo?'\nMotivo do desvio: '+t.motivo:''}`);
+      let g='';
+      // barra verde: o prazo ideal desta etapa (início e fim ideais), na mesma linha
+      if(id&&t.dur&&!semIdeal){
+        const il=x(id.ini),iw=x(id.fim)-il+px;
+        const txt=`ideal ${curto(id.ini)} → ${curto(id.fim)} · ${id.dur}d`;
+        const ps=pos(il,iw,Math.ceil(txt.length*6.2)+10);
+        g+=`<div class="idl" style="left:${il}px;width:${iw}px"></div><div class="lbl li${dirc(ps)}" style="${ps}">${txt}</div>`;
+      }
+      if(t.sem){
+        const ant=t.dep.filter(d=>byId[d].sem||byId[d].aberta).map(d=>byId[d].nome.replace(/\s*\(.*\)\s*$/,'')).join(', ');
+        g+=`<div class="lbl lr sem" style="left:12px">sem data · aguardando ${esc(ant)}</div>`;
+      }else if(t.dur){
+        const l=x(t.ini),w0=x(t.fim)-l+px,w=Math.max(w0,40);   // barra curta ganha largura mínima para caber o %
+        const pc=(a,b)=>`left:${(x(a)-l)/w0*100}%;width:${(x(b)-x(a)+px)/w0*100}%`;
+        let segs='';
+        if(id){
+          if(t.ini<=id.fim){const e=t.fim<id.fim?t.fim:id.fim;segs+=`<b class="sg ${t.ini>id.ini?'am':'ok'}" style="${pc(t.ini,e)}"></b>`;}
+          if(t.fim>id.fim){const a=t.ini>id.fim?t.ini:add(id.fim,1);segs+=`<b class="sg at" style="${pc(a,t.fim)}"></b>`;}
+        }else segs=`<b class="sg ok" style="left:0;width:100%"></b>`;
+        const rot=t.st==='done'?'real':'previsto';
+        const txt=t.st==='aberta'?`real ${curto(t.ini)} → hoje · ${t.dur}d · em andamento`:`${rot} ${curto(t.ini)} → ${curto(t.fim)} · ${t.dur}d`;
+        const ps=pos(l,w,Math.ceil(txt.length*6.6)+14);
+        const ov=(t.st==='doing')?`<i style="width:${t.pr}%"></i>`:'';   // só quem está em andamento escurece a parte feita; concluída fica na cor pura
+        const pct=t.st!=='aberta'?`<em>${t.pr}%</em>`:'';
+        g+=`<div class="rb s-${t.st}${t.critica?' crit':''}" style="left:${l}px;width:${w}px">${segs}${ov}${pct}</div><div class="lbl lr${dirc(ps)}" style="${ps}">${txt}</div><div class="mk" style="left:${l}px" title="${tip}"></div>`;
+      }else{
+        const l=x(t.ini)+px/2-7;
+        const mi=R.find(r=>r.marco);
+        const dg=mi?dias(mi.ini,t.ini):0;
+        let gap='';
+        if(dg>0)gap=`<div class="gap" style="left:${x(mi.ini)+px/2}px;width:${x(t.ini)-x(mi.ini)}px"></div>`;
+        const txt=curto(t.ini)+(dg>0?` · <span class="atr">+${dg} ${un_.trim()} sobre o ideal</span>`:'');
+        const est=Math.ceil((curto(t.ini).length+(dg>0?30:0))*6.6)+14;
+        const ps=(l+22+est>W&&l-8-est>=0)?`right:${W-l+8}px`:`left:${l+22}px`;
+        g+=`${gap}<div class="ms${t.critica?' crit':''}" style="left:${l}px" title="${tip}"></div><div class="lbl m${dirc(ps)}" style="${ps}">${txt}</div>`;
+      }
+      const meta=[t.responsavel,t.sem?'':t.st==='aberta'?`${curto(t.ini)} → hoje`:t.dur?`${curto(t.ini)} → ${curto(t.fim)}`:curto(t.ini),t.dur?(t.sem?'ideal '+t.dur+'d':t.dur+'d'):'marco'].filter(Boolean).map(esc).join(' · ');
+      const SB={done:['var(--done)','concluída'],doing:['var(--today)',t.pr+'%'],aberta:['var(--today)','em andamento'],sem:['var(--muted)','sem data'],todo:['var(--muted)','a iniciar']}[t.st]||['var(--muted)',''];
+      const sb=t.dur?`<span style="color:${SB[0]};font-weight:700"> · ${SB[1]}</span>`:'';
+      out+=`<div class="row" title="${tip}"><div class="left"><div class="n">${esc(t.id)}. ${esc(t.nome)}</div><div class="m">${meta}${sb}</div></div><div class="tl" style="${grade}">${lh}${g}</div></div>`;
+    });
+  });
+  $('chart').innerHTML=out;
+}
+
+try{
+  agendar();resumo();comparar();analise();desenhar();
+  document.querySelectorAll('[data-z]').forEach(b=>b.onclick=()=>{zoom=b.dataset.z;desenhar();});
+  $('bCrit').onclick=e=>{soCrit=!soCrit;e.currentTarget.classList.toggle('on',soCrit);desenhar();};
+  const bi=$('bIdeal');
+  if(!T.some(t=>t.ref))bi.hidden=true;
+  bi.onclick=e=>{semIdeal=!semIdeal;e.currentTarget.classList.toggle('on',semIdeal);e.currentTarget.textContent=semIdeal?'Mostrar prazo ideal':'Ocultar prazo ideal';desenhar();};
+  $('bPrint').onclick=()=>{const z=zoom;zoom='ajustar';desenhar();window.print();zoom=z;desenhar();};
+  let tm;addEventListener('resize',()=>{clearTimeout(tm);tm=setTimeout(desenhar,150);});
+}catch(e){
+  $('erro').innerHTML='<div class="erro"><b>Não foi possível montar o cronograma:</b> '+esc(e.message)+'</div>';
+}
+})();
+</script>
+
+</body></html>
