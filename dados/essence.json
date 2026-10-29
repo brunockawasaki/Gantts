@@ -154,7 +154,8 @@
    "depende": [
     "8",
     "3"
-   ]
+   ],
+   "semDuracao": true
   },
   {
    "id": "10",
@@ -335,5 +336,6 @@
    "Os anos da planilha estão agora consistentes (2025 e 2026). A falta de data de término da Conformidade foi mantida como está, sem data estimada, e não altera o término do projeto."
   ],
   "nota": ""
- }
+ },
+ "totalPorEtapa": true
 }

@@ -150,6 +150,7 @@ h2{font-size:17px;margin:30px 0 8px}
     <span class="sep"></span>
     <button id="bCrit">Só caminho crítico</button>
     <button id="bIdeal">Ocultar prazo ideal</button>
+    <button id="bEtapa" hidden>Total por etapa</button>
     <span class="sp"></span>
     <button id="bPrint">Imprimir / salvar PDF</button>
   </div>
@@ -432,7 +433,7 @@ const dias=(a,b)=>Math.round((b-a)/DIA);
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const PX={dia:30,semana:14,mes:4};
 const COR={p:'#4e79a7',r:'#59a14f'};
-let D,T,byId,cal,fimIdx,uteis,fases,zoom='ajustar',soCrit=false,semIdeal=false,fimG={},POS=null;
+let D,T,byId,cal,fimIdx,uteis,fases,zoom='ajustar',soCrit=false,semIdeal=false,viewEtapa=false,fimG={},POS=null;
 
 function agendar(){
   D=JSON.parse($('dados').textContent);
@@ -599,6 +600,52 @@ function desenhar(){
   const pos=(l,w,est)=>(l+w+8+est>W&&l-18-est>=0)?`right:${W-l+18}px`:`left:${l+w+8}px`;
   const dirc=p=>p.startsWith('right')?' dir':'';
   let out=`<div class="row head"><div class="left">Tarefa</div><div class="tl" style="width:${W}px">${h}</div></div>`;
+  if(viewEtapa){
+    out+=`<div class="row fase"><div class="left"><i class="sw l-ideal"></i><i class="sw l-ok"></i>Total por etapa</div><div class="tl" style="${grade}">${lh}${tags}</div></div>`;
+    const un_=uteis?' dias úteis':' dias', NL=String.fromCharCode(10);
+    R.filter(r=>r.dur).sort((a,b)=>a.ef-b.ef).forEach((id,k)=>{
+      const re=T.filter(t=>!t.ref&&t.dur&&t.etapa===id.etapa);
+      if(!re.length)return;
+      const ck=re.filter(t=>!t.sem&&!t.semDuracao), sd=re.filter(t=>t.semDuracao&&!t.sem);
+      const segsPara=(a,b,l0,w0)=>{
+        const pc=(p,q)=>`left:${(x(p)-l0)/w0*100}%;width:${(x(q)-x(p)+px)/w0*100}%`;let sg='';
+        if(a<=id.fim){const e=b<id.fim?b:id.fim;sg+=`<b class="sg ${a>id.ini?'am':'ok'}" style="${pc(a,e)}"></b>`;}
+        if(b>id.fim){const c=a>id.fim?a:add(id.fim,1);sg+=`<b class="sg at" style="${pc(c,b)}"></b>`;}
+        return sg;};
+      let g='',meta='',sit='',tipL='';
+      if(id&&!semIdeal){
+        const il=x(id.ini),iw=x(id.fim)-il+px,txt=`ideal ${curto(id.ini)} → ${curto(id.fim)} · ${id.dur}d`,ps=pos(il,iw,Math.ceil(txt.length*6.2)+10);
+        g+=`<div class="idl" style="left:${il}px;width:${iw}px"></div><div class="lbl li${dirc(ps)}" style="${ps}">${txt}</div>`;
+      }
+      const aberta=re.some(t=>t.st==='aberta'),emAnd=re.some(t=>t.st==='doing'||t.st==='aberta'),todos=re.every(t=>t.st==='done');
+      sit=re.every(t=>t.sem)?'sem data':todos?'concluída':emAnd?'em andamento':'a iniciar';
+      if(ck.length){
+        const ini=minD(ck,'ini'),fim=maxD(ck,'fim'),esI=Math.min(...ck.map(t=>t.es)),efI=Math.max(...ck.map(t=>t.ef));
+        const per=efI-esI,soma=ck.reduce((m,t)=>m+t.dur,0),entre=per-soma,dif=per-id.dur;
+        const l=x(ini),w=x(fim)-l+px;
+        const txt=`real ${curto(ini)} → ${curto(fim)} · ${per}d no total`+(ck.length>1?` · rodadas ${soma}d`:'')+(aberta?' · em andamento':'');
+        const ps=pos(l,w,Math.ceil(txt.length*6.6)+14);
+        g+=`<div class="rb" style="left:${l}px;width:${w}px;opacity:.38">${segsPara(ini,fim,l,w)}</div>`;
+        ck.forEach(t=>{const l2=x(t.ini),w2=x(t.fim)-l2+px;g+=`<div class="rb${t.st==='aberta'?' s-aberta':''}" style="left:${l2}px;width:${w2}px">${segsPara(t.ini,t.fim,l2,w2)}</div>`;});
+        const est=Math.ceil(txt.length*6.6)+14;
+        g+=w>=est+12?`<div class="lbl lr" style="left:${l+8}px;color:var(--ink);font-weight:700;text-shadow:0 0 3px #fff,0 0 4px #fff">${txt}</div>`   // barra larga: o texto vai dentro dela
+                    :`<div class="lbl lr${dirc(ps)}" style="${ps}">${txt}</div>`;
+        meta=[`ideal ${id.dur}d`,`real ${per}d`,(dif>0?'+':'')+dif+'d'].join(' · ');
+        tipL=['',`Período da etapa: ${fmt(ini)} → ${fmt(fim)} · ${per}${un_}`,`Soma das rodadas: ${soma}${un_} em ${ck.length} rodada(s)`,
+          entre>0?`Intervalo entre rodadas: ${entre}${un_}`:null,`Prazo ideal da etapa: ${id.dur}${un_} (${dif>0?'+':''}${dif})`,
+          sd.length?`${sd.length} rodada(s) sem data de término na planilha, fora desta conta`:null].filter(v=>v!==null).join(NL);
+      }
+      if(sd.length){
+        const t=sd[0],l=x(t.ini);
+        g+=`<div class="lbl lr sem" style="left:${ck.length?(l+px+8):(l+22)}px;${ck.length?'top:44px':''}">${ck.length?sd.length+' rodada(s) ':''}sem data de término · protocolo ${curto(t.ini)}</div><div class="mk" style="left:${l}px"></div>`;
+        if(!ck.length){meta=`ideal ${id.dur}d · real sem data`;tipL=['',`Protocolo: ${fmt(t.ini)}`,'A planilha não traz a data de término desta etapa; nenhuma duração foi estimada.'].join(NL);}
+      }
+      const SB={'concluída':'var(--done)','em andamento':'var(--today)'}[sit]||'var(--muted)';
+      const tip=esc(`${id.etapa}${tipL}${NL}Situação: ${sit}`);
+      out+=`<div class="row" title="${tip}"><div class="left"><div class="n">${k+1}. ${esc(id.etapa)}</div><div class="m">${esc(meta)}<span style="color:${SB};font-weight:700"> · ${sit}</span></div></div><div class="tl" style="${grade}">${lh}${g}</div></div>`;
+    });
+    $('chart').innerHTML=out;return;
+  }
   let primeira=true;
   fases.forEach(f=>{
     let ts=T.filter(t=>t.fase===f&&!t.ref);   // o prazo ideal fica na própria linha de cada tarefa
@@ -668,6 +715,7 @@ try{
   document.querySelectorAll('[data-z]').forEach(b=>b.onclick=()=>{zoom=b.dataset.z;desenhar();});
   $('bCrit').onclick=e=>{soCrit=!soCrit;e.currentTarget.classList.toggle('on',soCrit);desenhar();};
   const bi=$('bIdeal');
+  if(D.totalPorEtapa){const be=$('bEtapa');be.hidden=false;be.onclick=e=>{viewEtapa=!viewEtapa;e.currentTarget.classList.toggle('on',viewEtapa);desenhar();};}
   if(!T.some(t=>t.ref))bi.hidden=true;
   bi.onclick=e=>{semIdeal=!semIdeal;e.currentTarget.classList.toggle('on',semIdeal);e.currentTarget.textContent=semIdeal?'Mostrar prazo ideal':'Ocultar prazo ideal';desenhar();};
   $('bPrint').onclick=()=>{const z=zoom;zoom='ajustar';desenhar();window.print();zoom=z;desenhar();};
